@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on My New Hugo Site</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on My New Hugo Site</description>
+    <generator>Hugo -- 0.143.1</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 11 Feb 2025 23:49:58 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Personal Website of Fth</title>
+      <link>http://localhost:1313/posts/hello/</link>
+      <pubDate>Tue, 11 Feb 2025 23:49:58 +0800</pubDate>
+      <guid>http://localhost:1313/posts/hello/</guid>
+      <description>&lt;h1 id=&#34;hello-world&#34;&gt;Hello World&lt;/h1&gt;
+&lt;p&gt;This is &lt;strong&gt;bold&lt;/strong&gt; text, and this is &lt;em&gt;emphasized&lt;/em&gt; text.
+This is the origin manuscript of the website.&lt;/p&gt;
+&lt;h2 id=&#34;2nd-level-fth&#34;&gt;2nd level fth&lt;/h2&gt;
+&lt;h3 id=&#34;3rd-level-fth&#34;&gt;3rd level fth&lt;/h3&gt;</description>
+    </item>
+  </channel>
+</rss>
