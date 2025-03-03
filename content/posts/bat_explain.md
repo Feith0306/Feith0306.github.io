@@ -16,7 +16,7 @@ cover:
 ## :monocle_face: What is the file with the suffix ".bat" ? 
 
 - 后缀为“.bat”的文档是一个批处理文件。它是一种**可执行**文件，其中包含由操作系统执行的一系列命令。批处理文件通常用于自动化涉及多个命令的任务。它们通常用于**安装**软件、**配置**系统设置或**执行**其他需要多个步骤的任务。
-## :rocket: Example:
+## :rocket: Example
 **这是一个批处理文件的示例，它将“open with VS code”选项添加到Windows右键菜单中，允许用户直接右键单击文件夹或其背景（空白），并在 VS code 中打开文件夹。**
 ```
 @echo off
