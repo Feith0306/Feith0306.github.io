@@ -8,7 +8,7 @@ categories: ["themes", "syntax"]
 series: ["Themes Guide"]
 aliases: ["migrate-from-jekyl"]
 cover:
-  image: images/patrick.jpg
+  # image: images/patrick.jpg
   caption: "Generated using [OG Image Playground by Vercel](https://og-playground.vercel.app/)"
 ShowToc: true
 TocOpen: true

@@ -4,10 +4,22 @@
     <title>Code on My New Hugo Site</title>
     <link>http://localhost:1313/tags/code/</link>
     <description>Recent content in Code on My New Hugo Site</description>
+    <image>
+      <title>My New Hugo Site</title>
+      <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
     <generator>Hugo -- 0.143.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/code/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Explanation of .bat files</title>
+      <link>http://localhost:1313/posts/bat_explain/</link>
+      <pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/bat_explain/</guid>
+      <description>Sample article showcasing basic code syntax and formatting for HTML elements.</description>
+    </item>
     <item>
       <title>Code Syntax Guide</title>
       <link>http://localhost:1313/posts/code_syntax/</link>
