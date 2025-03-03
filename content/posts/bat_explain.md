@@ -15,10 +15,9 @@ cover:
 
 ## :monocle_face: What is the file with the suffix ".bat" ? 
 
-- The document with the suffix ".bat" is a batch file. It is a type of **executable** file that contains a series of commands that are executed by the operating system. Batch files are commonly used to automate tasks that involve multiple commands. They are often used to **install** software, **configure** system settings, or **perform** other tasks that require multiple steps.
-
+- 后缀为“.bat”的文档是一个批处理文件。它是一种**可执行**文件，其中包含由操作系统执行的一系列命令。批处理文件通常用于自动化涉及多个命令的任务。它们通常用于**安装**软件、**配置**系统设置或**执行**其他需要多个步骤的任务。
 ## :rocket: Example:
-**Here is an example of a batch file that adds the "Open with VS code" option to the Windows right-click menu, allowing users to right-click directly on the folder or its background (blank space) and open the folder in VS Code.**
+**这是一个批处理文件的示例，它将“open with VS code”选项添加到Windows右键菜单中，允许用户直接右键单击文件夹或其背景（空白），并在 VS code 中打开文件夹。**
 ```
 @echo off
 REG ADD "HKEY_CLASSES_ROOT\Directory\Background\shell\Open with VS Code" /ve /t REG_SZ /d "open here with VS Code" /f
@@ -28,27 +27,27 @@ pause
 ```
 
 - :telephone_receiver: **`@echo off`** 
-First line of the above code **turns off** the echo of the command line window to prevent it from appearing on the screen every time a command is **executed**, making the interface cleaner.<p style="margin-bottom:40px;">
+上述代码的第一行**关闭**命令行窗口的响应，以防止每次**执行命令**时它出现在屏幕上，使界面更清晰。<p style="margin-bottom:40px;">
 
 
 
 - :desktop_computer: **`REG ADD "HKEY_CLASSES_ROOT\Directory\Background\shell\Open with VS Code" /ve /t REG_SZ /d "open here with VS Code" /f`** 
-Add a key or value to the Windows Registry.
-  - :mag: **`KEY_CLASSES_ROOT\Directory\Background\shell\Open with VS Code`** : Create **a new option** "Open with VS Code" in the right-click menu of Windows Explorer.
-  - :mag: **`/ve`** : Create a **default** value (unnamed key value).
-  - :mag: **`/t REG_SZ`** : Set the data type of the value as **REG_SZ** (a *string*). 
-  - :mag: **`/d "open here with VS Code"`** : Set the value of the registry, which is the text displayed (**open here with VS Code**) in the right-click menu.
-  - :mag: **`/f`** : Force the operation to **overwrite** any existing key or value.
+将键或值添加到Windows注册表。
+  - :mag: **`KEY_CLASSES_ROOT\Directory\Background\shell\Open with VS Code`** : 在Windows资源管理器的右键菜单中创建一个新选项“open with VS code”。
+  - :mag: **`/ve`** : 创建一个默认值（未命名键值）。
+  - :mag: **`/t REG_SZ`** : 将值的数据类型设置为**REG_SZ**（*字符串*）。
+  - :mag: **`/d "open here with VS Code"`** : 设置注册表的值，即右键菜单中显示的文本（**open here with VS code**）。
+  - :mag: **`/f`** : 强制操作**覆盖**任何现有键或值。
   <p style="margin-bottom:40px;">
 
 - :desktop_computer: **`REG ADD "HKEY_CLASSES_ROOT\Directory\Background\shell\Open with VS Code\command" /ve /t REG_SZ /d "\"E:\VS code\Microsoft VS Code\Code.exe\" \"%%V\"" /f`**
-  - :mag: **`HKEY_CLASSES_ROOT\Directory\Background\shell\Open with VS Code\command`**: Define the command to be executed after clicking on a menu item.
-  - :mag: **`"E:\VS code\Microsoft VS Code\Code.exe"`**: The executable file **path of VS Code**.
-  - :mag: **`"%%V"`**: The **current folder path**, which is the directory where user right-clicks.
+  - :mag: **`HKEY_CLASSES_ROOT\Directory\Background\shell\Open with VS Code\command`**: 定义单击菜单项后要执行的命令。
+  - :mag: **`"E:\VS code\Microsoft VS Code\Code.exe"`**: VS code 的可执行文件路径。
+  - :mag: **`"%%V"`**: **当前**文件夹路径，即用户右键单击的文件夹。
   <p style="margin-bottom:40px;">
 
 - :desktop_computer: **`echo VS Code Successful！`**
-  - :mag: Display a prompt in the command line window, informing the user that the registry is successfully modified.
+  - :mag: 在命令行窗口中显示提示，表明注册表已成功修改。
 
 ## :file_folder: Operation effect 
 - :point_up_2: Right-click the folder or blank space inside the folder, select "Open with VS Code".
