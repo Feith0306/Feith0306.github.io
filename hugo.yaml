@@ -1,4 +1,5 @@
-baseURL: https://example.org/
+# baseURL: https://example.org/
+baseURL: https://Feith0306.github.io/
 languageCode: en-us
 title: My New Hugo Site
 theme: ["PaperMod"]
