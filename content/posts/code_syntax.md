@@ -13,16 +13,16 @@ cover:
   image: images/vscode.jpg
 ---
 
-# 1. 安装 VS code 插件：`Latex Workshop`
+## 1. 安装 VS code 插件：`Latex Workshop`
 
 :rocket: 在 VS code 扩展商店中找到 [Latex Workshop](https://github.com/James-Yu/LaTeX-Workshop/wiki/Compile#placeholders) 插件（如下），安装即可。
 ![LatexWorkshop](/images/LatexWorkshop.jpg)
 
-# 2. 打开一个 `.tex` 文件
+## 2. 打开一个 `.tex` 文件
 :robot: 可以看到 VS code 已经自动高亮文档内容
 ![latex](/images/latex.jpg)
 
-# 3. 配置 Latex Workshop
+## 3. 配置 Latex Workshop
 - :mag: 按 `F1`，搜索`setjson`，打开配置文件
 ![setjson](/images/setjson.jpg)
 - :mag: 可以看到在项目中生成了`.vscode`文件夹，在其中打开`settings.json`文件，添加如下代码：
@@ -145,12 +145,12 @@ cover:
 }
 ```
 
-# 4. 设置编译快捷键（可选）
+## 4. 设置编译快捷键（可选）
 - :mag: 左下角打开设置 -> `Keyboard Shortcut`-> 搜索`recipe` -> 双击中间的`When` -> 按下想要使用的快捷键
 - :mag: 选择编译方式
 ![compile](/images/compile.jpg)
 - :mag: **直接运行`.tex`文件也可以编译**
 
 
-# 5. 测试
+## 5. 测试
 ![test](/images/test.jpg)
