@@ -1,9 +1,9 @@
 ---
 author: ["Tianhao Fei"]
-title: "Explanation of .bat files"
+title: "什么是 .bat 文件？"
 date: "2025-03-03"
-description: "这个文档简要介绍了 .bat 文件的作用，以及如何 .bat 文件右击在 VS code 中打开文件夹。"
-summary: "这个文档简要介绍了 .bat 文件的作用，以及如何 .bat 文件右击在 VS code 中打开文件夹。"
+description: "这个文档简要介绍了 .bat 文件的作用，以及如何通过 .bat 文件右击文件夹在 VS code 中打开。"
+summary: "这个文档简要介绍了 .bat 文件的作用，以及如何通过 .bat 右击文件夹在 VS code 中打开。"
 tags: ["VS code"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
