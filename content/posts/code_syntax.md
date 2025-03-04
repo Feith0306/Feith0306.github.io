@@ -1,153 +1,156 @@
 ---
-author: ["Aditya Telange"]
-title: "Code Syntax Guide"
-date: "2019-03-10"
-description: "Sample article showcasing basic code syntax and formatting for HTML elements."
+author: ["Tianhao Fei"]
+title: "VS code 编译 .tex 文件"
+date: "2025-03-04"
+description: "这个文档用于说明如何在使用 VS code 编译 .tex 文件"
 summary: "Sample article showcasing basic code syntax and formatting for HTML elements."
-tags: ["markdown", "syntax", "code", "gist"]
+tags: ["markdown", "VS code", "Latex"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
 ShowToc: true
 TocOpen: true
+cover:
+  image: images/vscode.jpg
 ---
 
-### Inline Code
+# 1. 安装 VS code 插件：`Latex Workshop`
 
-`This is Inline Code`
+:rocket: 在 VS code 扩展商店中找到 [Latex Workshop](https://github.com/James-Yu/LaTeX-Workshop/wiki/Compile#placeholders) 插件（如下），安装即可。
+![LatexWorkshop](/LatexWorkshop.jpg)
 
-### Only `pre`
+# 2. 打开一个 `.tex` 文件
+:robot: 可以看到 VS code 已经自动高亮文档内容
+![latex](/latex.jpg)
 
-<pre>
-This is pre text
-</pre>
-
-### Code block with backticks
-
-```{hl_lines=[2,8]}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Example HTML5 Document</title>
-    <meta
-      name="description"
-      content="Sample article showcasing basic Markdown syntax and formatting for HTML elements."
-    />
-  </head>
-  <body>
-    <p>Test</p>
-  </body>
-</html>
+# 3. 配置 Latex Workshop
+- :mag: 按 `F1`，搜索`setjson`，打开配置文件
+![setjson](/setjson.jpg)
+- :mag: 可以看到在项目中生成了`.vscode`文件夹，在其中打开`settings.json`文件，添加如下代码：
+```
+{
+    "latex-workshop.latex.autoBuild.run": "never",        # 从不自动编译
+    "latex-workshop.showContextMenu": true,               # 显示右键菜单，出现"Build Latex Project"选项
+    "latex-workshop.intellisense.package.enabled": true,  # 启用包自动完成
+    "latex-workshop.message.error.show": false,           # 不显示错误信息（从终端获取）
+    "latex-workshop.message.warning.show": false,         # 不显示警告信息（从终端获取）
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"                                # 文件所在路径可以为中文，若为"%DOC"则不可有中文
+            ]
+        },
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "XeLaTeX",
+            "tools": [
+                "xelatex"
+            ]
+        },
+        {
+            "name": "PDFLaTeX",
+            "tools": [
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "BibTeX",
+            "tools": [
+                "bibtex"
+            ]
+        },
+        {
+            "name": "LaTeXmk",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "xelatex -> bibtex -> xelatex*2",
+            "tools": [
+                "xelatex",
+                "bibtex",
+                "xelatex",
+                "xelatex"
+            ]
+        },
+        {
+            "name": "pdflatex -> bibtex -> pdflatex*2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+    ],
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.ist",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk"
+    ],
+    "latex-workshop.latex.autoClean.run": "onFailed",                       # 编译失败时自动清理上述类型的辅助文件（"OnBuilt":无论编译是否成功，都清除辅助文件；"never":无论编译是否成功，都不清除）
+    "latex-workshop.latex.recipe.default": "lastUsed",                      # 编译时使用上次使用的编译方式
+    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click"   # 点击 pdf 可以跳转到相应代码位置
+}
 ```
 
-### Code block with backticks and language specified
+# 4. 设置编译快捷键（可选）
+- :mag: 左下角打开设置 -> `Keyboard Shortcut`-> 搜索`recipe` -> 双击中间的`When` -> 按下想要使用的快捷键
+- :mag: 选择编译方式
+![compile](/compile.jpg)
+- :mag: **直接运行`.tex`文件也可以编译**
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Example HTML5 Document</title>
-    <meta
-      name="description"
-      content="Sample article showcasing basic Markdown syntax and formatting for HTML elements."
-    />
-  </head>
-  <body>
-    <p>Test</p>
-  </body>
-</html>
-```
 
-### Code block with backticks and language specified with line numbers
-
-```html {linenos=true}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Example HTML5 Document</title>
-    <meta
-      name="description"
-      content="Sample article showcasing basic Markdown syntax and formatting for HTML elements."
-    />
-  </head>
-  <body>
-    <p>Test</p>
-  </body>
-</html>
-```
-
-### Code block with line numbers and <mark>highlighted</mark> lines
-
-- PaperMod supports `linenos=true` or `linenos=table`
-
-```html {linenos=true,hl_lines=[2,8]}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Example HTML5 Document</title>
-    <meta
-      name="description"
-      content="Sample article showcasing basic Markdown syntax and formatting for HTML elements."
-    />
-  </head>
-  <body>
-    <p>Test</p>
-  </body>
-</html>
-```
-
-- <del>With `linenos=inline` line <mark>**might not** get highlighted</mark> properly.<del>
-- This issue is fixed with [045c084](https://github.com/adityatelange/hugo-PaperMod/commit/045c08496d61b1b3f9c79e69e7d3d243a526d8f3)
-
-```html {linenos=inline,hl_lines=[2,8]}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Example HTML5 Document</title>
-    <meta
-      name="description"
-      content="Sample article showcasing basic Markdown syntax and formatting for HTML elements."
-    />
-  </head>
-  <body>
-    <p>Test</p>
-  </body>
-</html>
-```
-
-### Code block indented with four spaces
-
-    <!doctype html>
-    <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <title>Example HTML5 Document</title>
-    </head>
-    <body>
-      <p>Test</p>
-    </body>
-    </html>
-
-### Code block with Hugo's internal highlight shortcode
-
-{{< highlight html >}}
-
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Example HTML5 Document</title>
-</head>
-<body>
-  <p>Test</p>
-</body>
-</html>
-{{< /highlight >}}
-
-### Github Gist
-
-{{< gist adityatelange 376cd56ee2c94aaa2e8b93200f2ba8b5 >}}
+# 5. 测试
+![test](/test.jpg)
