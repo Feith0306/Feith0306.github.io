@@ -2,8 +2,8 @@
 author: ["Tianhao Fei"]
 title: "VS code 编译 .tex 文件"
 date: "2025-03-04"
-description: "这个文档用于说明如何在使用 VS code 编译 .tex 文件"
-summary: "Sample article showcasing basic code syntax and formatting for HTML elements."
+description: "这个文档用于说明如何在使用 VS code 编译 .tex 文件。"
+summary: "这个文档用于说明如何在使用 VS code 编译 .tex 文件。"
 tags: ["markdown", "VS code", "Latex"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
