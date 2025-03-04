@@ -2,9 +2,9 @@
 author: ["Tianhao Fei"]
 title: "Explanation of .bat files"
 date: "2025-03-03"
-# description: "Sample article showcasing basic code syntax and formatting for HTML elements."
-summary: "Sample article showcasing basic code syntax and formatting for HTML elements."
-tags: ["markdown", "syntax", "code", "gist"]
+description: "这个文档简要介绍了 .bat 文件的作用，以及如何 .bat 文件右击在 VS code 中打开文件夹。"
+summary: "这个文档简要介绍了 .bat 文件的作用，以及如何 .bat 文件右击在 VS code 中打开文件夹。"
+tags: ["VS code"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
 ShowToc: true
