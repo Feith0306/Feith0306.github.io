@@ -1,0 +1,6 @@
+body {
+    background-image: url('/images/background.jpg'); /* 修改为你的图片路径 */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
