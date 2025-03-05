@@ -13,7 +13,7 @@
   background-image: url(/images/background.jpg);
 }
 
-#top::after,
+/* #top::after,
 .list::after,
 .list-profile::after {
   background: inherit;
@@ -27,4 +27,4 @@
   background-size: cover;
   z-index: -1;
   background-attachment: fixed;
-}
+} */
