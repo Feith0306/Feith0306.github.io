@@ -82,7 +82,7 @@ params:
       - "css/extended/backgound.css"
 
   label:
-    text:  "👻 <span style='font-family:Brush Script MT, Lucida Handwriting, cursive;'>Feith's Blog</span>"                                            # 站点的标签
+    text:  "<span style='font-family:Brush Script MT, Lucida Handwriting, cursive;'>Feith's Blog</span>"                                            # 站点的标签
     icon: /apple-touch-icon.png   
     iconHeight: 35
 
