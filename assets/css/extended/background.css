@@ -1,0 +1,7 @@
+body {
+    background-image: url('{{ "images/background.jpg" | relURL }}');  /* 让 Hugo 解析图片路径 */
+    background-size: cover;  /* 让图片铺满整个背景 */
+    background-position: center;  /* 居中对齐 */
+    background-repeat: no-repeat;  /* 不重复 */
+    background-attachment: fixed;  /* 让背景固定，不随滚动条滚动 */
+}
