@@ -1,0 +1,39 @@
+/* 标题统一配置 */
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    font-family: "Noto Serif SC", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    margin: 20px 0 10px;
+    letter-spacing: 0.02em;
+}
+
+/* 标题大小设置 */
+.post-content h1 { font-size: 1.8em; font-weight: 700; }
+.post-content h2 { font-size: 1.6em; font-weight: 600; }
+.post-content h3 { font-size: 1.3em; font-weight: 600; }
+.post-content h4,
+.post-content h5,
+.post-content h6 { font-size: 1em; font-weight: 500; }
+
+/* h1 和 h2 的下划线样式 */
+.post-content h1,
+.post-content h2 {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* 移除其他标题的下划线 */
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    border-bottom: none !important;
+    padding-bottom: 0;
+    margin-bottom: 10px;
+}
