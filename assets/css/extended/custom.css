@@ -17,7 +17,7 @@ iframe {
 }
 
 body {
-    background-image: url('/images/background.jpg'); /* 替换为你的图片路径 */
+    background-image: '/images/background.jpg'; /* 替换为你的图片路径 */
     background-size: cover; /* 让背景铺满整个页面 */
     background-position: center;
     background-attachment: fixed; /* 让背景固定不随滚动条滚动 */
