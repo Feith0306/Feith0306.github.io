@@ -155,10 +155,10 @@ menu:                             # 定义导航菜单
     #   url: https://example.org    # 自定义菜单的链接
     #   weight: 30                  # 自定义菜单的权重
     - identifier: archive  
-      name: Archive
-      url: :open_book: archives
+      name: Archive [:open_book:]
+      url: archives
       weight: 5
     - identifier: search
-      name: :mag: Search
+      name: Search [:mag:]
       url: search/
       weight: 10
