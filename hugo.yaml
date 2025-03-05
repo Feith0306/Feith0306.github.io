@@ -31,6 +31,7 @@ markup:
     style: "monokai"
     
 params:
+  umami: true 
   fancybox: true
   copyCodeButton: true
   env: production 

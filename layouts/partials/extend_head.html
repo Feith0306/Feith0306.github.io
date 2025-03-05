@@ -19,3 +19,12 @@
   />
 {{ end }}
 
+
+{{ if .Site.Params.umami -}}
+<script 
+    defer 
+    src="https://umami.grew.cc/myscript" 
+    data-website-id="b2daf838-b6d4-4783-a157-e2fbe0cc225d"
+    data-domains="blog.grew.cc"
+></script>
+{{- end }}
