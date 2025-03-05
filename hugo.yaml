@@ -147,7 +147,7 @@ menu:                             # 定义导航菜单
       url: /categories/           # 分类页面的 URL （/categories/ Hugo 的分类页面（taxonomy page））
       weight: 10                  # 菜单的权重（值越小越靠前）
     - identifier: tags            
-      name: :pushpin: tags                  # 标签菜单项
+      name:  tags [:pushpin:]                  # 标签菜单项
       url: /tags/                 # 标签页面的 URL
       weight: 20
     # - identifier: example 
