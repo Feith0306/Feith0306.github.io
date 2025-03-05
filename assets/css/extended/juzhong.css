@@ -1,0 +1,15 @@
+/* 首页信息居中 */
+.first-entry .entry-header {
+    align-self: center;
+}
+.home-info .entry-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.first-entry .entry-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
