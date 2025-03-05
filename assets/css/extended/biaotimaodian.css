@@ -1,0 +1,22 @@
+.post-content h1 .anchor,
+.post-content h2 .anchor,
+.post-content h3 .anchor,
+.post-content h4 .anchor,
+.post-content h5 .anchor,
+.post-content h6 .anchor {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: #3cb371 !important;
+}
+
+.post-content h1:hover .anchor,
+.post-content h2:hover .anchor,
+.post-content h3:hover .anchor,
+.post-content h4:hover .anchor,
+.post-content h5:hover .anchor,
+.post-content h6:hover .anchor {
+    opacity: 1;
+}
