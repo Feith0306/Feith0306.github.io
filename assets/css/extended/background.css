@@ -1,7 +1,30 @@
-body {
-    background-image: url('{{ "images/background.jpg" | relURL }}');  /* 让 Hugo 解析图片路径 */
-    background-size: cover;  /* 让图片铺满整个背景 */
-    background-position: center;  /* 居中对齐 */
-    background-repeat: no-repeat;  /* 不重复 */
-    background-attachment: fixed;  /* 让背景固定，不随滚动条滚动 */
+#top,
+.list,
+.list-profile {
+  background-image: url(/images/background.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+#top.dark,
+.list.dark,
+.list-profile.dark {
+  background-image: url(/images/background.jpg);
+}
+
+#top::after,
+.list::after,
+.list-profile::after {
+  background: inherit;
+  filter: blur(5px);
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  background-size: cover;
+  z-index: -1;
+  background-attachment: fixed;
 }
