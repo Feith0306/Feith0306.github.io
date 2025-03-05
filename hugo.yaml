@@ -32,7 +32,7 @@ markup:
     
 params:
   umami: true 
-  fancybox: true
+  fancybox: false
   copyCodeButton: true
   env: production 
   title: ExampleSite                                                # 站点的标题
