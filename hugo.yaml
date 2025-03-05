@@ -78,8 +78,8 @@ params:
     favicon32x32: "<link / abs url>"
     apple_touch_icon: "<link / abs url>"
     safari_pinned_tab: "<link / abs url>"
-    css:                                                     # 修改 1
-      - css/extended/custom.css                                            # 修改 2
+    customCSS:                                                     # 修改 1
+      - css/custom.css                                            # 修改 2
 
   label:
     text: "Feith's Blog"                                            # 站点的标签
@@ -145,22 +145,22 @@ params:
 menu:                             # 定义导航菜单
   main:                           # Hugo 主题 PaperMod 默认的主菜单（可以有多个菜单）
     - identifier: categories      # 菜单的唯一标识符，用于 Hugo 内部管理这个菜单项
-      name: categories            # 分类菜单项的显示名称
+      name: :open_file_folder: categories            # 分类菜单项的显示名称
       url: /categories/           # 分类页面的 URL （/categories/ Hugo 的分类页面（taxonomy page））
       weight: 10                  # 菜单的权重（值越小越靠前）
     - identifier: tags            
-      name: tags                  # 标签菜单项
+      name: :pushpin: tags                  # 标签菜单项
       url: /tags/                 # 标签页面的 URL
       weight: 20
-    - identifier: example 
-      name: example.org           # 自定义菜单项
-      url: https://example.org    # 自定义菜单的链接
-      weight: 30                  # 自定义菜单的权重
+    # - identifier: example 
+    #   name: example.org           # 自定义菜单项
+    #   url: https://example.org    # 自定义菜单的链接
+    #   weight: 30                  # 自定义菜单的权重
     - identifier: archive  
       name: Archive
-      url: archives
+      url: :open_book: archives
       weight: 5
     - identifier: search
-      name: Search
+      name: :mag: Search
       url: search/
       weight: 10
