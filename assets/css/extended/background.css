@@ -1,7 +1,7 @@
 #top,
 .list,
 .list-profile {
-  background-image: url(/images/background0.jpg);
+  background-image: url(/images/backgroundwhite.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -10,7 +10,7 @@
 #top.dark,
 .list.dark,
 .list-profile.dark {
-  background-image: url(/images/background1.jpg);
+  background-image: url(/images/backgrounddark.jpg);
 }
 
 #top::after,
