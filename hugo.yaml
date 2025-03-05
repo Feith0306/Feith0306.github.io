@@ -101,7 +101,7 @@ params:
         url: tags
 
   homeInfoParams:                     # 主页信息模式（如果启用，会在主页显示欢迎信息）
-    Title: "Feith's Blog :partying_face:"      # 主页欢迎信息标题
+    Title: "Welcome to Tianhao Fei's Blog :partying_face:"      # 主页欢迎信息标题
     Content: 办法总比困难多       # 主页欢迎信息内容
 
   socialIcons:
