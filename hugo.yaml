@@ -78,8 +78,8 @@ params:
     favicon32x32: "<link / abs url>"
     apple_touch_icon: "<link / abs url>"
     safari_pinned_tab: "<link / abs url>"
-    customSCSS:                                                     # 修改 1
-      - scss/custom.scss                                            # 修改 2
+    customCSS:                                                     # 修改 1
+      - css/custom.css                                            # 修改 2
 
   label:
     text: "Feith's Blog"                                            # 站点的标签
