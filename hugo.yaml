@@ -31,6 +31,7 @@ markup:
     style: "monokai"
     
 params:
+  fancybox: true
   copyCodeButton: true
   env: production 
   title: ExampleSite                                                # 站点的标题
