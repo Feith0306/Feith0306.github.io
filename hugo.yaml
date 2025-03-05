@@ -43,13 +43,21 @@ params:
   defaultTheme: auto # dark, light                                  # 站点默认主题模式（自动适应用户偏好）
   disableThemeToggle: false                                         # 是否禁用深色/浅色模式切换
 
+
   ShowReadingTime: true                                             # 显示阅读时间
   ShowShareButtons: true                                            # 显示社交分享按钮
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowCodeCopyButtons: false
+  ShowCodeCopyButtons: true
   ShowWordCount: true
   ShowRssButtonInSectionTermList: true                              # 在分类/标签页显示 RSS 订阅按钮
+  ##
+  ShowMacDots: true # Mac色块
+  ShowCodeLang: true # 语言显示
+  ShowExpandButton: true # 代码块折叠
+  ShowCodeCopyButtons: true # 代码块复制按钮
+  codeMaxHeight: "300px" # 代码块最大折叠高度
+  ##
   UseHugoToc: true
   disableSpecial1stPost: false
   disableScrollToTop: false
