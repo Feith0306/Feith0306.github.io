@@ -13,11 +13,11 @@
   background-image: url(/images/background.jpg);
 }
 
-/* #top::after,
+#top::after,
 .list::after,
 .list-profile::after {
   background: inherit;
-  filter: blur(5px);
+  filter: blur(0px);
   content: "";
   position: fixed;
   top: 0;
@@ -27,4 +27,4 @@
   background-size: cover;
   z-index: -1;
   background-attachment: fixed;
-} */
+}
