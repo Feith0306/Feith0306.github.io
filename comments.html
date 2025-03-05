@@ -1,0 +1,15 @@
+{{- /* Comments area start */ -}}
+{{- /* to add comments read => https://gohugo.io/content-management/comments/ */ -}}
+{{- /* Comments area end */ -}}
+
+{{ if .Site.Params.walineServer }}
+<div id="waline"></div>
+<script>
+    Waline.init({
+        el: '#waline',
+        //path: location.pathname,
+        dark: "body.dark",
+        serverURL: "{{.Site.Params.walineServer}}",
+    });
+    </script>
+{{ end }}

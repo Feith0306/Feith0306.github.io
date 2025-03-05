@@ -61,7 +61,8 @@ params:
   UseHugoToc: true
   disableSpecial1stPost: false
   disableScrollToTop: false
-  comments: false
+  comments: true
+  walineServer: https://waline.vercel.app
   hidemeta: false
   hideSummary: false                                                # 是否隐藏文章摘要
   showtoc: false                                                    # 是否显示文章目录
