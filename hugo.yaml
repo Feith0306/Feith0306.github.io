@@ -1,7 +1,7 @@
 # baseURL: https://example.org/
 baseURL: https://Feith0306.github.io/
 languageCode: en-us
-title: 🤖 Feith's Blog
+title: Feith's Blog
 theme: ["PaperMod"]
 enableEmoji: true
 
@@ -80,6 +80,13 @@ params:
     safari_pinned_tab: "<link / abs url>"
     customCSS:
       - "css/extended/backgound.css"
+    favicon: "/favicon.ico"
+    favicon16x16: "favicon-16x16.png"
+    favicon32x32: "favicon-32x32.png"
+    apple_touch_icon: "apple-touch-icon.png"
+    safari_pinned_tab: "safari-pinned-tab.svg"
+    theme_color: "#ffffff"
+    msapplication_TileColor: "#ffffff"
 
   label:
     text:  "👻 Feith's Blog"                                            # 站点的标签
