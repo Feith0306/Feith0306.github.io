@@ -1,8 +1,9 @@
 ---
 author: "Tianhao Fei"
-title: "解决github端口连接问题"
+title: " github端口连接 "
 date: "2025-03-27"
 description: "这个文档用于解决github端口连接报错。"
+summary: "这个文档用于解决github端口连接报错问题。"
 tags: ["github"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
@@ -10,7 +11,7 @@ ShowBreadCrumbs: false
 ShowToc: true
 TocOpen: true
 cover:
-  image: images/gitbash.jpg
+  image: images/gitbash.png
 ---
 
 ## :rocket: 一、问题描述
