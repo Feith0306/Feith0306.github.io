@@ -98,7 +98,7 @@ params:
     enabled: true # needs to be explicitly set
     title: "Welcome to Tianhao Fei's Blog"                                           # 个人资料标题
     subtitle: "Every little helps"                                  # 个人资料副标题
-    imageUrl: "images/profile.jpg"                                    # 个人资料图片
+    imageUrl: <images/profile.jpg>                                # 个人资料图片
     imageWidth: 120                                               # 个人资料图片宽度
     imageHeight: 120                                              # 个人资料图片高度
     imageTitle: Tianhao Fei                                         # 个人资料图片标题
