@@ -32,8 +32,8 @@ markup:
     
 params:
   umami: true                                                       # 是否启用 Umami 分析
-  fancybox: false                                                   # 是否启用 FancyBox 图片预览
-  copyCodeButton: true                                              # 是否启用代码块复制按钮
+  fancybox: true                                                  # 是否启用 FancyBox 图片预览
+  # copyCodeButton: false                                              # 是否启用代码块复制按钮
   env: production 
   title: ExampleSite                                                # 站点的标题
   description: "ExampleSite description"                            # 站点的描述信息
@@ -54,15 +54,14 @@ params:
   ShowWordCount: true                                               # 显示文章字数统计
   ShowRssButtonInSectionTermList: true                              # 在分类/标签页显示 RSS 订阅按钮
   ##
-  ShowMacDots: true # Mac色块
-  ShowCodeLang: true # 语言显示
-  ShowExpandButton: true # 代码块折叠
-  ShowCodeCopyButtons: true # 代码块复制按钮
-  codeMaxHeight: "300px" # 代码块最大折叠高度
+  # ShowMacDots: true # Mac色块
+  # ShowCodeLang: true # 语言显示
+  # ShowExpandButton: true # 代码块折叠
+  # codeMaxHeight: "300px" # 代码块最大折叠高度
   ##
-  UseHugoToc: true
-  disableSpecial1stPost: false
-  disableScrollToTop: false
+  UseHugoToc: true # 使用 Hugo 自动生成的目录
+  disableSpecial1stPost: false # 禁用第一篇文章的特殊样式
+  disableScrollToTop: true # 启用滚动到顶部按钮
   comments: true
   walineServer: https://waline.vercel.app
   hidemeta: false
@@ -73,11 +72,11 @@ params:
   assets:
     # disableHLJS: true # to disable highlight.js
     # disableFingerprinting: true
-    favicon: "<link / abs url>"
-    favicon16x16: "<link / abs url>"
-    favicon32x32: "<link / abs url>"
-    apple_touch_icon: "<link / abs url>"
-    safari_pinned_tab: "<link / abs url>"
+    # favicon: "<link / abs url>"
+    # favicon16x16: "<link / abs url>"
+    # favicon32x32: "<link / abs url>"
+    # apple_touch_icon: "<link / abs url>"
+    # safari_pinned_tab: "<link / abs url>"
     customCSS:
       - "css/extended/backgound.css"
     favicon: "images/favicon.ico"
@@ -95,30 +94,35 @@ params:
 
   # profile-mode
   profileMode:                                                    # 个人资料模式
-    enabled: false # needs to be explicitly set
-    title: "Welcome to Tianhao Fei's Blog"                                           # 个人资料标题
-    subtitle: "Every little helps"                                  # 个人资料副标题
-    imageUrl: <images/profile.jpg>                                # 个人资料图片
+    enabled: true # needs to be explicitly set
+    # title: "<marquee behavior='scroll' direction='left'>🚀 Welcome to Tianhao Fei's Blog</marquee>"                                         # 个人资料标题
+    title: "<span class='title-typing'>🚀 Welcome to Tianhao Fei's Blog</span>"
+    # subtitle: "<span class='title-typing'>Every little helps</span>"
+    subtitle: "<span class='subtitle-fancy'>Every little helps</span>"
+    # title: "<span class='apple-title'>🚀 Welcome to Tianhao Fei's Blog</span>"
+    # subtitle: "<span class='apple-subtitle'>Every little helps</span>"
+    imageUrl: images/profile.jpg                               # 个人资料图片
     imageWidth: 120                                               # 个人资料图片宽度
     imageHeight: 120                                              # 个人资料图片高度
     imageTitle: Tianhao Fei                                         # 个人资料图片标题
     buttons:                                                      # 个人资料按钮
       - name: Posts                                               # 按钮名称
         url: posts                                                # 按钮链接
-      - #name: Tags                                                # 按钮名称
-        #url: tags                                                 # 按钮链接
+      - name: Email
+        url: "mailto:feith0306@gmail.com"
+
 
   homeInfoParams:                     # 主页信息模式（如果启用，会在主页显示欢迎信息）
     Title: "<span style='font-family:Brush Script MT, Lucida Handwriting, cursive;'>Welcome to Tianhao Fei's Blog</span> :partying_face:"      # 主页欢迎信息标题
     Content: "<span style='font-size: 20px; font-family: Arial, sans-serif;'>Every Little Helps</span>"       # 主页欢迎信息内容
 
   socialIcons:
-    - name: weibo 
-      url: "https://weibo.com/"
-    - name: stackoverflow
-      url: "https://stackoverflow.com"
+    - name: zhihu 
+      url: "https://zhihu.com/"
+    - name: wechat
+      url: "https://wechat.com"
     - name: github
-      url: "https://github.com/"
+      url: "https://github.com/Feith0306"
 
   analytics:
     google:
@@ -171,3 +175,4 @@ menu:                             # 定义导航菜单
       name: "Search \U0001F50D"
       url: search/
       weight: 10
+

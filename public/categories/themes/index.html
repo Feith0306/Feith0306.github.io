@@ -13,7 +13,7 @@
 <meta name="google-site-verification" content="XYZabc">
 <meta name="yandex-verification" content="XYZabc">
 <meta name="msvalidate.01" content="XYZabc">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.863b6ef019d4f6bf53522dd119bb50e596bac2f503181a5e64eaa331b2c99c6f.css" integrity="sha256-hjtu8BnU9r9TUi3RGbtQ5Za6wvUDGBpeZOqjMbLJnG8=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.0b4bb5980dab55855475cadfecbf14df2a406d0486cc263c7bd1a421a85528a6.css" integrity="sha256-C0u1mA2rVYVUdcrf7L8U3ypAbQSGzCY8e9GkIahVKKY=" rel="preload stylesheet" as="style">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -102,9 +102,9 @@
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="👻 Feith&#39;s Blog (Alt + H)">
+            <a href="http://localhost:1313/" accesskey="h" title="Feith&#39;s Blog (Alt + H)">
                 <img src="http://localhost:1313/images/apple-touch-icon.png" alt="" aria-label="logo"
-                    height="35">👻 Feith&#39;s Blog</a>
+                    height="35">Feith&#39;s Blog</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -231,11 +231,6 @@
         <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
     </span>
 </footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
 
 <script>
     let menu = document.getElementById('menu')
@@ -267,19 +262,6 @@
 
 </script>
 <script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
         if (document.body.className.includes("dark")) {
             document.body.classList.remove('dark');
@@ -292,6 +274,47 @@
 
 </script>
 
+
+
+
+<script src="/js/particles.min.js"></script>
+<script src="/js/particles-config.js"></script> -->
+
+
+<div id="particles-js"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+
+<script>
+  function loadParticles(theme) {
+    const existingScript = document.querySelector('#dynamic-particles-script');
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement('script');
+    script.id = 'dynamic-particles-script';
+    script.src = `/js/particles-${theme}.js`;
+    document.getElementById("particles-js").innerHTML = ""; 
+    document.body.appendChild(script);
+  }
+
+  const getCurrentTheme = () =>
+    document.documentElement.classList.contains("dark") ? "dark" : "light";
+
+  
+  loadParticles(getCurrentTheme());
+
+  
+  const observer = new MutationObserver(() => {
+    loadParticles(getCurrentTheme());
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+</script>
 </body>
 
 </html>

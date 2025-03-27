@@ -368,3 +368,45 @@
     });
 </script>
 {{- end }}
+
+<!-- <div id="particles-js"></div>
+
+<!-- 粒子库和配置 -->
+<script src="/js/particles.min.js"></script>
+<script src="/js/particles-config.js"></script> -->
+
+
+<div id="particles-js"></div>
+
+<!-- 粒子库 -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<!-- 根据当前主题加载粒子 -->
+<script>
+  function loadParticles(theme) {
+    const existingScript = document.querySelector('#dynamic-particles-script');
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement('script');
+    script.id = 'dynamic-particles-script';
+    script.src = `/js/particles-${theme}.js`;
+    document.getElementById("particles-js").innerHTML = ""; // 清空旧粒子 DOM
+    document.body.appendChild(script);
+  }
+
+  const getCurrentTheme = () =>
+    document.documentElement.classList.contains("dark") ? "dark" : "light";
+
+  // 初始加载
+  loadParticles(getCurrentTheme());
+
+  // 监听主题切换（响应 toggle）
+  const observer = new MutationObserver(() => {
+    loadParticles(getCurrentTheme());
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+</script>

@@ -7,7 +7,7 @@ summary: "这个文档用于解决github端口连接报错问题。"
 tags: ["github"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
-ShowBreadCrumbs: false
+ShowBreadCrumbs: false 
 ShowToc: true
 TocOpen: true
 cover:

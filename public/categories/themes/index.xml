@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Themes on My New Hugo Site</title>
+    <title>Themes on Feith&#39;s Blog</title>
     <link>http://localhost:1313/categories/themes/</link>
-    <description>Recent content in Themes on My New Hugo Site</description>
+    <description>Recent content in Themes on Feith&#39;s Blog</description>
     <image>
-      <title>My New Hugo Site</title>
+      <title>Feith&#39;s Blog</title>
       <url>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>http://localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- 0.143.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Mar 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/themes/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Explanation of .bat files</title>
+      <title> github端口连接 </title>
+      <link>http://localhost:1313/posts/git_port/</link>
+      <pubDate>Thu, 27 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/git_port/</guid>
+      <description>这个文档用于解决github端口连接报错。</description>
+    </item>
+    <item>
+      <title>VS code 编译 .tex 文件</title>
+      <link>http://localhost:1313/posts/vs_tex/</link>
+      <pubDate>Tue, 04 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/vs_tex/</guid>
+      <description>这个文档用于说明如何使用 VS code 编译 .tex 文件。</description>
+    </item>
+    <item>
+      <title>什么是 .bat 文件？</title>
       <link>http://localhost:1313/posts/bat_explain/</link>
       <pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/bat_explain/</guid>
-      <description>Sample article showcasing basic code syntax and formatting for HTML elements.</description>
+      <description>这个文档简要介绍了 .bat 文件的作用，以及如何通过 .bat 文件右击文件夹在 VS code 中打开。</description>
     </item>
     <item>
       <title>Markdown Syntax Guide</title>
@@ -26,13 +40,6 @@
       <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/markdown-syntax/</guid>
       <description>Sample article showcasing basic Markdown syntax and formatting for HTML elements.</description>
-    </item>
-    <item>
-      <title>Code Syntax Guide</title>
-      <link>http://localhost:1313/posts/code_syntax/</link>
-      <pubDate>Sun, 10 Mar 2019 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/code_syntax/</guid>
-      <description>Sample article showcasing basic code syntax and formatting for HTML elements.</description>
     </item>
   </channel>
 </rss>
