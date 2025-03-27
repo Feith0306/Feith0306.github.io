@@ -31,9 +31,9 @@ markup:
     style: "monokai"
     
 params:
-  umami: true 
-  fancybox: false
-  copyCodeButton: true
+  umami: true                                                       # 是否启用 Umami 分析
+  fancybox: false                                                   # 是否启用 FancyBox 图片预览
+  copyCodeButton: true                                              # 是否启用代码块复制按钮
   env: production 
   title: ExampleSite                                                # 站点的标题
   description: "ExampleSite description"                            # 站点的描述信息
@@ -48,10 +48,10 @@ params:
 
   ShowReadingTime: true                                             # 显示阅读时间
   ShowShareButtons: true                                            # 显示社交分享按钮
-  ShowPostNavLinks: true
-  ShowBreadCrumbs: true
-  ShowCodeCopyButtons: true
-  ShowWordCount: true
+  ShowPostNavLinks: true                                            # 显示文章导航链接 
+  ShowBreadCrumbs: true                                             # 显示导航
+  ShowCodeCopyButtons: true                                         # 代码块复制按钮
+  ShowWordCount: true                                               # 显示文章字数统计
   ShowRssButtonInSectionTermList: true                              # 在分类/标签页显示 RSS 订阅按钮
   ##
   ShowMacDots: true # Mac色块
@@ -90,30 +90,30 @@ params:
 
   label:
     text:  "👻 Feith's Blog"                                            # 站点的标签
-    icon: /apple-touch-icon.png   
+    icon: "images/apple-touch-icon.png"   
     iconHeight: 35
 
   # profile-mode
-  profileMode:
-    enabled: false # needs to be explicitly set
-    title: ExampleSite
-    subtitle: "This is subtitle"
-    imageUrl: "<img location>"
-    imageWidth: 120
-    imageHeight: 120
-    imageTitle: my image
-    buttons:
-      - name: Posts
-        url: posts
-      - name: Tags
-        url: tags
+  profileMode:                                                    # 个人资料模式
+    enabled: true # needs to be explicitly set
+    title: ExampleSite                                            # 个人资料标题
+    subtitle: "This is subtitle"                                  # 个人资料副标题
+    imageUrl: "<img location>"                                    # 个人资料图片
+    imageWidth: 120                                               # 个人资料图片宽度
+    imageHeight: 120                                              # 个人资料图片高度
+    imageTitle: my image                                          # 个人资料图片标题
+    buttons:                                                      # 个人资料按钮
+      - name: Posts                                               # 按钮名称
+        url: posts                                                # 按钮链接
+      - name: Tags                                                # 按钮名称
+        url: tags                                                 # 按钮链接
 
   homeInfoParams:                     # 主页信息模式（如果启用，会在主页显示欢迎信息）
     Title: "<span style='font-family:Brush Script MT, Lucida Handwriting, cursive;'>Welcome to Tianhao Fei's Blog</span> :partying_face:"      # 主页欢迎信息标题
     Content: "<span style='font-size: 20px; font-family: Arial, sans-serif;'>办法总比困难多</span>"       # 主页欢迎信息内容
 
   socialIcons:
-    - name: weibo
+    - name: weibo 
       url: "https://weibo.com/"
     - name: stackoverflow
       url: "https://stackoverflow.com"
