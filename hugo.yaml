@@ -79,17 +79,17 @@ params:
     # safari_pinned_tab: "<link / abs url>"
     customCSS:
       - "css/extended/backgound.css"
-    favicon: "images/favicon.ico"
-    favicon16x16: "images/favicon-16x16.png"
-    favicon32x32: "images/favicon-32x32.png"
-    apple_touch_icon: "images/apple-touch-icon.png"
-    safari_pinned_tab: "images/safari-pinned-tab.svg"
+    favicon: "images/newicon.ico"
+    # favicon16x16: "images/favicon-16x16.png"
+    # favicon32x32: "images/favicon-32x32.png"
+    # apple_touch_icon: "images/apple-touch-icon.png"
+    # safari_pinned_tab: "images/safari-pinned-tab.svg"
     theme_color: "#ffffff"
     msapplication_TileColor: "#ffffff"
 
   label:
     text:  "Feith's Blog"                                            # 站点的标签
-    icon: "images/apple-touch-icon.png"   
+    icon: "favicon.ico"   
     iconHeight: 35
 
   # profile-mode
@@ -109,7 +109,7 @@ params:
       - name: Posts                                               # 按钮名称
         url: posts                                                # 按钮链接
       - name: Email
-        url: "mailto:feith0306@gmail.com"
+        url: "mailto:fth.ustb@gmail.com"
 
 
   homeInfoParams:                     # 主页信息模式（如果启用，会在主页显示欢迎信息）
