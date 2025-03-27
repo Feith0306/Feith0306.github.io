@@ -89,24 +89,24 @@ params:
     msapplication_TileColor: "#ffffff"
 
   label:
-    text:  "👻 Feith's Blog"                                            # 站点的标签
+    text:  "Feith's Blog"                                            # 站点的标签
     icon: "images/apple-touch-icon.png"   
     iconHeight: 35
 
   # profile-mode
   profileMode:                                                    # 个人资料模式
     enabled: true # needs to be explicitly set
-    title: ExampleSite                                            # 个人资料标题
-    subtitle: "This is subtitle"                                  # 个人资料副标题
-    imageUrl: "<img location>"                                    # 个人资料图片
+    title: "Welcome to Tianhao Fei's Blog"                                           # 个人资料标题
+    subtitle: "办法总比困难多"                                  # 个人资料副标题
+    imageUrl: "images/profile.jpg"                                    # 个人资料图片
     imageWidth: 120                                               # 个人资料图片宽度
     imageHeight: 120                                              # 个人资料图片高度
-    imageTitle: my image                                          # 个人资料图片标题
+    imageTitle: Tianhao Fei                                         # 个人资料图片标题
     buttons:                                                      # 个人资料按钮
       - name: Posts                                               # 按钮名称
         url: posts                                                # 按钮链接
-      - name: Tags                                                # 按钮名称
-        url: tags                                                 # 按钮链接
+      - #name: Tags                                                # 按钮名称
+        #url: tags                                                 # 按钮链接
 
   homeInfoParams:                     # 主页信息模式（如果启用，会在主页显示欢迎信息）
     Title: "<span style='font-family:Brush Script MT, Lucida Handwriting, cursive;'>Welcome to Tianhao Fei's Blog</span> :partying_face:"      # 主页欢迎信息标题
