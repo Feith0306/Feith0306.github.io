@@ -410,3 +410,86 @@
     attributeFilter: ["class"]
   });
 </script>
+
+
+<!-- 小狗挂件 -->
+<div id="dog-widget">
+    <img src="/dog/dog.png" id="dog" />
+  </div>
+  
+  <style>
+    #dog-widget {
+      position: fixed;
+      top: 800px;
+      left: 400px;
+      width: 200px; 
+      height: 200px;
+      z-index: 9999;
+      overflow: visible;
+    }
+  
+    #dog {
+      position: absolute;
+      width: 200px;
+      height: auto;
+      top: 0;
+      transition: transform 0.2s ease-out;
+    }
+  
+    /* 翻转方向 */
+    .flip {
+      transform: scaleX(-1);
+    }
+  
+    /* 跳跃效果（向上平移） */
+    .jump {
+      animation: jumpAnim 0.4s ease-out;
+    }
+  
+    @keyframes jumpAnim {
+      0%   { top: 0px; }
+      30%  { top: -30px; }
+      100% { top: 0px; }
+    }
+  </style>
+  
+  <script>
+    const dog = document.getElementById("dog");
+    let direction = 1;
+    let pos = 0;
+  
+    // 跑动速度 & 范围
+    const speed = 0.5;
+    const maxX = 850;
+  
+    function moveDog() {
+      pos += direction * speed;
+      dog.style.left = pos + "px";
+  
+      if (pos > maxX) {
+        direction = -1;
+        dog.classList.add("flip");
+      } else if (pos < 0) {
+        direction = 1;
+        dog.classList.remove("flip");
+      }
+  
+      requestAnimationFrame(moveDog);
+    }
+  
+    moveDog();
+  
+    // 点击跳跃
+    dog.addEventListener("click", () => {
+      if (!dog.classList.contains("jump")) {
+        dog.classList.add("jump");
+        setTimeout(() => {
+          dog.classList.remove("jump");
+        }, 400); // 跳跃动画时长
+      }
+    });
+  </script>
+  
+  
+  
+  

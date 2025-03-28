@@ -1,7 +1,7 @@
-/* #top,
+#top,
 .list,
 .list-profile {
-  background-image: url(/images/backnew.jpg);
+  background-image: url(/images/white-2.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -10,7 +10,7 @@
 #top.dark,
 .list.dark,
 .list-profile.dark {
-  background-image: url(/images/backgrounddark.jpg);
+  background-image: url(/images/black-2.png);
 }
 
 #top::after,
@@ -29,11 +29,11 @@
   background-attachment: fixed;
 }
 
-.list-archive .main,
+/* .list-archive .main,
 .list-linklog-post .main,
 #top article.post-single {
-  -webkit-backdrop-filter: blur(1px);
-  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
   background-color: rgba(104, 152, 191, 0.45);
 } */
 
