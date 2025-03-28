@@ -13,7 +13,7 @@
 <meta name="google-site-verification" content="XYZabc">
 <meta name="yandex-verification" content="XYZabc">
 <meta name="msvalidate.01" content="XYZabc">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.ae9db8bd0e02345a3449bfbe0def5bce3617e3d8db3b53474442ad31b5350899.css" integrity="sha256-rp24vQ4CNFo0Sb&#43;&#43;De9bzjYX49jbO1NHREKtMbU1CJk=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.833be8742fb0c2a41e25b0bde82d6621a517feacc9db4e9974bcc2e6c7cc6315.css" integrity="sha256-gzvodC&#43;wwqQeJbC96C1mIaUX/qzJ206ZdLzC5sfMYxU=" rel="preload stylesheet" as="style">
 
 
 
@@ -289,6 +289,142 @@
     attributeFilter: ["class"]
   });
 </script>
+
+
+
+<div id="dog-widget">
+    <img src="/dog/dog.png" id="dog" />
+  </div>
+  
+  <style>
+    #dog-widget {
+      position: fixed;
+      top: 800px;
+      left: 400px;
+      width: 200px; 
+      height: 200px;
+      z-index: 9999;
+      overflow: visible;
+    }
+  
+    #dog {
+      position: absolute;
+      width: 200px;
+      height: auto;
+      top: 0;
+      transition: transform 0.2s ease-out;
+    }
+  
+     
+    .flip {
+      transform: scaleX(-1);
+    }
+  
+     
+    .jump {
+      animation: jumpAnim 0.4s ease-out;
+    }
+  
+    @keyframes jumpAnim {
+      0%   { top: 0px; }
+      30%  { top: -30px; }
+      100% { top: 0px; }
+    }
+  </style>
+  
+  <script>
+    const dog = document.getElementById("dog");
+    let direction = 1;
+    let pos = 0;
+  
+    
+    const speed = 0.5;
+    const maxX = 850;
+  
+    function moveDog() {
+      pos += direction * speed;
+      dog.style.left = pos + "px";
+  
+      if (pos > maxX) {
+        direction = -1;
+        dog.classList.add("flip");
+      } else if (pos < 0) {
+        direction = 1;
+        dog.classList.remove("flip");
+      }
+  
+      requestAnimationFrame(moveDog);
+    }
+  
+    moveDog();
+  
+    
+    dog.addEventListener("click", () => {
+      if (!dog.classList.contains("jump")) {
+        dog.classList.add("jump");
+        setTimeout(() => {
+          dog.classList.remove("jump");
+        }, 400); 
+      }
+    });
+  </script>
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/mario-widget.css">
+
+<div id="mario-container">
+  <div id="spring-line"></div>
+  <img src="/images/mario.png" id="mario" alt="Mario">
+</div>
+
+<script>
+  const mario = document.getElementById('mario');
+  const container = document.getElementById('mario-container');
+  let isDragging = false;
+  let offsetY = 0;
+
+  mario.addEventListener('mousedown', function (e) {
+    isDragging = true;
+    offsetY = e.clientY - mario.getBoundingClientRect().top;
+    mario.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!isDragging) return;
+    const y = e.clientY - offsetY;
+    mario.style.transform = `translateY(${y}px) rotate(${(y/5)%15}deg)`;
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!isDragging) return;
+    isDragging = false;
+    mario.style.cursor = 'grab';
+
+    
+    let pos = parseFloat(mario.style.transform.match(/translateY\((.*?)px\)/)?.[1] || 0);
+    let velocity = -pos * 0.15;
+    let damping = 0.9;
+
+    function animate() {
+      pos += velocity;
+      velocity *= damping;
+
+      mario.style.transform = `translateY(${pos}px)`;
+
+      if (Math.abs(pos) > 1 || Math.abs(velocity) > 1) {
+        requestAnimationFrame(animate);
+      } else {
+        mario.style.transform = 'translateY(0)';
+      }
+    }
+
+    animate();
+  });
+</script>
+
+
 </body>
 
 </html>

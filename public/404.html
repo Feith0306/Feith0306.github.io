@@ -13,7 +13,7 @@
 <meta name="google-site-verification" content="XYZabc">
 <meta name="yandex-verification" content="XYZabc">
 <meta name="msvalidate.01" content="XYZabc">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.9a2ee460e6670e1172421e2380838abd4a84a06581647c54aaa0968032e93573.css" integrity="sha256-mi7kYOZnDhFyQh4jgIOKvUqEoGWBZHxUqqCWgDLpNXM=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.130c642a76d5a0ce3994a18ed428909cc76170c5fe3f6bb39232a0be35cf3b35.css" integrity="sha256-EwxkKnbVoM45lKGO1CiQnMdhcMX&#43;P2uzkjKgvjXPOzU=" rel="preload stylesheet" as="style">
 
 
 
@@ -209,9 +209,11 @@
 
 
 
+<div id="particles-js"></div>
+
 
 <script src="/js/particles.min.js"></script>
-<script src="/js/particles-config.js"></script> -->
+<script src="/js/particles-config.js"></script>
 
 
 <div id="particles-js"></div>
@@ -248,6 +250,8 @@
     attributeFilter: ["class"]
   });
 </script>
+
+
 
 
 
@@ -330,6 +334,60 @@
   
   
   
-  </body>
+  <link rel="stylesheet" href="/css/mario-widget.css">
+
+<div id="mario-container">
+  <div id="spring-line"></div>
+  <img src="/images/mario2.png" id="mario" alt="Mario">
+</div>
+
+<script>
+  const mario = document.getElementById('mario');
+  const container = document.getElementById('mario-container');
+  let isDragging = false;
+  let offsetY = 0;
+
+  mario.addEventListener('mousedown', function (e) {
+    isDragging = true;
+    offsetY = e.clientY - mario.getBoundingClientRect().top;
+    mario.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!isDragging) return;
+    const y = e.clientY - offsetY;
+    mario.style.transform = `translateY(${y}px) rotate(${(y/5)%15}deg)`;
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!isDragging) return;
+    isDragging = false;
+    mario.style.cursor = 'grab';
+
+    
+    let pos = parseFloat(mario.style.transform.match(/translateY\((.*?)px\)/)?.[1] || 0);
+    let velocity = -pos * 0.15;
+    let damping = 0.9;
+
+    function animate() {
+      pos += velocity;
+      velocity *= damping;
+
+      mario.style.transform = `translateY(${pos}px)`;
+
+      if (Math.abs(pos) > 1 || Math.abs(velocity) > 1) {
+        requestAnimationFrame(animate);
+      } else {
+        mario.style.transform = 'translateY(0)';
+      }
+    }
+
+    animate();
+  });
+</script>
+
+
+
+</body>
 
 </html>

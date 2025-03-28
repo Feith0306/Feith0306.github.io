@@ -1,0 +1,25 @@
+#mario-container {
+    position: fixed;
+    top: 0;
+    left: 50px;
+    z-index: 9999;
+    user-select: none;
+    pointer-events: auto;
+  }
+  
+  #spring-line {
+    width: 2px;
+    height: 130px;
+    background-color: #333;
+    margin: 0 auto;
+  }
+  
+  #mario {
+    width: 80px;
+    cursor: grab;
+    transition: transform 0.1s ease-out;
+    transform-origin: top center;
+  }
+  
+
+  
