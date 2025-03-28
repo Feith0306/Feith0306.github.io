@@ -2,28 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/categories/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/my_profile/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/personal/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/syntax/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/themes/</loc>
+    <lastmod>2025-03-28T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/git_port/</loc>
     <lastmod>2025-03-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
-    <lastmod>2025-03-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2025-03-27T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/github/</loc>
-    <lastmod>2025-03-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2025-03-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/categories/syntax/</loc>
-    <lastmod>2025-03-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2025-03-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/categories/themes/</loc>
     <lastmod>2025-03-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/latex/</loc>
@@ -37,24 +43,6 @@
   </url><url>
     <loc>http://localhost:1313/posts/bat_explain/</loc>
     <lastmod>2025-03-03T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/css/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/html/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/markdown/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/markdown-syntax/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/themes/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/math-typesetting/</loc>
-    <lastmod>2019-03-08T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/archives/</loc>
   </url><url>

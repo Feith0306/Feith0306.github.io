@@ -1,15 +1,16 @@
 ---
-author: "Hugo Authors"
-title: "Markdown Syntax Guide"
-date: "2019-03-11"
-description: "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
-tags: ["markdown", "css", "html", "themes"]
+author: "Tianhao Fei"
+title: "My personal profile"
+date: "2025-03-28"
+# description: "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
+# tags: ["markdown", "css", "html", "themes"]
+tags: ["personal"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
 aliases: ["migrate-from-jekyl"]
 cover:
-  # image: images/patrick.jpg
-  caption: "Generated using [OG Image Playground by Vercel](https://og-playground.vercel.app/)"
+  image: images/mylogo.jpg
+  # caption: "Generated using [OG Image Playground by Vercel](https://og-playground.vercel.app/)"
 ShowToc: true
 TocOpen: true
 ---
