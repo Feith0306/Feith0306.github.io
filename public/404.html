@@ -335,67 +335,13 @@
   
   
   
-<img src="/images/sticker1.png" alt="贴纸"
-style="position: fixed; bottom: 20px; right: 20px; width: 300px; z-index: 9999; pointer-events: none;">
+
 
   
   
 
   
-  <link rel="stylesheet" href="/css/mario-widget.css">
-
-<div id="mario-container">
-  <div id="spring-line"></div>
-  <img src="/images/mario2.png" id="mario" alt="Mario">
-</div>
-
-<script>
-  const mario = document.getElementById('mario');
-  const container = document.getElementById('mario-container');
-  let isDragging = false;
-  let offsetY = 0;
-
-  mario.addEventListener('mousedown', function (e) {
-    isDragging = true;
-    offsetY = e.clientY - mario.getBoundingClientRect().top;
-    mario.style.cursor = 'grabbing';
-  });
-
-  document.addEventListener('mousemove', function (e) {
-    if (!isDragging) return;
-    const y = e.clientY - offsetY;
-    mario.style.transform = `translateY(${y}px) rotate(${(y/5)%15}deg)`;
-  });
-
-  document.addEventListener('mouseup', function () {
-    if (!isDragging) return;
-    isDragging = false;
-    mario.style.cursor = 'grab';
-
-    
-    let pos = parseFloat(mario.style.transform.match(/translateY\((.*?)px\)/)?.[1] || 0);
-    let velocity = -pos * 0.15;
-    let damping = 0.9;
-
-    function animate() {
-      pos += velocity;
-      velocity *= damping;
-
-      mario.style.transform = `translateY(${pos}px)`;
-
-      if (Math.abs(pos) > 1 || Math.abs(velocity) > 1) {
-        requestAnimationFrame(animate);
-      } else {
-        mario.style.transform = 'translateY(0)';
-      }
-    }
-
-    animate();
-  });
-</script>
-
-
-
+  
 </body>
 
 </html>
