@@ -80,7 +80,7 @@ params:
     # safari_pinned_tab: "<link / abs url>"
     customCSS:
       - "css/extended/backgound.css"
-    favicon: "images/feiicon.ico"
+    favicon: "images/atmicon.ico"
     # favicon16x16: "images/favicon-16x16.png"
     # favicon32x32: "images/favicon-32x32.png"
     # apple_touch_icon: "images/apple-touch-icon.png"
