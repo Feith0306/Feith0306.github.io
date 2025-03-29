@@ -33,7 +33,7 @@ markup:
 params:
   umami: true                                                       # 是否启用 Umami 分析
   fancybox: true                                                  # 是否启用 FancyBox 图片预览
-  # copyCodeButton: false                                              # 是否启用代码块复制按钮
+  copyCodeButton: true                                              # 是否启用代码块复制按钮
   env: production 
   title: ExampleSite                                                # 站点的标题
   description: "ExampleSite description"                            # 站点的描述信息
@@ -57,6 +57,7 @@ params:
   # ShowMacDots: true # Mac色块
   # ShowCodeLang: true # 语言显示
   # ShowExpandButton: true # 代码块折叠
+  # ShowCodeCopyButtons: true 
   # codeMaxHeight: "300px" # 代码块最大折叠高度
   ##
   UseHugoToc: true # 使用 Hugo 自动生成的目录

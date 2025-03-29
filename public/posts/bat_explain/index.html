@@ -13,7 +13,7 @@
 <meta name="google-site-verification" content="XYZabc">
 <meta name="yandex-verification" content="XYZabc">
 <meta name="msvalidate.01" content="XYZabc">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.d505978cb9e5e44d12b547d1287aa285375a795446f1bf3bfd0751ca2f2f1882.css" integrity="sha256-1QWXjLnl5E0StUfRKHqihTdaeVRG8b87/QdRyi8vGII=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.7de8d6d7e50889b516b731568dafb194940db1f685f40b8afd314271be757573.css" integrity="sha256-fejW1&#43;UIibUWtzFWja&#43;xlJQNsfaF9AuK/TFCcb51dXM=" rel="preload stylesheet" as="style">
 
 
 
@@ -438,6 +438,53 @@ pause
 
   </footer>
 </article>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
     </main>
     
 <footer class="footer">
@@ -493,6 +540,70 @@ pause
 </script>
 
 
+
+
+
+<div id="particles-js"></div>
+
+
+<script src="/js/particles.min.js"></script>
+<script src="/js/particles-config.js"></script>
+
+
+<div id="particles-js"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+
+<script>
+  function loadParticles(theme) {
+    const existingScript = document.querySelector('#dynamic-particles-script');
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement('script');
+    script.id = 'dynamic-particles-script';
+    script.src = `/js/particles-${theme}.js`;
+    document.getElementById("particles-js").innerHTML = ""; 
+    document.body.appendChild(script);
+  }
+
+  const getCurrentTheme = () =>
+    document.documentElement.classList.contains("dark") ? "dark" : "light";
+
+  
+  loadParticles(getCurrentTheme());
+
+  
+  const observer = new MutationObserver(() => {
+    loadParticles(getCurrentTheme());
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+</script>
+
+
+
+
+
+
+  
+  
+  
+  
+
+
+  
+  
+
+  
+  
+</body>
+
+</html>
 <style>
     .code-toolbar {
         display: flex;
@@ -716,140 +827,3 @@ pause
         });
     });
 </script>
-
-<div id="particles-js"></div>
-
-
-<script src="/js/particles.min.js"></script>
-<script src="/js/particles-config.js"></script>
-
-
-<div id="particles-js"></div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-
-<script>
-  function loadParticles(theme) {
-    const existingScript = document.querySelector('#dynamic-particles-script');
-    if (existingScript) existingScript.remove();
-
-    const script = document.createElement('script');
-    script.id = 'dynamic-particles-script';
-    script.src = `/js/particles-${theme}.js`;
-    document.getElementById("particles-js").innerHTML = ""; 
-    document.body.appendChild(script);
-  }
-
-  const getCurrentTheme = () =>
-    document.documentElement.classList.contains("dark") ? "dark" : "light";
-
-  
-  loadParticles(getCurrentTheme());
-
-  
-  const observer = new MutationObserver(() => {
-    loadParticles(getCurrentTheme());
-  });
-
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"]
-  });
-</script>
-
-
-
-
-
-<div id="dog-widget">
-    <img src="/dog/dog.png" id="dog" />
-  </div>
-  
-  <style>
-    #dog-widget {
-      position: fixed;
-      top: 770px;
-      left: 400px;
-      width: 200px; 
-      height: 200px;
-      z-index: 9999;
-      overflow: visible;
-    }
-  
-    #dog {
-      position: absolute;
-      width: 200px;
-      height: auto;
-      top: 0;
-      transition: transform 0.2s ease-out;
-    }
-  
-     
-    .flip {
-      transform: scaleX(-1);
-    }
-  
-     
-    .jump {
-      animation: jumpAnim 0.4s ease-out;
-    }
-  
-    @keyframes jumpAnim {
-      0%   { top: 0px; }
-      30%  { top: -30px; }
-      100% { top: 0px; }
-    }
-  </style>
-  
-  <script>
-    const dog = document.getElementById("dog");
-    let direction = 1;
-    let pos = 0;
-  
-    
-    const speed = 0.5;
-    const maxX = 850;
-  
-    function moveDog() {
-      pos += direction * speed;
-      dog.style.left = pos + "px";
-  
-      if (pos > maxX) {
-        direction = -1;
-        dog.classList.add("flip");
-      } else if (pos < 0) {
-        direction = 1;
-        dog.classList.remove("flip");
-      }
-  
-      requestAnimationFrame(moveDog);
-    }
-  
-    moveDog();
-  
-    
-    dog.addEventListener("click", () => {
-      if (!dog.classList.contains("jump")) {
-        dog.classList.add("jump");
-        setTimeout(() => {
-          dog.classList.remove("jump");
-        }, 400); 
-      }
-    });
-  </script>
-  
-  
-  
-  
-
-
-  
-  
-
-  
-  
-</body>
-
-</html>
