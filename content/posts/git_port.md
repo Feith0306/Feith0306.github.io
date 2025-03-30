@@ -1,9 +1,9 @@
 ---
 author: "Tianhao Fei"
-title: " github端口连接 "
+title: " Github 端口连接 "
 date: "2025-03-27"
-description: "这个文档用于解决github端口连接报错。"
-summary: "这个文档用于解决github端口连接报错问题。"
+description: "这个文档用于解决 Github 端口连接报错。"
+summary: "这个文档用于解决 Github 端口连接报错问题。"
 tags: ["github"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
@@ -15,7 +15,7 @@ cover:
 ---
 
 ## :rocket: 一、问题描述
- 以前从本地 `pull/push` 文件向 `github` 远程操作时，没有任何问题，今天操作出现如下报错：
+ 以前从本地 `pull/push` 文件向 `github` 仓库远程操作时，没有任何问题，今天操作出现如下报错：
 ```
 bash
 $ git pull
@@ -43,7 +43,7 @@ ssh -T git@github.com
 ```
 Hi username! You've successfully authenticated, but GitHub does not provide shell access.
 ```
-  - 重新 `pull/push` 代码即可。
+  - 重新 `pull/push` 即可。
 
 ## :dart: 三、报错原因
   - 可能是因为 `SSH` 的 `config` 文件中配置的端口与实际使用的端口不一致。

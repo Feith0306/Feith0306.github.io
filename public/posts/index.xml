@@ -21,11 +21,11 @@
       <description>&lt;p&gt;This article offers the sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
     </item>
     <item>
-      <title> github端口连接 </title>
+      <title> Github 端口连接 </title>
       <link>http://localhost:1313/posts/git_port/</link>
       <pubDate>Thu, 27 Mar 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/git_port/</guid>
-      <description>这个文档用于解决github端口连接报错。</description>
+      <description>这个文档用于解决 Github 端口连接报错。</description>
     </item>
     <item>
       <title>VS code 编译 .tex 文件</title>

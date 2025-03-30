@@ -62,7 +62,7 @@ params:
   ##
   UseHugoToc: true # 使用 Hugo 自动生成的目录
   disableSpecial1stPost: false # 禁用第一篇文章的特殊样式
-  disableScrollToTop: true # 启用滚动到顶部按钮
+  disableScrollToTop: false # 启用滚动到顶部按钮
   comments: true
   walineServer: https://waline.vercel.app
   hidemeta: false
@@ -80,7 +80,7 @@ params:
     # safari_pinned_tab: "<link / abs url>"
     customCSS:
       - "css/extended/backgound.css"
-    favicon: "images/atmicon.ico"
+    favicon: images/feiicon.ico
     # favicon16x16: "images/favicon-16x16.png"
     # favicon32x32: "images/favicon-32x32.png"
     # apple_touch_icon: "images/apple-touch-icon.png"
@@ -99,9 +99,9 @@ params:
     # title: "<marquee behavior='scroll' direction='left'>🚀 Welcome to Tianhao Fei's Blog</marquee>"                                         # 个人资料标题
     title: "<span class='title-typing'>🚀 Welcome to Tianhao Fei's Blog</span>"
     # subtitle: "<span class='title-typing'>Every little helps</span>"
-    subtitle: "<span class='subtitle-fancy'>Every little helps</span>"
+    subtitle: "<span class='subtitle-fancy'>Every Little Helps</span>"
     # title: "<span class='apple-title'>🚀 Welcome to Tianhao Fei's Blog</span>"
-    # subtitle: "<span class='apple-subtitle'>Every little helps</span>"
+    # subtitle: "<span class='apple-subtitle'>Every Little Helps</span>"
     imageUrl: images/profile.jpg                               # 个人资料图片
     imageWidth: 120                                               # 个人资料图片宽度
     imageHeight: 120                                              # 个人资料图片高度
@@ -125,7 +125,7 @@ params:
     - name: github
       url: "https://github.com/Feith0306"
 
-  analytics:
+  analytics: 
     google:
       SiteVerificationTag: "XYZabc"
     bing:

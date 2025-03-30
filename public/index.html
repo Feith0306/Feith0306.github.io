@@ -95,7 +95,7 @@
   "name": "Feith's Blog",
   "url": "http://localhost:1313/",
   "description": "ExampleSite description",
-  "logo": "http://localhost:1313/images/atmicon.ico",
+  "logo": "http://localhost:1313/images/feiicon.ico",
   "sameAs": [
       "https://zhihu.com/", "https://wechat.com", "https://github.com/Feith0306"
   ]
@@ -172,7 +172,7 @@
             <img draggable="false" src="http://localhost:1313/images/profile_hu_69f7cd58d418f152.jpg" alt="Tianhao Fei" title="Tianhao Fei"
                 height="120" width="120" />
         <h1><span class='title-typing'>🚀 Welcome to Tianhao Fei&rsquo;s Blog</span></h1>
-        <span><span class='subtitle-fancy'>Every little helps</span></span><div class="social-icons" >
+        <span><span class='subtitle-fancy'>Every Little Helps</span></span><div class="social-icons" >
     <a href="https://zhihu.com/" target="_blank" rel="noopener noreferrer me"
         title="Zhihu">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2"
@@ -228,6 +228,11 @@
         <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
     </span>
 </footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
 
 <script>
     let menu = document.getElementById('menu')
@@ -256,6 +261,19 @@
             }
         });
     });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
 
 </script>
 <script>
