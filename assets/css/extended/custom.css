@@ -17,4 +17,14 @@ iframe {
 }
 
 
+.post-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center; /* 让公式和文字 baseline 对齐 */
+    gap: 0.1em; /* 可选：微调公式和文字间距 */
+  }
   
+  .post-title .MathJax {
+    display: inline-block;
+    vertical-align: middle; /* 或者 baseline，试一下 */
+  }

@@ -14,11 +14,11 @@
     <lastBuildDate>Thu, 27 Mar 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/github/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title> github端口连接 </title>
+      <title> Github 端口连接 </title>
       <link>http://localhost:1313/posts/git_port/</link>
       <pubDate>Thu, 27 Mar 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/git_port/</guid>
-      <description>这个文档用于解决github端口连接报错。</description>
+      <description>这个文档用于解决 Github 端口连接报错。</description>
     </item>
   </channel>
 </rss>

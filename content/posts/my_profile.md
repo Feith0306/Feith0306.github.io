@@ -4,6 +4,7 @@ title: "My personal profile"
 date: "2025-03-28"
 # description: "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
 # tags: ["markdown", "css", "html", "themes"]
+featured: true
 tags: ["personal"]
 categories: ["themes", "syntax"]
 series: ["Themes Guide"]
