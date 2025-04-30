@@ -31,6 +31,7 @@ markup:
     style: "monokai"
     
 params:
+  math: true                                                    # 是否启用 MathJax 数学公式支持
   umami: true                                                       # 是否启用 Umami 分析
   fancybox: true                                                  # 是否启用 FancyBox 图片预览
   copyCodeButton: true                                              # 是否启用代码块复制按钮

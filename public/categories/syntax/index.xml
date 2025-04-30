@@ -11,14 +11,14 @@
     </image>
     <generator>Hugo -- 0.143.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 19 Apr 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 29 Apr 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/syntax/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>\({\mathcal L}_2\)相关概念整理</title>
+      <title>L2相关概念整理</title>
       <link>http://localhost:1313/posts/l_2/</link>
-      <pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 29 Apr 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/l_2/</guid>
-      <description>一个Hugo用的Markdown文件模板，包含LaTeX行内公式和块级公式示例。</description>
+      <description>基于供能率函数和耗散系统理论，分析H∞控制问题。</description>
     </item>
     <item>
       <title>My personal profile</title>
