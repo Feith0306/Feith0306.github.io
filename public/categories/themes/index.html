@@ -104,8 +104,8 @@ window.MathJax = {
 <script>
     window.MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],  
-        displayMath: [['$$', '$$'], ['\\[', '\\]']] 
+        inlineMath: [['$', '$'], ['\(', '\)']],  
+        displayMath: [['$$', '$$'], ['\[', '\]']] 
       },
       options: {
         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -113,6 +113,24 @@ window.MathJax = {
     };
     </script>
     <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    packages: {'[+]': ['ams']}
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     
 
 </head>
@@ -206,7 +224,7 @@ window.MathJax = {
   <div class="entry-content">
     <p>从耗散系统理论出发，分析非线性系统在面对扰动输入时的 H∞ 控制问题，推导相应的 HJI 不等式，并给出最优控制律的结构。适用于理解非线性控制中的能量约束。</p>
   </div>
-  <footer class="entry-footer"><span title='2025-04-29 00:00:00 +0000 UTC'>April 29, 2025</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;1117 words&nbsp;·&nbsp;Tianhao Fei</footer>
+  <footer class="entry-footer"><span title='2025-04-29 00:00:00 +0000 UTC'>April 29, 2025</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;1141 words&nbsp;·&nbsp;Tianhao Fei</footer>
   <a class="entry-link" aria-label="post link to L2相关概念整理" href="http://localhost:1313/posts/l_2/"></a>
 </article>
 

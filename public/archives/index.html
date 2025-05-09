@@ -145,7 +145,7 @@ window.MathJax = {
     "name": "Feith's Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "http://localhost:1313/images/feiicon.ico"
+      "url": "http://localhost:1313/images/myicon.ico"
     }
   }
 }
@@ -157,8 +157,8 @@ window.MathJax = {
 <script>
     window.MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],  
-        displayMath: [['$$', '$$'], ['\\[', '\\]']] 
+        inlineMath: [['$', '$'], ['\(', '\)']],  
+        displayMath: [['$$', '$$'], ['\[', '\]']] 
       },
       options: {
         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -166,6 +166,24 @@ window.MathJax = {
     };
     </script>
     <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    packages: {'[+]': ['ams']}
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     
 
 </head>
@@ -263,7 +281,7 @@ window.MathJax = {
       <div class="archive-entry">
         <h3 class="archive-entry-title entry-hint-parent">L2相关概念整理
         </h3>
-        <div class="archive-meta"><span title='2025-04-29 00:00:00 +0000 UTC'>April 29, 2025</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;1117 words&nbsp;·&nbsp;Tianhao Fei</div>
+        <div class="archive-meta"><span title='2025-04-29 00:00:00 +0000 UTC'>April 29, 2025</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;1141 words&nbsp;·&nbsp;Tianhao Fei</div>
         <a class="entry-link" aria-label="post link to L2相关概念整理" href="http://localhost:1313/posts/l_2/"></a>
       </div>
     </div>
