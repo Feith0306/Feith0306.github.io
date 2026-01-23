@@ -1,0 +1,22 @@
+/* 首页 Banner 中“副标题”上方头像 */
+.banner-avatar{
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 18px auto;
+
+  /* 让头像在暗背景上更清晰 */
+  border: 2px solid rgba(255,255,255,0.75);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px){
+  .banner-avatar{
+    width: 88px;
+    height: 88px;
+    margin-bottom: 14px;
+  }
+}

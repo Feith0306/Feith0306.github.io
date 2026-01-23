@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>交互式仿真 - RK45(ode45) | GitHub Pages</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+
+  <style>
+    /* 关键修复点：
+       1) 不强行 html/body height:100%（会限制滚动范围）
+       2) body 不再垂直居中，而是从顶部开始布局
+       3) body 显式允许纵向滚动
+    */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+      background: linear-gradient(135deg, #a1a4b3 0%, #764ba2 100%) !important;
+
+      /* 让页面从顶部开始，而不是垂直居中 */
+      display: flex !important;
+      justify-content: center !important;
+      align-items: flex-start !important;
+
+      /* 允许滚动（修复“无法滚回顶部”） */
+      overflow-y: auto !important;
+
+      /* 顶部留出安全边距：避免 Hexo/Fluid 可能的固定导航遮盖 */
+      padding: 80px 20px 40px !important;
+
+      /* 避免移动端横屏时 viewport 计算偏差 */
+      min-height: 100vh !important;
+    }
+
+    #app * { box-sizing: border-box; }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+      padding: 30px;
+      max-width: 1200px;
+      width: 100%;
+
+      /* 确保容器有上下边距，顶部不会贴边 */
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin: 0 0 10px 0;
+      font-size: 28px;
+      line-height: 1.25;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    .badge {
+      display: inline-block;
+      background: #28a745;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .instructions {
+      background: #e7f3ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      border-left: 4px solid #0066cc;
+    }
+    .instructions h3 {
+      color: #0066cc;
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+    .instructions ul {
+      margin: 0 0 0 18px;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    .settings {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+    }
+    .settings h3 {
+      color: #856404;
+      margin: 0 0 12px 0;
+      font-size: 16px;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+    label {
+      font-weight: 600;
+      color: #333;
+      min-width: 160px;
+    }
+    input[type="number"] {
+      padding: 8px 12px;
+      border: 2px solid #ffc107;
+      border-radius: 5px;
+      font-size: 14px;
+      width: 200px;
+      background: #fff;
+    }
+
+    .status {
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .status.idle { background: #e7f3ff; color: #0066cc; }
+    .status.running { background: #fff3cd; color: #856404; }
+    .status.success { background: #d4edda; color: #155724; }
+    .status.error { background: #f8d7da; color: #721c24; }
+
+    .info-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+    .info-card {
+      background: #f8f9fa;
+      padding: 14px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+    .info-card h3 {
+      font-size: 13px;
+      color: #666;
+      margin: 0 0 6px 0;
+      font-weight: 700;
+    }
+    .info-card p {
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chart-container {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .chart-title {
+      font-weight: 800;
+      color: #333;
+      margin: 0 0 10px 0;
+      font-size: 14px;
+    }
+    .chart-box {
+      position: relative;
+      height: 340px;
+    }
+    canvas { width: 100% !important; height: 100% !important; }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-weight: 600;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.35); }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-secondary:hover { background: #5a6268; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-danger:hover { background: #c82333; }
+
+    .footer {
+      text-align: center;
+      margin-top: 8px;
+      color: #666;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* 小高度横屏：减少顶部 padding，避免内容被挤压 */
+    @media (max-height: 620px) {
+      body { padding-top: 20px !important; }
+      .container { padding: 22px; }
+      .chart-box { height: 260px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>📈 交互式仿真：RK45(ode45)<span class="badge">GitHub Pages</span></h1>
+      <p class="subtitle">系统：ẋ = 3x sin(x) + u，u = −3x sin(x) − kx（数值求解 + 导出 CSV）</p>
+
+      <div class="instructions">
+        <h3>📖 使用说明</h3>
+        <ul>
+          <li>两张子图：上图 x(t)，下图 u(t)。</li>
+          <li>k、x0 手动输入（不设范围限制）。</li>
+          <li>导出 CSV：仅包含 t, x, u。</li>
+        </ul>
+      </div>
+
+      <div class="settings">
+        <h3>⚙️ 仿真参数</h3>
+
+        <div class="row">
+          <label>k（反馈增益）</label>
+          <input type="number" id="kNum" step="any" value="4" />
+        </div>
+
+        <div class="row">
+          <label>x0（初值）</label>
+          <input type="number" id="x0Num" step="any" value="4" />
+        </div>
+
+        <div class="row">
+          <label>T（仿真时长）</label>
+          <input type="number" id="tEnd" min="0.1" step="any" value="8" />
+        </div>
+
+        <div class="row">
+          <label>AbsTol</label>
+          <input type="number" id="absTol" min="1e-12" step="any" value="1e-6" />
+        </div>
+
+        <div class="row">
+          <label>RelTol</label>
+          <input type="number" id="relTol" min="1e-12" step="any" value="1e-6" />
+        </div>
+
+        <div class="row">
+          <label>MaxStep（步长上限）</label>
+          <input type="number" id="maxStep" min="1e-6" step="any" value="0.05" />
+        </div>
+      </div>
+
+      <div class="status idle" id="status">等待运行仿真...</div>
+
+      <div class="info-panel">
+        <div class="info-card">
+          <h3>数值点数</h3>
+          <p id="pointCount">-</p>
+        </div>
+        <div class="info-card">
+          <h3>运行耗时（ms）</h3>
+          <p id="costMs">-</p>
+        </div>
+        <div class="info-card">
+          <h3>终值 x(T)</h3>
+          <p id="xEnd">-</p>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-title">上图：状态 x(t)</div>
+        <div class="chart-box"><canvas id="xChart"></canvas></div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-title">下图：控制输入 u(t)</div>
+        <div class="chart-box"><canvas id="uChart"></canvas></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn-primary" id="runBtn">🚀 运行仿真</button>
+        <button class="btn-secondary" id="resetBtn">↩️ 重置图像</button>
+        <button class="btn-danger" id="csvBtn" disabled>⬇️ 导出 CSV</button>
+      </div>
+
+      <div class="footer">💡 纯前端计算，适配 Hexo / GitHub Pages。</div>
+    </div>
+  </div>
+
+<script>
+  const DEFAULT_REFINE = 4;
+
+  function rk45Solve(f, t0, x0, tEnd, opts) {
+    const absTol = opts.absTol ?? 1e-6;
+    const relTol = opts.relTol ?? 1e-6;
+    const hMax   = opts.maxStep ?? 0.05;
+    const hMin   = opts.minStep ?? 1e-12;
+    const nMax   = opts.maxIters ?? 400000;
+
+    const c2=1/5, c3=3/10, c4=4/5, c5=8/9, c6=1, c7=1;
+    const a21=1/5;
+    const a31=3/40,  a32=9/40;
+    const a41=44/45, a42=-56/15, a43=32/9;
+    const a51=19372/6561, a52=-25360/2187, a53=64448/6561, a54=-212/729;
+    const a61=9017/3168, a62=-355/33, a63=46732/5247, a64=49/176, a65=-5103/18656;
+    const a71=35/384, a72=0, a73=500/1113, a74=125/192, a75=-2187/6784, a76=11/84;
+
+    const b1=a71, b2=a72, b3=a73, b4=a74, b5=a75, b6=a76;
+    const bh1=5179/57600, bh2=0, bh3=7571/16695, bh4=393/640, bh5=-92097/339200, bh6=187/2100, bh7=1/40;
+
+    let t=t0, x=x0;
+    let h = Math.min(hMax, Math.max(1e-4, (tEnd - t0) / 200));
+
+    const T=[t];
+    const X=[x];
+
+    for (let iter=0; iter<nMax; iter++) {
+      if (t >= tEnd) break;
+      if (t + h > tEnd) h = tEnd - t;
+
+      const k1 = f(t, x);
+      const k2 = f(t + c2*h, x + h*(a21*k1));
+      const k3 = f(t + c3*h, x + h*(a31*k1 + a32*k2));
+      const k4 = f(t + c4*h, x + h*(a41*k1 + a42*k2 + a43*k3));
+      const k5 = f(t + c5*h, x + h*(a51*k1 + a52*k2 + a53*k3 + a54*k4));
+      const k6 = f(t + c6*h, x + h*(a61*k1 + a62*k2 + a63*k3 + a64*k4 + a65*k5));
+
+      const x5 = x + h*(b1*k1 + b2*k2 + b3*k3 + b4*k4 + b5*k5 + b6*k6);
+      const k7 = f(t + c7*h, x5);
+      const x4 = x + h*(bh1*k1 + bh2*k2 + bh3*k3 + bh4*k4 + bh5*k5 + bh6*k6 + bh7*k7);
+
+      const err = x5 - x4;
+      const scale = absTol + relTol * Math.max(Math.abs(x), Math.abs(x5));
+      const e = Math.abs(err) / scale;
+
+      if (e <= 1) {
+        t += h;
+        x = x5;
+        T.push(t);
+        X.push(x);
+
+        const fac = (e === 0) ? 5.0 : Math.min(5.0, Math.max(0.2, 0.9*Math.pow(1/e, 0.2)));
+        h = Math.min(hMax, Math.max(hMin, h*fac));
+      } else {
+        const fac = Math.max(0.1, 0.9*Math.pow(1/e, 0.25));
+        h = Math.max(hMin, h*fac);
+        if (h <= hMin) throw new Error("步长降至 minStep 仍无法满足误差容限。");
+      }
+    }
+
+    if (T[T.length-1] < tEnd - 1e-12) {
+      throw new Error("达到最大迭代次数仍未到终点。");
+    }
+
+    return { t: T, x: X };
+  }
+
+  function refineHermite(sol, f, refine) {
+    const r = Math.max(1, Math.floor(refine || 1));
+    if (r === 1) return { t: sol.t.slice(), x: sol.x.slice() };
+
+    const T = [];
+    const X = [];
+
+    for (let i = 0; i < sol.t.length - 1; i++) {
+      const t0 = sol.t[i], t1 = sol.t[i+1];
+      const x0 = sol.x[i], x1 = sol.x[i+1];
+      const h  = t1 - t0;
+
+      const m0 = f(t0, x0);
+      const m1 = f(t1, x1);
+
+      for (let j = 0; j < r; j++) {
+        const theta = j / r;
+        const tt = t0 + theta * h;
+
+        const h00 = (2*theta**3 - 3*theta**2 + 1);
+        const h10 = (theta**3 - 2*theta**2 + theta);
+        const h01 = (-2*theta**3 + 3*theta**2);
+        const h11 = (theta**3 - theta**2);
+
+        const xx = h00*x0 + h10*h*m0 + h01*x1 + h11*h*m1;
+
+        T.push(tt);
+        X.push(xx);
+      }
+    }
+
+    T.push(sol.t[sol.t.length-1]);
+    X.push(sol.x[sol.x.length-1]);
+    return { t: T, x: X };
+  }
+
+  function controlLaw(x, k) {
+    return -3*x*Math.sin(x) - k*x;
+  }
+  function dynamicsFactory(k) {
+    return (t, x) => {
+      const u = controlLaw(x, k);
+      return 3*x*Math.sin(x) + u;
+    };
+  }
+
+  let xChart=null, uChart=null;
+  let lastCSV=null;
+
+  function initCharts() {
+    const xCtx = document.getElementById("xChart").getContext("2d");
+    const uCtx = document.getElementById("uChart").getContext("2d");
+
+    xChart = new Chart(xCtx, {
+      type: "line",
+      data: { datasets: [{ label: "x(t)", data: [], borderWidth: 3, pointRadius: 0, tension: 0.25 }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: { legend: { display: true, position: "top" } },
+        scales: {
+          x: { type: "linear", title: { display: true, text: "t (s)" } },
+          y: { type: "linear", title: { display: true, text: "x" } }
+        }
+      }
+    });
+
+    uChart = new Chart(uCtx, {
+      type: "line",
+      data: { datasets: [{ label: "u(t)", data: [], borderWidth: 3, pointRadius: 0, tension: 0.25 }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: { legend: { display: true, position: "top" } },
+        scales: {
+          x: { type: "linear", title: { display: true, text: "t (s)" } },
+          y: { type: "linear", title: { display: true, text: "u" } }
+        }
+      }
+    });
+  }
+
+  function setStatus(type, text) {
+    const el = document.getElementById("status");
+    el.className = "status " + type;
+    el.textContent = text;
+  }
+
+  function resetUI() {
+    lastCSV = null;
+    document.getElementById("csvBtn").disabled = true;
+    document.getElementById("pointCount").textContent = "-";
+    document.getElementById("costMs").textContent = "-";
+    document.getElementById("xEnd").textContent = "-";
+    setStatus("idle", "等待运行仿真...");
+
+    xChart.data.datasets[0].data = [];
+    uChart.data.datasets[0].data = [];
+    xChart.update();
+    uChart.update();
+  }
+
+  function exportCSV() {
+    if (!lastCSV) return;
+    const {t, x, u} = lastCSV;
+
+    let csv = "t,x,u\n";
+    for (let i=0; i<t.length; i++) {
+      csv += `${t[i]},${x[i]},${u[i]}\n`;
+    }
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rk45_sim_t_x_u.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function runSim() {
+    const runBtn = document.getElementById("runBtn");
+    const csvBtn = document.getElementById("csvBtn");
+    runBtn.disabled = true;
+    csvBtn.disabled = true;
+
+    try {
+      const k = Number(document.getElementById("kNum").value);
+      const x0 = Number(document.getElementById("x0Num").value);
+      const tEnd = Number(document.getElementById("tEnd").value);
+      const absTol = Number(document.getElementById("absTol").value);
+      const relTol = Number(document.getElementById("relTol").value);
+      const maxStep = Number(document.getElementById("maxStep").value);
+
+      if (!isFinite(k) || !isFinite(x0) || !isFinite(tEnd) || tEnd <= 0) {
+        throw new Error("参数非法：请检查 k、x0、T。");
+      }
+      if (!isFinite(absTol) || !isFinite(relTol) || absTol <= 0 || relTol <= 0) {
+        throw new Error("AbsTol/RelTol 必须为正数。");
+      }
+      if (!isFinite(maxStep) || maxStep <= 0) {
+        throw new Error("MaxStep 必须为正数。");
+      }
+
+      setStatus("running", "正在仿真（自适应 RK45/ode45）...");
+      await new Promise(r => setTimeout(r, 10));
+
+      const f = dynamicsFactory(k);
+
+      const tStart = performance.now();
+      const sol = rk45Solve(f, 0, x0, tEnd, { absTol, relTol, maxStep });
+      const out = refineHermite(sol, f, DEFAULT_REFINE);
+      const tCost = performance.now() - tStart;
+
+      const U = out.x.map(xx => controlLaw(xx, k));
+
+      xChart.data.datasets[0].data = out.t.map((tt,i)=>({x:tt, y:out.x[i]}));
+      uChart.data.datasets[0].data = out.t.map((tt,i)=>({x:tt, y:U[i]}));
+
+      xChart.update();
+      uChart.update();
+
+      document.getElementById("pointCount").textContent = String(out.t.length);
+      document.getElementById("costMs").textContent = tCost.toFixed(1);
+      document.getElementById("xEnd").textContent = out.x[out.x.length - 1].toFixed(6);
+
+      lastCSV = { t: out.t, x: out.x, u: U };
+      csvBtn.disabled = false;
+
+      setStatus("success", "✅ 仿真完成：已更新 x(t)、u(t)，可导出 CSV。");
+    } catch (e) {
+      console.error(e);
+      setStatus("error", "❌ " + e.message + "（打开控制台查看详细报错）");
+    } finally {
+      runBtn.disabled = false;
+    }
+  }
+
+  window.addEventListener("load", () => {
+    initCharts();
+    document.getElementById("runBtn").addEventListener("click", runSim);
+    document.getElementById("resetBtn").addEventListener("click", resetUI);
+    document.getElementById("csvBtn").addEventListener("click", exportCSV);
+    resetUI();
+  });
+</script>
+</body>
+</html>

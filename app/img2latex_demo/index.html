@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Image → LaTeX (Gemini generateContent / novai proxy)</title>
+  <style>
+    :root { --gap: 12px; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: #111;
+      background: #f6f7f9;
+    }
+    header {
+      padding: 14px 18px;
+      background: #111;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header .sub {
+      opacity: .8;
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 18px 28px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: var(--gap);
+      align-items: start;
+    }
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e6e8ee;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+    label { display: block; font-size: 12px; color: #444; margin: 10px 0 6px; }
+    input[type="text"], input[type="number"], textarea, select {
+      width: 100%;
+      padding: 10px 10px;
+      border: 1px solid #d7dbe6;
+      border-radius: 10px;
+      outline: none;
+      font-size: 13px;
+      background: #fff;
+    }
+    textarea { min-height: 62px; resize: vertical; }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+    }
+    @media (max-width: 980px) { .row { grid-template-columns: 1fr; } }
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    button {
+      border: 1px solid #d7dbe6;
+      background: #111;
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    button.secondary { background: #fff; color: #111; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .hint {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.5;
+      background: #fff7d6;
+      border: 1px solid #ffe08a;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .drop {
+      border: 2px dashed #c8cfdf;
+      background: #fbfcff;
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 240px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #556;
+      position: relative;
+      overflow: hidden;
+    }
+    .drop.dragover { border-color: #111; background: #eef2ff; }
+    .drop img {
+      max-width: 100%;
+      max-height: 360px;
+      display: none;
+      border-radius: 10px;
+    }
+    .drop .placeholder { font-size: 13px; line-height: 1.6; }
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+    pre {
+    background: #0b1020;
+    color: #d7e0ff;
+    border-radius: 12px;
+    padding: 12px;
+    overflow: auto;
+    min-height: 220px;
+    margin: 0;
+    border: 1px solid #1f2a4a;
+
+    /* 关键：默认开启自动换行 */
+    white-space: pre-wrap;        /* 保留换行，同时允许长行折行 */
+    overflow-wrap: anywhere;      /* 超长 token 也能断 */
+    word-break: break-word;       /* 兼容性兜底 */
+    }
+
+  /* 如果用户关闭自动换行，恢复横向滚动 */
+    pre.nowrap {
+      white-space: pre;             /* 不折行 */
+      overflow-x: auto;             /* 横向滚动 */
+    }
+    .status {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #333;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .ok { color: #0a7a2f; }
+    .bad { color: #b00020; }
+    .small {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.4;
+    }
+    .inline {
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .inline input[type="checkbox"] { transform: translateY(1px); }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div><strong>Image → LaTeX</strong>（novai proxy / Gemini generateContent 风格）</div>
+    <div class="sub">
+      支持：本地上传 / 拖拽 / 复制粘贴图片。输出：LaTeX 代码块。<br/>
+      重要：纯静态页面直接调用第三方接口会暴露 API_KEY，且可能被 CORS 拦截。要安全发布到 GitHub Pages，需要加一层你自己的代理后端。
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <!-- Left: Config -->
+      <section class="card">
+        <h2>参数输入（网页端手动填）</h2>
+
+        <label>API_KEY</label>
+        <input id="apiKey" type="text" placeholder='例如：sk-xxxx' value='sk-uQzgnsidCk1HFXFsPD62HTaeZQQQKcTZ2MQ8HqC8Xc48Tdst' />
+
+        <label>BASE_URL</label>
+        <input id="baseUrl" type="text" value="https://once.novai.su/v1beta/models" />
+
+        <label>MODEL_CALL</label>
+        <input id="modelCall" type="text" value="[次]gemini-2.5-pro" />
+
+        <div class="row">
+          <div>
+            <label>TIMEOUT_SECONDS</label>
+            <input id="timeoutSec" type="number" min="5" max="600" step="1" value="120" />
+          </div>
+          <div>
+            <label>wrap（输出是否包裹）</label>
+            <select id="wrapMode">
+              <option value="none">none（不加 $）</option>
+              <option value="display">display（\\[ \\]）</option>
+              <option value="dollars">dollars（$$ $$）</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="inline">
+          <label style="margin:0;">
+            <input id="useQueryKey" type="checkbox" />
+            使用 Query 参数 key=...（否则用 Authorization: Bearer）
+          </label>
+        </div>
+
+        <label>Prompt（可改）</label>
+        <textarea id="promptBox" class="mono">请从图片中识别数学公式，并输出对应的 LaTeX。
+要求：
+1) 只输出 LaTeX 源码，不要解释、不要标题、不要代码块标记。
+2) 多行公式用 align 或 aligned。
+3) 不确定的字符用 \placeholder{} 标记，不要猜。
+4) 默认不加 $...$；由 wrap 参数决定是否包裹。</textarea>
+
+        <div class="btns">
+          <button id="btnPick" class="secondary">选择图片</button>
+          <input id="fileInput" type="file" accept="image/png,image/jpeg" style="display:none" />
+          <button id="btnRun" disabled>开始识别</button>
+          <button id="btnClear" class="secondary">清空</button>
+        </div>
+
+        <div class="hint">
+          你要求“可 GitHub Pages 发布”的同时又要“网页端输入 API_KEY 并调用接口”，这是不安全的组合：密钥会被任何访问者直接拿走。<br/>
+          正确做法：把请求发到你自己的代理（Serverless/后端），由代理持有密钥。
+        </div>
+
+        <div class="small" style="margin-top:10px;">
+          若一直失败，优先检查：1) CORS 是否被拦截；2) 中转是否要求 query key；3) endpoint 是否需要 <code>:generateContent</code> 后缀；4) 账号配额/模型名是否匹配。
+        </div>
+      </section>
+
+      <!-- Right: Workspace + Output -->
+      <section class="card">
+        <h2>工作区（上传/拖拽/粘贴图片）</h2>
+        <div id="dropZone" class="drop" tabindex="0">
+          <div class="placeholder">
+            <div><strong>把图片拖到这里</strong>，或在此区域 <strong>Ctrl+V 粘贴</strong>，或点击左侧“选择图片”。</div>
+            <div style="margin-top:8px;">支持：PNG / JPG</div>
+          </div>
+          <img id="preview" alt="preview" />
+        </div>
+
+        <div class="status mono" id="status"></div>
+
+        <h2 style="margin-top:14px;">LaTeX 输出</h2>
+        <div class="btns" style="margin:10px 0;">
+          <button id="btnCopy" class="secondary" disabled>复制 LaTeX</button>
+          <button id="btnDownload" class="secondary" disabled>下载 .tex</button>
+
+          <label class="small" style="display:flex;align-items:center;gap:6px;margin-left:auto;">
+            <input id="wrapOut" type="checkbox" checked />
+            自动换行
+          </label>
+        </div>
+
+        <pre class="mono" id="outBox"></pre>
+      </section>
+    </div>
+  </main>
+
+<script>
+  // ---------- Helpers ----------
+  function $(id){ return document.getElementById(id); }
+
+  function setStatus(msg, cls="") {
+    const el = $("status");
+    el.className = "status mono " + cls;
+    el.textContent = msg || "";
+  }
+
+  // Encode model_call similar to Python: quote(model_call, safe=":-_.~")
+  // i.e., keep alphanumerics plus ":-_.~" unescaped, percent-encode everything else (including [] and Chinese).
+  function encodeModelCall(s) {
+    const safe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:-_.~";
+    let out = "";
+    for (const ch of s) {
+      if (safe.indexOf(ch) >= 0) {
+        out += ch;
+      } else {
+        // UTF-8 percent encoding
+        const bytes = new TextEncoder().encode(ch);
+        for (const b of bytes) out += "%" + b.toString(16).toUpperCase().padStart(2, "0");
+      }
+    }
+    return out;
+  }
+
+  function buildEndpoint(baseUrl, modelCall) {
+    const u = baseUrl.replace(/\/+$/, "");
+    return u + "/" + encodeModelCall(modelCall);
+  }
+
+  async function blobToBase64(blob) {
+    const arrayBuffer = await blob.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    let binary = "";
+    // chunk to avoid call stack issues
+    const chunkSize = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      const chunk = bytes.subarray(i, i + chunkSize);
+      binary += String.fromCharCode.apply(null, chunk);
+    }
+    return btoa(binary);
+  }
+
+  function wrapLatex(latex, mode) {
+    if (!latex) return latex;
+    if (mode === "display") return "\\[\\n" + latex + "\\n\\]";
+    if (mode === "dollars") return "$$\\n" + latex + "\\n$$";
+    return latex;
+  }
+
+  function tryExtractTextFromResponse(data) {
+    // 1) Gemini: candidates[0].content.parts[*].text
+    try {
+      const cands = data?.candidates || [];
+      if (cands.length > 0) {
+        const parts = cands[0]?.content?.parts || [];
+        const texts = parts
+          .filter(p => p && typeof p === "object" && typeof p.text === "string" && p.text.trim())
+          .map(p => p.text.trim());
+        if (texts.length) return texts.join("\n").trim();
+      }
+    } catch (e) {}
+
+    // 2) fallback keys
+    for (const k of ["text", "output", "result"]) {
+      if (typeof data?.[k] === "string" && data[k].trim()) return data[k].trim();
+    }
+    throw new Error("Unexpected response JSON structure: " + JSON.stringify(data));
+  }
+
+  // ---------- State ----------
+  let currentFile = null;   // File
+  let currentBlob = null;   // Blob
+  let currentMime = null;   // string
+  let currentLatex = "";    // string
+
+  function setPreviewFromFile(file) {
+    currentFile = file;
+    currentBlob = file;
+    currentMime = file.type || "image/png";
+    const url = URL.createObjectURL(file);
+    const img = $("preview");
+    img.onload = () => URL.revokeObjectURL(url);
+    img.src = url;
+    img.style.display = "block";
+    $("dropZone").querySelector(".placeholder").style.display = "none";
+    $("btnRun").disabled = false;
+    setStatus("已载入图片：" + file.name + " (" + Math.round(file.size/1024) + " KB)", "ok");
+  }
+
+  function clearAll() {
+    currentFile = null;
+    currentBlob = null;
+    currentMime = null;
+    currentLatex = "";
+    $("preview").src = "";
+    $("preview").style.display = "none";
+    $("dropZone").querySelector(".placeholder").style.display = "block";
+    $("outBox").textContent = "";
+    $("btnRun").disabled = true;
+    $("btnCopy").disabled = true;
+    $("btnDownload").disabled = true;
+    setStatus("");
+  }
+
+  async function run() {
+    const apiKey = $("apiKey").value.trim();
+    const baseUrl = $("baseUrl").value.trim();
+    const modelCall = $("modelCall").value.trim();
+    const timeoutSec = Math.max(5, Number($("timeoutSec").value || 120));
+    const wrapMode = $("wrapMode").value;
+    const useQueryKey = $("useQueryKey").checked;
+    const prompt = $("promptBox").value || "";
+
+    if (!currentBlob) {
+      setStatus("请先上传/拖拽/粘贴一张图片。", "bad");
+      return;
+    }
+    if (!apiKey) {
+      setStatus("API_KEY 为空。", "bad");
+      return;
+    }
+    if (!baseUrl) {
+      setStatus("BASE_URL 为空。", "bad");
+      return;
+    }
+    if (!modelCall) {
+      setStatus("MODEL_CALL 为空。", "bad");
+      return;
+    }
+
+    const endpoint = buildEndpoint(baseUrl, modelCall);
+
+    setStatus("请求中...\nPOST " + endpoint, "");
+
+    $("btnRun").disabled = true;
+
+    // Build payload (generateContent style)
+    const imgB64 = await blobToBase64(currentBlob);
+    const payload = {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: prompt },
+            { inlineData: { mimeType: currentMime || "image/png", data: imgB64 } }
+          ]
+        }
+      ],
+      generationConfig: { temperature: 0 }
+    };
+
+    // Timeout via AbortController
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutSec * 1000);
+
+    try {
+      const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      };
+      let url = endpoint;
+      if (useQueryKey) {
+        const sep = url.includes("?") ? "&" : "?";
+        url = url + sep + "key=" + encodeURIComponent(apiKey);
+      } else {
+        headers["Authorization"] = "Bearer " + apiKey;
+      }
+
+      const resp = await fetch(url, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+
+      const text = await resp.text();
+      let data = null;
+      try { data = JSON.parse(text); } catch (e) {}
+
+      if (!resp.ok) {
+        // Provide more concrete debugging hints
+        const msg = [
+          "HTTP " + resp.status,
+          "响应内容（截断）：",
+          text.slice(0, 2000),
+          "",
+          "常见原因：",
+          "- CORS 被目标域拦截（静态网页直接调用第三方很常见）",
+          "- 中转要求 query key 或者要求 :generateContent 后缀",
+          "- MODEL_CALL 不正确/未开通/配额不足",
+          "- BASE_URL 不正确"
+        ].join("\n");
+        setStatus(msg, "bad");
+        $("btnRun").disabled = false;
+        return;
+      }
+
+      const latexRaw = tryExtractTextFromResponse(data);
+      currentLatex = wrapLatex(latexRaw, wrapMode);
+
+      $("outBox").textContent = currentLatex;
+      $("btnCopy").disabled = !currentLatex;
+      $("btnDownload").disabled = !currentLatex;
+
+      setStatus("完成。", "ok");
+    } catch (err) {
+      const msg = (err?.name === "AbortError")
+        ? ("请求超时（" + timeoutSec + " 秒）。")
+        : ("请求失败：" + (err?.message || String(err)));
+
+      // CORS failures often show as TypeError: Failed to fetch
+      const extra = (String(err).includes("Failed to fetch") || String(err).includes("NetworkError"))
+        ? "\n提示：这很可能是 CORS 或网络策略导致的。若要在 GitHub Pages 可靠运行，你需要加一层代理后端。"
+        : "";
+
+      setStatus(msg + extra, "bad");
+    } finally {
+      clearTimeout(timer);
+      $("btnRun").disabled = false;
+    }
+  }
+
+  // ---------- Wire up UI ----------
+  $("btnPick").addEventListener("click", () => $("fileInput").click());
+
+  $("fileInput").addEventListener("change", (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!/^image\/(png|jpeg)$/.test(f.type)) {
+      setStatus("仅支持 PNG/JPG。", "bad");
+      return;
+    }
+    setPreviewFromFile(f);
+  });
+
+  $("btnRun").addEventListener("click", run);
+
+  $("btnClear").addEventListener("click", clearAll);
+
+  $("btnCopy").addEventListener("click", async () => {
+    if (!currentLatex) return;
+    await navigator.clipboard.writeText(currentLatex);
+    setStatus("已复制到剪贴板。", "ok");
+  });
+
+  $("btnDownload").addEventListener("click", () => {
+    if (!currentLatex) return;
+    const blob = new Blob([currentLatex + "\n"], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formula.tex";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  // Drag & Drop
+  const dz = $("dropZone");
+  dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+  dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+  dz.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dz.classList.remove("dragover");
+    const f = e.dataTransfer?.files?.[0];
+    if (!f) return;
+    if (!/^image\/(png|jpeg)$/.test(f.type)) {
+      setStatus("仅支持 PNG/JPG。", "bad");
+      return;
+    }
+    setPreviewFromFile(f);
+  });
+
+  // Paste image (Ctrl+V)
+  dz.addEventListener("paste", async (e) => {
+    const items = e.clipboardData?.items || [];
+    for (const it of items) {
+      if (it.type && it.type.startsWith("image/")) {
+        const blob = it.getAsFile();
+        if (!blob) continue;
+        // Convert to File-like object for naming
+        const file = new File([blob], "pasted-image.png", { type: blob.type || "image/png" });
+        setPreviewFromFile(file);
+        e.preventDefault();
+        return;
+      }
+    }
+  });
+
+  // Allow paste when focus on dropzone
+  dz.addEventListener("click", () => dz.focus());
+
+  clearAll();
+
+  // LaTeX 输出区：自动换行开关（默认开）
+  $("wrapOut").addEventListener("change", (e) => {
+    const pre = $("outBox");
+    if (e.target.checked) pre.classList.remove("nowrap");
+    else pre.classList.add("nowrap");
+  });
+
+  // 初始状态：自动换行
+  $("outBox").classList.remove("nowrap");
+</script>
+</body>
+</html>

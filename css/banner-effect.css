@@ -1,0 +1,127 @@
+/* -------------------------
+   0) 艺术字体（推荐放本地字体）
+   你可以把字体文件放：source/fonts/ArtFont.woff2
+   然后用 /fonts/ArtFont.woff2 引用
+------------------------- */
+@font-face {
+  font-family: "FeithArt";
+  src: url("/fonts/ArtFont.woff2") format("woff2");
+  font-display: swap;
+}
+
+/* 兜底：如果你没放字体文件，就先用系统字体/装饰性字体 */
+:root{
+  --banner-title-font: "FeithArt", "Cinzel Decorative", "Georgia", "Times New Roman", serif;
+}
+
+/* -------------------------
+   1) 主标题：更大字号 + 打字机效果
+------------------------- */
+.banner-main-title{
+  font-family: var(--banner-title-font);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+
+  /* 字号 */
+  font-size: 3.2rem;
+  line-height: 1.15;
+
+  text-align: center;
+  margin: 0 0 14px 0;
+
+  /* 打字机关键：限制显示宽度并逐步展开 */
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+
+  /* caret */
+  border-right: 2px solid rgba(255,255,255,0.85);
+
+  /* 用 JS 写入的 --chars 控制 steps */
+  width: calc(var(--chars) * 1ch);
+
+  animation:
+    feith-typing 2.2s steps(var(--chars)) 0.3s both,
+    feith-caret 0.7s step-end infinite;
+}
+
+/* 打字机展开：从 0 宽到目标宽 */
+@keyframes feith-typing {
+  from { width: 0; }
+  to   { width: calc(var(--chars) * 1ch); }
+}
+
+/* 光标闪烁 */
+@keyframes feith-caret {
+  50% { border-right-color: rgba(255,255,255,0); }
+}
+
+/* 移动端字号自适应 */
+@media (max-width: 768px){
+  .banner-main-title{
+    font-size: 2.2rem;
+  }
+}
+
+/* -------------------------
+   2) 副标题：渐变流光动画（不是打字机）
+------------------------- */
+#subtitle.banner-subtitle-anim{
+  font-size: 1.25rem;   /* 比主标题小 */
+  line-height: 1.4;
+  margin-top: 0;
+
+  /* 渐变文字 */
+  background: linear-gradient(90deg, #ffffff, #a7c7ff, #ffd6a5, #ffffff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  animation: feith-gradient 4s ease-in-out infinite;
+}
+
+/* 渐变流动 */
+@keyframes feith-gradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 移动端副标题再小一点 */
+@media (max-width: 768px){
+  #subtitle.banner-subtitle-anim{
+    font-size: 1.05rem;
+  }
+}
+
+/* -------------------------
+   3) 无障碍：用户开启“减少动画”时禁用
+------------------------- */
+@media (prefers-reduced-motion: reduce){
+  .banner-main-title,
+  #subtitle.banner-subtitle-anim{
+    animation: none !important;
+    border-right: none;
+    width: auto;
+    overflow: visible;
+  }
+}
+
+/* 关键：让标题与副标题一定分两行 */
+.banner-main-title{
+  display: block !important;
+  width: 100%;
+  text-align: center;
+  margin: 0 0 12px 0;
+}
+
+/* 副标题也独占一行 */
+#subtitle.banner-subtitle-anim,
+#subtitle{
+  display: block !important;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+}
+

@@ -1,0 +1,12 @@
+/* 限制代码块最大高度，超出滚动 */
+figure.highlight,
+pre[class*="language-"] {
+  max-height: 420px;     /* 你要的折叠高度 */
+  overflow: auto;
+}
+
+/* 可选：滚动更顺滑 */
+figure.highlight pre,
+pre[class*="language-"] {
+  overflow: auto;
+}

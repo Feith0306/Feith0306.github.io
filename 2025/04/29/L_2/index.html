@@ -1,0 +1,985 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.ico">
+  <link rel="icon" href="/img/fluid.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tianhao Fei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基于供能率函数和耗散系统理论，分析H_infty控制问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="L2 概念整理">
+<meta property="og:url" content="https://feith0306.github.io/2025/04/29/L_2/index.html">
+<meta property="og:site_name" content="Feith&#39;s Blog">
+<meta property="og:description" content="基于供能率函数和耗散系统理论，分析H_infty控制问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://feith0306.github.io/img/cover/H.png">
+<meta property="article:published_time" content="2025-04-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-23T06:27:29.420Z">
+<meta property="article:author" content="Tianhao Fei">
+<meta property="article:tag" content="HJI">
+<meta property="article:tag" content="H_infty control">
+<meta property="article:tag" content="L2">
+<meta property="article:tag" content="Robust control">
+<meta property="article:tag" content="耗散系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://feith0306.github.io/img/cover/H.png">
+  
+  
+  
+  <title>L2 概念整理 - Feith&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/banner-avatar.css">
+<link rel="stylesheet" href="/css/mac.css">
+<link rel="stylesheet" href="/css/code_fold.css">
+<link rel="stylesheet" href="/css/banner-title.css">
+<link rel="stylesheet" href="/css/banner-effect.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"feith0306.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":null,"loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Feith&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/app/" target="_self">
+                <i class="iconfont icon-app-fill"></i>
+                <span>应用</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="L2 概念整理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-29 00:00" pubdate>
+          2025年4月29日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">L2 概念整理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <hr>
+<h2 id="一输入输出稳定性与增益约束-robot">一、输入输出稳定性与增益约束 <span class="github-emoji"><span>🤖</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f916.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></h2>
+<p>输入输出系统被建模为一个算子 $ G $，将输入信号 <span class="math inline">\(u : {\mathbb R} \mapsto {\mathbb R}^m\)</span> 映射为输出信号 $ y : {R} ^p $，即 $ y = G(u)$。</p>
+<p>输入输出信号被认为属于 $ {L}_q[0, ) $ 空间，该空间由满足：</p>
+<p><span class="math display">\[
+\|f\|_q := \left( \int_0^{\infty} \|f(t)\|^q {\mathrm {d}}t \right)^{1/q} &lt; \infty
+\]</span></p>
+<p>的测度函数构成。这一约束使我们关注信号整体能量而非瞬时行为。</p>
+<p>输入输出映射的最基本要求是<strong>因果性</strong>（causality）：系统在时间 $ t $ 时刻的输出 $y(t) $ 不能依赖于未来的输入 $ u(s) &nbsp;(s &gt; t) $。数学上，映射 <span class="math inline">\(G : L_q \to L_p\)</span> 是因果的，当且仅当对任意 $ u,v _q $ 和任意 $ T &gt; 0 $，若</p>
+<p><span class="math display">\[
+u(t) = v(t) \quad \forall t \in [0, T] ,
+\]</span></p>
+<p>则有</p>
+<p><span class="math display">\[
+(G(u))(t) = (G(v))(t), \quad \forall t \in [0, T].
+\]</span></p>
+<p>这保证了系统对未来信息的不可预测性，是物理实现的基本要求。</p>
+<p>在此基础上，若存在常数 $ &gt; 0 $，使得：</p>
+<p><span class="math display">\[
+\|G(u)\|_q \leq \gamma \|u\|_q,
+\]</span></p>
+<p>则系统被称为具有有限 $ {L}_q $-增益，该增益 $ $ 被称为系统的 ${L}_q $-增益。更进一步，若系统对任意有界输入 $ u _q $ 输出 $ y _q $，则称为 $ {L}_q $-stable。</p>
+<hr>
+<h2 id="二小增益定理与闭环稳定性-boom">二、小增益定理与闭环稳定性 <span class="github-emoji"><span>💥</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a5.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></h2>
+<p>当两个系统 $ G_1, G_2 $ 以负反馈互联构成闭环系统时，其输入输出关系将变得复杂。系统互联后，扰动信号可能在环路中反复传播、放大或衰减，因此需要严密的准则判断系统整体的稳定性。若我们将系统互联结构建模为：</p>
+<p><span class="math display">\[
+\begin{cases}
+y_1 = G_1(u_1), \quad u_1 = e_1 - y_2, \\
+y_2 = G_2(u_2), \quad u_2 = e_2 + y_1,
+\end{cases}
+\]</span></p>
+<p>则可以通过替换得到：</p>
+<p><span class="math display">\[
+u = e - FG(u), \quad y = G(u), \quad F = 
+\begin{bmatrix}
+0 &amp; I \\
+-I &amp; 0
+\end{bmatrix}.
+\]</span></p>
+<p>此时系统整体的闭环行为由非线性代数方程 $ u = (I + FG)^{-1} e $ 决定。映射 $ (e_1, e_2) (y_1, y_2) $ 是否定义良好（即闭环是否存在且唯一），并具有 $ {L}_q $-稳定性，成为关键问题。</p>
+<p><strong>小增益定理</strong> 给出了这个问题的充分条件之一：</p>
+<p>若两个因果系统 $ G_1, G_2 $ 分别具有有限 $ {L}_q $-增益 $ _1, _2 $，且满足：</p>
+<p><span class="math display">\[
+\gamma_1 \cdot \gamma_2 &lt; 1,
+\]</span></p>
+<p>则闭环系统整体是 $ {}_q $-稳定的，且映射 $ e y $ 是连续、唯一的。</p>
+<p>这一定理以代数乘积揭示了稳定性的本质：在能量意义下，只要反馈回路的总“放大能力”小于1，就能保证系统“收敛”而不是发散。对于线性系统，这一结果直接对应于频域的 <span class="math inline">\(H_{\infty}\)</span> 范数约束；而对于非线性系统，小增益定理提供了从局部 Lipschitz 性或数值界估计出发的通用判据。</p>
+<hr>
+<h2 id="三无源性系统与能量守恒结构-mechanical_arm">三、无源性系统与能量守恒结构 <span class="github-emoji"><span>🦾</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f9be.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></h2>
+<p>相较于小增益定理的代数判据，无源性理论（passivity）从物理角度出发，刻画系统在能量传递上的性质。</p>
+<p>一个系统是<strong>无源的</strong>，意味着它无法生成能量：系统输出给环境的能量不超过它从环境获取的能量。</p>
+<p>形式上，若对系统 $ G $ 存在常数 $  $，对任意 $ u _2 $ 和任意时间 $ T &gt; 0 $，有：</p>
+<p><span class="math display">\[
+\int_0^T \langle (G(u))(t), u(t) \rangle {\mathrm {d}}t \geq \beta,
+\]</span></p>
+<p>则称 $G $ 为<strong>无源系统</strong>。进一步地，若存在 $ &gt; 0 $ 使得：</p>
+<p><span class="math display">\[
+\int_0^T \langle (G(u))(t), u(t) \rangle {\mathrm{d}}t \geq \varepsilon \|G(u)\|_{\mathcal{L}_2[0,T]}^2 + \beta,
+\]</span></p>
+<p>则称 $ G $ 为<strong>严格输出无源系统</strong>。</p>
+<p>无源系统的结构性质具有深远影响。首先，它天然满足因果性；其次，两个无源系统的互联系统仍然无源，从而自动继承稳定性和有限增益性质。</p>
+<p>更重要的是，严格输出无源系统必定具有有限 $ {L}_2 $-gain，其增益满足：</p>
+<p><span class="math display">\[
+\|G(u)\|_{\mathcal{L}_2} \leq \frac{1}{\sqrt\varepsilon} \|u\|_{\mathcal{L}_2} ,
+\]</span></p>
+<p>因此，无源性不仅是系统的物理属性，也是一种增益约束条件，为稳定性与性能分析提供了结构化的数学工具。</p>
+<hr>
+<h2 id="四耗散系统-person_fencing">四、耗散系统 <span class="github-emoji"><span>🤺</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f93a.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></h2>
+<p>为了将输入输出的增益性和状态空间的 Lyapunov 稳定性统一，提出了<strong>耗散系统</strong>的框架。</p>
+<p>系统 $  = f(x, u), &nbsp;y = h(x, u) $ 被称为关于供能率 $ s(u, y) $ 的耗散系统，若存在函数 $ S(x)  $，称为<strong>存储函数</strong>，使得对任意时间区间 <span class="math inline">\([t_0, t_1]\)</span>：</p>
+<p><span class="math display">\[
+S(x(t_1)) - S(x(t_0)) \le \int_{t_0}^{t_1} s(u(t), y(t)) {\mathrm{d}}t.
+\]</span></p>
+<p>这一不等式意味着系统“吸收”的供能 $ s(u, y) $ 不会转化为比 $ S $ 所表示的内部能量更多的输出，换言之，系统具有某种“能量耗散”特性。</p>
+<p>根据所选供能率 $ s(u,y) $ 的不同，可以刻画出不同的系统属性，如下分析。</p>
+<h3 id="globe_with_meridians-4-1-供能率的选择与系统性能"><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 4-1 供能率的选择与系统性能</h3>
+<p>耗散系统理论的核心，是通过定义一个输入输出对 $ (u, y) $ 上的<strong>供能率函数</strong> $ s(u, y) $，来描述系统的能量如何从输入传递到输出，以及是否会在系统内部以某种形式“被”存储或“耗散”。这一函数并非任意，而是根据我们对系统特性的不同关注点选出。典型的供能率如下：</p>
+<h4 id="earth_africa-1.-su-y-uy"><span class="github-emoji"><span>🌍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f30d.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 1. $ s(u, y) = u^y $</h4>
+<p>此时，系统是无源的（Passive）。这是最自然的选择，反映系统从外界吸收的瞬时功率。此时，耗散不等式变为：</p>
+<p><span class="math display">\[
+S(x(t_1)) - S(x(t_0)) \leq \int_{t_0}^{t_1} u^\top(t) y(t) {\mathrm {d}}t,
+\]</span></p>
+<p>表示系统内部存储的能量增量不超过输入与输出之间的能量传递。其背后逻辑是：如果一个系统不会凭空生成能量，那它从输入吸收的功必须转化为内部能量或者输出能量。</p>
+<p>在输入输出映射的形式下，该条件等价于：</p>
+<p><span class="math display">\[
+\int_0^T u^\top(t) G(u)(t) {\mathrm {d}}t \geq \beta,
+\]</span></p>
+<p>即映射 $ G $ 为无源系统。</p>
+<h4 id="earth_africa-2.-su-y-uy---y2"><span class="github-emoji"><span>🌍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f30d.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 2. $ s(u, y) = u^y - |y|^2 $</h4>
+<p>此时，系统是<strong>严格输出无源的</strong>（Strict Output Passive）。在实际物理系统中，能量不仅被储存，还可能由于摩擦、电阻等原因被耗散。此时系统对输出信号的能量具有“惩罚项”，形式化为：</p>
+<p><span class="math display">\[
+\int u^\top y \, {\mathrm {d}}t \geq \varepsilon \int \|y\|^2 {\mathrm {d}}t + \beta.
+\]</span></p>
+<p>这说明系统输出越大，能量耗散越多。等价于：</p>
+<p><span class="math display">\[
+\int_0^T u^\top(t) y(t) {\mathrm {d}}t - \varepsilon \int_0^T \|y(t)\|^2 {\mathrm {d}}t \geq \beta.
+\]</span></p>
+<p>在无状态模型中，它等价于映射 $ G $ 满足：</p>
+<p><span class="math display">\[
+\|G(u)\|_{\mathcal{L}_2}^2 \leq \frac{1}{\varepsilon} \int u^\top G(u) \, {\mathrm {d}}t.
+\]</span></p>
+<p>因此，该供能率刻画的是<strong>输出能量耗散对输入功率的约束</strong>，其物理意义在于系统能从输出“泄露能量”。</p>
+<h4 id="earth_africa-3.-su-y-2-u2---y2"><span class="github-emoji"><span>🌍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f30d.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 3. $ s(u, y) =  ^2 |u|^2 -  |y|^2 $</h4>
+<p>此时，系统具有有限 $ {L}_2 $-增益，不超过 $ $。该形式直接对应于系统从输入信号到输出信号的<strong>增益控制</strong>。若存在存储函数 $ S(x) $ 使得：</p>
+<p><span class="math display">\[
+S(x(t_1)) - S(x(t_0)) \leq \int_{t_0}^{t_1} \left( \frac{1}{2} \gamma^2 \|u(t)\|^2 - \|y(t)\|^2 \right) {\mathrm {d}}t,
+\]</span></p>
+<p>则可推出：</p>
+<p><span class="math display">\[
+\|y\|^2_{\mathcal{L}_2} \leq \gamma^2 \|u\|^2_{\mathcal{L}_2} + 2 S(x_0),
+\]</span></p>
+<p>这说明系统的输出能量不会超过输入能量的 $ ^2 $ 倍，加上初始能量的一个常数项。若 $ S(x) = 0 $，这就成了标准的 $ {L}_2 $-增益界定。</p>
+<h4 id="earth_africa-4.-su-y--y2"><span class="github-emoji"><span>🌍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f30d.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 4. $ s(u, y) = -|y|^2 $</h4>
+<p>此时，系统输出能量呈现衰减趋势。这是一个强约束：系统的能量<strong>不但不能增加</strong>，甚至其输出总能量<strong>必须“亏损”</strong>。从不等式：</p>
+<p><span class="math display">\[
+S(x(t_1)) - S(x(t_0)) \leq - \int_{t_0}^{t_1} \|y(t)\|^2 {\mathrm{d}}t,
+\]</span></p>
+<p>可知只要输出有能量，存储函数必然下降。这是某些无源耗散系统（如阻尼结构）的典型模型，表明系统必须将输出转化为内部的损耗耗散，直至最终达到稳定。</p>
+<h4 id="earth_africa-5.-su-y-y2---2-u2"><span class="github-emoji"><span>🌍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f30d.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 5. $ s(u, y) = |y|^2 - {}^2 |u|^2 $</h4>
+<p>此时，系统放大能力有限，适用于构造 <span class="math inline">\(H_{\infty}\)</span> 控制目标。这是一种对偶形式，更倾向于用于性能评估。若系统关于该 $ s(u, y) $ 是耗散的，则必然满足：</p>
+<p><span class="math display">\[
+\int \|y\|^2 {\mathrm {d}}t \leq \gamma^2 \int \|u\|^2 {\mathrm {d}}t + S(x_0),
+\]</span></p>
+<p>进而推出增益约束：</p>
+<p><span class="math display">\[
+\|y\|_{\mathcal{L}_2} \leq \gamma \|u\|_{\mathcal{L}_2}.
+\]</span></p>
+<p>它是最直接的 <span class="math inline">\(H_{\infty}\)</span> 范数定义形式，用作控制设计中的目标函数。该供能率的优势在于它对输出信号进行直接约束，适用于性能评估（如抗扰动、最坏场景最小化等场景）。</p>
+<h3 id="globe_with_meridians4-2-available-storage"><span class="github-emoji"><span>🌐</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f310.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>4-2 available storage</h3>
+<p><strong>定义：</strong></p>
+<p><span class="math display">\[
+S_a(x) := \sup_{u \in {\mathcal L}_2} \left\{ - \int_0^\infty s(u(t), y(t)) {\mathrm {d}}t \right\}, \quad x(0) = x.
+\]</span></p>
+<p>该函数描述从当前状态 $ x $ 出发，系统在所有可行输入作用下，<strong>所能向外界“释放”的最大能量</strong>。其物理含义与热力学中的“可用能”相同，表明状态 $ x $ 所蕴含的“控制势能”极限。</p>
+<p><strong>从控制意义看：</strong></p>
+<ul>
+<li>若 $ S_a(x) = 0 $，说明此状态下系统无法向外界输出能量，是耗尽状态；</li>
+<li>若 $ S_a(x) &gt; 0 $，说明存在输入使系统输出净能量，状态具有能量转换能力。</li>
+</ul>
+<p><strong>数学上，available storage 还有如下性质：</strong></p>
+<ul>
+<li>它是所有存储函数的<strong>下界</strong>，即：若 $ S(x) $ 是任意使系统耗散的函数，则：</li>
+</ul>
+<p><span class="math display">\[
+S_a(x) \leq S(x), \quad \forall x.
+\]</span></p>
+<ul>
+<li>它自身就是一个存储函数；</li>
+<li>在 passivity 条件下，$ s(u, y) = u^y $，可得：</li>
+</ul>
+<p><span class="math display">\[
+\int_0^T u^\top y \, {\mathrm {d}}t \geq -S_a(x(0)).
+\]</span></p>
+<p>这为系统耗散性提供了<strong>最小能量约束</strong>，有助于进行能量一致性判断与系统设计下界估计。</p>
+<hr>
+<h2 id="五h_infty-控制问题-mag">五、<span class="math inline">\(H_{\infty}\)</span> 控制问题 <span class="github-emoji"><span>🔍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f50d.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></h2>
+<p>考虑非线性系统：</p>
+<p><span class="math display">\[
+\dot{x} = f(x) + g(x) u + k(x) d,
+\]</span></p>
+<p>其中：<span class="math inline">\(x \in \mathbb{R}^n\)</span>：系统状态；<span class="math inline">\(u \in \mathbb{R}^{n_u}\)</span>：控制输入；<span class="math inline">\(d \in \mathbb{R}^{n_d}\)</span>：外部扰动；<span class="math inline">\(f(x), g(x), k(x)\)</span> 为局部 Lipschitz 连续函数。</p>
+<p>系统的性能输出定义为：</p>
+<p><span class="math display">\[
+z(x, u) = Q(x) + u^\top R u,
+\]</span></p>
+<p>其中 <span class="math inline">\(Q(x) \geq 0\)</span> 是正定函数，<span class="math inline">\(R \succ 0\)</span> 是控制输入的权重矩阵。性能目标为：对于任意扰动 <span class="math inline">\(d \in \mathcal{L}_2\)</span>，闭环系统满足：</p>
+<p><span class="math display">\[
+\int_0^\infty \left( Q(x(t)) + u^\top(t) R u(t) \right) {\mathrm {d}}t \leq \gamma^2 \|d\|^2_{\mathcal{L}_2}.
+\]</span></p>
+<p>这是一种标准的非线性 <span class="math inline">\(H_\infty\)</span> 控制形式，目标是以最小控制代价抑制最强扰动。</p>
+<h3 id="bulb-5-1.-耗散系统-h_infty-性能指标"><span class="github-emoji"><span>💡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 5-1. 耗散系统 <span class="math inline">\(H_\infty\)</span> 性能指标</h3>
+<p>构造供能率函数：</p>
+<p><span class="math display">\[
+s(d, x, u) := Q(x) + u^\top R u - \gamma^2 \|d\|^2,
+\]</span></p>
+<p>若存在光滑非负函数 <span class="math inline">\(V(x)\)</span> 使得系统沿解轨迹满足：</p>
+<p><span class="math display">\[
+\dot{V}(x) \leq - s(d, x, u) ,
+\]</span></p>
+<p>则沿系统轨迹有</p>
+<p><span class="math display">\[
+\frac{\mathrm{d}}{\mathrm{d}t} V(x(t))\le -Q(x) - u^\top R u + \gamma^2 \|d\|^2.
+\]</span></p>
+<p>则通过积分可得：</p>
+<p><span class="math display">\[
+V(x(0)) \geq \int_0^\infty \left( Q(x(t)) + u^\top(t) R u(t) \right) {\mathrm {d}}t - \gamma^2 \|d\|^2_{\mathcal{L}_2},
+\]</span></p>
+<p>即系统满足期望的 <span class="math inline">\(H_\infty\)</span> 性能指标。</p>
+<h3 id="bulb-5-2.-hji-推导"><span class="github-emoji"><span>💡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 5-2. HJI 推导</h3>
+<p>考虑沿系统轨迹对 <span class="math inline">\(V(x)\)</span> 求导：</p>
+<p><span class="math display">\[
+\dot{V}(x) = \nabla V(x)^\top \left( f(x) + g(x) u + k(x) d \right).
+\]</span></p>
+<p>代入上述不等式，有：</p>
+<p><span class="math display">\[
+\nabla V^\top f(x) + \nabla V^\top g(x) u + \nabla V^\top k(x) d \leq - Q(x) - u^\top R u + \gamma^2 \|d\|^2.
+\]</span></p>
+<p>整理后构造 Hamiltonian：</p>
+<p><span class="math display">\[
+H(x, \nabla V, u, d) := \nabla V^\top f(x) + Q(x) + \nabla V^\top g(x) u + u^\top R u + \nabla V^\top k(x) d - \gamma^2 \|d\|^2.
+\]</span></p>
+<p>要求：</p>
+<p><span class="math display">\[
+\inf_{u} \sup_{d} H(x, \nabla V, u, d) \leq 0,
+\]</span></p>
+<p>即系统在最坏扰动下依然满足性能限制。</p>
+<h3 id="bulb-5-3.-扰动与控制的最优化"><span class="github-emoji"><span>💡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 5-3. 扰动与控制的最优化</h3>
+<ul>
+<li><strong>(1) 对扰动 <span class="math inline">\(d\)</span> 的极大化（扰动 <span class="math inline">\(d\)</span> 试图最大化供能）</strong>：</li>
+</ul>
+<p>求：</p>
+<p><span class="math display">\[
+\sup_d \left\{ \nabla V^\top k(x) d - \gamma^2 \|d\|^2 \right\}
+\]</span></p>
+<p>最优扰动为：</p>
+<p><span class="math display">\[
+d^* = \frac{1}{2\gamma^2} k(x)^\top \nabla V(x)
+\]</span></p>
+<p>对应最大值为：</p>
+<p><span class="math display">\[
+\frac{1}{4\gamma^2} \| \nabla V^\top k(x) \|^2.
+\]</span></p>
+<ul>
+<li><strong>(2) 对控制输入 <span class="math inline">\(u\)</span> 的极小化（控制 <span class="math inline">\(u\)</span> 试图最小化供能）</strong>：</li>
+</ul>
+<p>求：</p>
+<p><span class="math display">\[
+\inf _u \left\{ \nabla V^\top g(x) u + u^\top R u \right\} 
+\]</span></p>
+<p>最优控制为：</p>
+<p><span class="math display">\[
+u^* = - \frac{1}{2} R^{-1} g(x)^\top \nabla V(x)
+\]</span></p>
+<p>对应最小值为：</p>
+<p><span class="math display">\[
+ -\frac{1}{4} \nabla V^\top g(x) R^{-1} g(x)^\top \nabla V.
+\]</span></p>
+<p>最优控制为：</p>
+<p><span class="math display">\[
+u^* = - \frac{1}{2} R^{-1} g(x)^\top \nabla V(x)
+\]</span></p>
+<p>对应最小值为：</p>
+<p><span class="math display">\[
+ -\frac{1}{4} \nabla V^\top g(x) R^{-1} g(x)^\top \nabla V.
+\]</span></p>
+<h3 id="bulb-5-4.-hji-不等式最终形式"><span class="github-emoji"><span>💡</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" srcset="/img/loading.gif" lazyload aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> 5-4. HJI 不等式最终形式</h3>
+<p>将控制项与扰动项代入 Hamiltonian，得到最终形式的 HJI 不等式：</p>
+<p><span class="math display">\[
+\nabla V^\top f(x) + Q(x) - \frac{1}{4} \nabla V^\top g(x) R^{-1} g(x)^\top \nabla V + \frac{1}{4\gamma^2} \|\nabla V^\top k(x)\|^2 \leq 0.
+\]</span></p>
+<p>若存在正定光滑函数 <span class="math inline">\(V(x)\)</span> 满足上述不等式，则控制器：</p>
+<p><span class="math display">\[
+u(x) = -\frac{1}{2} R^{-1} g(x)^\top \nabla V(x)
+\]</span></p>
+<p>确保系统满足性能约束：</p>
+<p><span class="math display">\[
+\int_0^\infty \left( Q(x(t)) + u^\top(t) R u(t) \right) dt \leq \gamma^2 \|d\|^2_{\mathcal{L}_2}.
+\]</span></p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/control/" class="category-chain-item">control</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%80%97%E6%95%A3%E7%B3%BB%E7%BB%9F/" class="print-no-link">#耗散系统</a>
+      
+        <a href="/tags/L2/" class="print-no-link">#L2</a>
+      
+        <a href="/tags/H-infty-control/" class="print-no-link">#H_infty control</a>
+      
+        <a href="/tags/HJI/" class="print-no-link">#HJI</a>
+      
+        <a href="/tags/Robust-control/" class="print-no-link">#Robust control</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>L2 概念整理</div>
+      <div>https://feith0306.github.io/2025/04/29/L_2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Tianhao Fei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/12/SOS/" title="SOS Programming 系列 - 0 预备知识和底层逻辑">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SOS Programming 系列 - 0 预备知识和底层逻辑</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/03/28/my_profile/" title="My personal profile">
+                        <span class="hidden-mobile">My personal profile</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            tags: 'ams',
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/banner-avatar.js"></script>
+<script src="/js/banner-title.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
