@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-27T09:41:53.235Z">
+<meta property="article:modified_time" content="2026-01-27T09:48:10.917Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -320,7 +320,11 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
 <li>条件数 <span class="math inline">\(L/m\)</span> 越大，收敛越慢。</li>
 </ul>
 <p><strong>复杂度</strong>：每步一次梯度计算（成本依赖问题规模）。</p>
-<p><strong>优缺点</strong>： - 优：简单、每步便宜；对良好条件数的强凸问题很快。 - 缺：要求可微；对病态问题慢。</p>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优：简单、每步便宜；对良好条件数的强凸问题很快。</li>
+<li>缺：要求可微；对病态问题慢。</li>
+</ul>
 <hr>
 <h2 id="次梯度法subgradient-method">2. 次梯度法（Subgradient Method）</h2>
 <p><strong>次梯度定义</strong>（用于非光滑凸函数）： <span class="math display">\[\begin{align}
@@ -333,7 +337,11 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
   \lim_{k\to\infty} f(x_{\text{best}}^{(k)}) \le f^* + \frac{G^2 t}{2}
   \end{align}\]</span> - 递减步长（平方可和但不可和）：<span class="math inline">\(f(x_{\text{best}}^{(k)}) \to f^*\)</span>。 - 收敛率：<span class="math inline">\(O(1/\varepsilon^2)\)</span>（明显慢于 GD 的 <span class="math inline">\(O(1/\varepsilon)\)</span>）。</p>
 <p><strong>复杂度</strong>：每步一次次梯度计算；不保证单调下降。</p>
-<p><strong>优缺点</strong>： - 优：可处理不可微凸问题，适用面广。 - 缺：收敛慢；对步长较敏感。</p>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优：可处理不可微凸问题，适用面广。</li>
+<li>缺：收敛慢；对步长较敏感。</li>
+</ul>
 <hr>
 <h2 id="近端梯度下降proximal-gradient-descent-pgd">3. 近端梯度下降（Proximal Gradient Descent, PGD）</h2>
 <p><strong>问题设定</strong>：复合目标 <span class="math inline">\(f(x)=g(x)+h(x)\)</span>，其中 <span class="math inline">\(g\)</span> 光滑凸、<span class="math inline">\(h\)</span> 凸且可计算近端算子。</p>
@@ -347,7 +355,11 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
   f(x^{(k)})-f^* = O(1/k)
   \end{align}\]</span> 迭代复杂度 <span class="math inline">\(O(1/\varepsilon)\)</span>。</p>
 <p><strong>复杂度</strong>：每步一次梯度 + 一次 prox 计算（若 prox 便宜则总体高效）。</p>
-<p><strong>优缺点</strong>： - 优：可处理常见非光滑正则（如 <span class="math inline">\(\ell_1\)</span>、核范数），保留 GD 的速率。 - 缺：prox 若代价高会成为瓶颈；误差近端会影响速率。</p>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优：可处理常见非光滑正则（如 <span class="math inline">\(\ell_1\)</span>、核范数），保留 GD 的速率。</li>
+<li>缺：prox 若代价高会成为瓶颈；误差近端会影响速率。</li>
+</ul>
 <hr>
 <h2 id="加速近端梯度accelerated-pgd-nesterov-加速">4. 加速近端梯度（Accelerated PGD / Nesterov 加速）</h2>
 <p><strong>核心思想</strong>：在 PGD 上加入动量外推；当 <span class="math inline">\(h=0\)</span> 时退化为加速梯度法。</p>
@@ -357,18 +369,35 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
 \end{align}\]</span></p>
 <p><strong>收敛性与速度</strong>： - 函数值收敛率达到 <span class="math inline">\(O(1/k^2)\)</span>（一阶方法最优）。 - 相应的精度复杂度为 <span class="math inline">\(O(1/\sqrt{\varepsilon})\)</span>。</p>
 <p><strong>复杂度</strong>：每步一次梯度 + 一次 prox；但并非单调下降。</p>
-<p><strong>优缺点</strong>： - 优：显著加速，理论最优速率。 - 缺：对步长/动量更敏感；不一定单调下降。</p>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优：显著加速，理论最优速率。</li>
+<li>缺：对步长/动量更敏感；不一定单调下降。</li>
+</ul>
 <hr>
 <h2 id="随机梯度下降stochastic-gradient-descent-sgd">5. 随机梯度下降（Stochastic Gradient Descent, SGD）</h2>
 <p><strong>问题设定</strong>：最小化均值型目标 <span class="math inline">\(f(x)=\frac{1}{m}\sum_{i=1}^m f_i(x)\)</span>。</p>
 <p><strong>迭代格式</strong>： <span class="math display">\[\begin{align}
  x^{(k)} = x^{(k-1)} - t_k \nabla f_{i_k}(x^{(k-1)})
 \end{align}\]</span> 其中 <span class="math inline">\(i_k\)</span> 为随机抽样索引，<span class="math inline">\(\mathbb{E}[\nabla f_{i_k}(x)] = \nabla f(x)\)</span>。</p>
-<p><strong>收敛性与速度</strong>： - 对凸函数、递减步长： <span class="math display">\[\begin{align}
-  \mathbb{E}[f(x^{(k)})]-f^* = O(1/k)
-  \end{align}\]</span> - 即使强凸+Lipschitz 梯度，SGD 仍只有 <span class="math inline">\(O(1/k)\)</span> 的期望收敛，不具备 GD 的线性收敛。</p>
-<p><strong>复杂度</strong>： - 一次 batch 梯度：<span class="math inline">\(O(np)\)</span>； - 一次随机梯度：<span class="math inline">\(O(p)\)</span>； - mini-batch 大小 <span class="math inline">\(b\)</span>：<span class="math inline">\(O(bp)\)</span>。</p>
-<p><strong>优缺点</strong>： - 优：单步开销小，适合大规模数据。 - 缺：噪声导致收敛慢；需谨慎设置步长/停止策略。</p>
+<p><strong>收敛性与速度</strong>：</p>
+<ul>
+<li>对凸函数、递减步长： <span class="math display">\[\begin{align}
+\mathbb{E}[f(x^{(k)})]-f^* = O(1/k)
+\end{align}\]</span></li>
+<li>即使强凸+Lipschitz 梯度，SGD 仍只有 <span class="math inline">\(O(1/k)\)</span> 的期望收敛，不具备 GD 的线性收敛。</li>
+</ul>
+<p><strong>复杂度</strong>：</p>
+<ul>
+<li>一次 batch 梯度：<span class="math inline">\(O(np)\)</span>；</li>
+<li>一次随机梯度：<span class="math inline">\(O(p)\)</span>；</li>
+<li>mini-batch 大小 <span class="math inline">\(b\)</span>：<span class="math inline">\(O(bp)\)</span>。</li>
+</ul>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优：单步开销小，适合大规模数据。</li>
+<li>缺：噪声导致收敛慢；需谨慎设置步长/停止策略。</li>
+</ul>
 <hr>
 <h2 id="方法性质对比简表">方法性质对比（简表）</h2>
 <table style="width:100%;">
@@ -545,8 +574,8 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-2/" title="凸优化学习系列 - 2. 凸优化问题分类">
-                        <span class="hidden-mobile">凸优化学习系列 - 2. 凸优化问题分类</span>
+                      <a href="/2025/12/12/02=SOS_Programming/SOS_0/" title="SOS Programming 系列 - 0 预备知识和底层逻辑">
+                        <span class="hidden-mobile">SOS Programming 系列 - 0 预备知识和底层逻辑</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
