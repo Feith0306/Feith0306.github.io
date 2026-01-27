@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-27T12:26:13.790Z">
+<meta property="article:modified_time" content="2026-01-27T13:27:33.713Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -335,7 +335,7 @@ x_{k+1} = \Pi_{\mathcal{C}}\!\left(x_k - t_k \nabla f(x_k)\right),
 \end{align}
 \]</span> 其中 <span class="math inline">\(f\)</span> 可微凸，<span class="math inline">\(g\)</span> 凸但可不可微。定义近端算子： <span class="math display">\[
 \begin{align}
-\operatorname{prox}_{t g}(z)
+\operatorname{prox}_{t ,g}(z)
 :=\arg\min_y\left(g(y)+\frac{1}{2t}\|y-z\|_2^2\right).
 \end{align}
 \]</span> 近端梯度更新为： <span class="math display">\[
