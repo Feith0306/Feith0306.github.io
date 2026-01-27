@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-27T09:48:10.917Z">
+<meta property="article:modified_time" content="2026-01-27T13:18:32.898Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.3k 字
         
       </span>
     
@@ -399,16 +399,14 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
 <li>缺：噪声导致收敛慢；需谨慎设置步长/停止策略。</li>
 </ul>
 <hr>
-<h2 id="方法性质对比简表">方法性质对比（简表）</h2>
-<table style="width:100%;">
-
+<h2 id="方法性质对比">6. 方法性质对比</h2>
+<table>
 <thead>
 <tr class="header">
 <th>方法</th>
 <th>适用目标</th>
 <th>每步计算</th>
-<th>典型收敛率（函数值）</th>
-<th>迭代复杂度</th>
+<th>典型收敛率（<span class="math inline">\(f\)</span>一般凸）</th>
 <th>主要优点</th>
 <th>主要缺点</th>
 </tr>
@@ -418,27 +416,24 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
 <td>GD</td>
 <td>光滑凸</td>
 <td>1 次全梯度</td>
-<td><span class="math inline">\(O(1/k)\)</span>；强凸时 <span class="math inline">\(O(\gamma^k)\)</span></td>
-<td><span class="math inline">\(O(1/\varepsilon)\)</span> 或 <span class="math inline">\(O(\log(1/\varepsilon))\)</span></td>
+<td><span class="math inline">\(O(1/k)\)</span></td>
 <td>简单、稳定</td>
-<td>需可微，病态问题慢</td>
+<td>需可微</td>
 </tr>
 <tr class="even">
 <td>Subgradient</td>
 <td>非光滑凸</td>
 <td>1 次次梯度</td>
-<td><span class="math inline">\(O(1/\varepsilon^2)\)</span></td>
-<td><span class="math inline">\(O(1/\varepsilon^2)\)</span></td>
-<td>适用面广</td>
-<td>收敛慢、非下降</td>
+<td><span class="math inline">\(O(1/\sqrt{k})\)</span></td>
+<td>可处理目标函数不可微问题</td>
+<td>收敛慢</td>
 </tr>
 <tr class="odd">
 <td>PGD</td>
-<td>复合凸 <span class="math inline">\(g+h\)</span></td>
+<td>复合凸</td>
 <td>1 梯度 + 1 prox</td>
 <td><span class="math inline">\(O(1/k)\)</span></td>
-<td><span class="math inline">\(O(1/\varepsilon)\)</span></td>
-<td>处理稀疏/核范数等</td>
+<td>可处理目标函数不可微问题</td>
 <td>prox 可能昂贵</td>
 </tr>
 <tr class="even">
@@ -446,7 +441,6 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
 <td>复合凸</td>
 <td>1 梯度 + 1 prox</td>
 <td><span class="math inline">\(O(1/k^2)\)</span></td>
-<td><span class="math inline">\(O(1/\sqrt{\varepsilon})\)</span></td>
 <td>理论最优速率</td>
 <td>参数敏感、非单调</td>
 </tr>
@@ -454,19 +448,18 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
 <td>SGD</td>
 <td>均值目标</td>
 <td>1 次随机梯度</td>
-<td><span class="math inline">\(\mathbb{E}[f(x^{(k)})]-f^*=O(1/k)\)</span></td>
-<td><span class="math inline">\(O(1/\varepsilon)\)</span>（期望）</td>
+<td><span class="math inline">\(\mathbb{E}[f(x_k)]-f^*=O(1/\sqrt{k})\)</span></td>
 <td>单步便宜、适合大数据</td>
 <td>噪声、收敛慢</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h2 id="小结与选型建议">小结与选型建议</h2>
+<h2 id="总结">7. 总结</h2>
 <ul>
 <li>小中规模、光滑凸：优先 GD；若强凸且条件数好，GD 收敛很快。</li>
 <li>非光滑凸：若有可计算的 prox，优先 PGD/Acc-PGD；否则用次梯度法。</li>
-<li>大规模数据：SGD/mini-batch 是首选，尤其当全梯度代价高时。</li>
+<li>大规模数据：SGD 是首选，尤其当全梯度代价高时。</li>
 </ul>
 
                 
@@ -564,9 +557,9 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-4/" title="凸优化学习系列 - 4. 梯度下降法">
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-2/" title="凸优化学习系列 - 2. 凸优化问题分类">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">凸优化学习系列 - 4. 梯度下降法</span>
+                        <span class="hidden-mobile">凸优化学习系列 - 2. 凸优化问题分类</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -574,8 +567,8 @@ f(x^{(k)}) - f^* = O(\gamma^k), \quad 0&lt;\gamma&lt;1
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/12/12/02=SOS_Programming/SOS_0/" title="SOS Programming 系列 - 0 预备知识和底层逻辑">
-                        <span class="hidden-mobile">SOS Programming 系列 - 0 预备知识和底层逻辑</span>
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-4/" title="凸优化学习系列 - 4. 梯度下降法">
+                        <span class="hidden-mobile">凸优化学习系列 - 4. 梯度下降法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
