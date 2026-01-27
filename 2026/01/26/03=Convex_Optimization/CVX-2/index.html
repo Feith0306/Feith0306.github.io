@@ -19,16 +19,16 @@
   <meta name="author" content="Tianhao Fei">
   <meta name="keywords" content="">
   
-    <meta name="description" content="这个文档简要介绍凸优化问题的相关概念。">
+    <meta name="description" content="这个文档简要介绍几类常见的凸优化问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="凸优化学习系列 - 1. 基本概念">
-<meta property="og:url" content="https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-1/index.html">
+<meta property="og:title" content="凸优化学习系列 - 2. 凸优化问题分类">
+<meta property="og:url" content="https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-2/index.html">
 <meta property="og:site_name" content="Feith&#39;s Blog">
-<meta property="og:description" content="这个文档简要介绍凸优化问题的相关概念。">
+<meta property="og:description" content="这个文档简要介绍几类常见的凸优化问题。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-27T06:05:03.375Z">
+<meta property="article:modified_time" content="2026-01-27T07:21:32.424Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -38,7 +38,7 @@
   
   
   
-  <title>凸优化学习系列 - 1. 基本概念 - Feith&#39;s Blog</title>
+  <title>凸优化学习系列 - 2. 凸优化问题分类 - Feith&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -215,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="凸优化学习系列 - 1. 基本概念"></span>
+            <span id="subtitle" data-typed-text="凸优化学习系列 - 2. 凸优化问题分类"></span>
           
         </div>
 
@@ -238,7 +238,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.4k 字
+          1.6k 字
         
       </span>
     
@@ -249,7 +249,7 @@
         
         
         
-          20 分钟
+          14 分钟
         
       </span>
     
@@ -286,277 +286,202 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">凸优化学习系列 - 1. 基本概念</h1>
+            <h1 id="seo-header">凸优化学习系列 - 2. 凸优化问题分类</h1>
             
             
               <div class="markdown-body">
                 
-                <p>从【<a target="_blank" rel="noopener" href="https://www.stat.cmu.edu/~ryantibs/convexopt/">CMU 课程，10-725, 2019</a>】出发，这一系列的文档用于整理/讨论凸优化问题相关的基本概念和重要求解方法，主要包括（暂定）：</p>
-<ul>
-<li>凸优化问题的重要概念（什么是凸优化问题，为什么要做凸优化）</li>
-<li>一阶求解方法
-<details>
-<ul>
-<li>梯度下降法（Gradient Descent）</li>
-<li>子梯度方法（Subgradient Method）</li>
-<li>近端梯度下降法（Proximal Gradient Method）</li>
-<li>随机梯度下降法（Stochastic Gradient Descent）</li>
-</ul>
-</details></li>
-<li>对偶理论和最优理论
-<details>
-<ul>
-<li>线性/非线性对偶理论</li>
-<li>KKT 条件（Karush-Kuhn-Tucker 条件）</li>
-<li>对偶性应用</li>
-</ul>
-</details></li>
-<li>二阶求解方法
-<details>
-<ul>
-<li>牛顿法</li>
-<li>屏障法（Barrier Method）</li>
-<li>原始对偶内点法（Primal-Dual Interior Point Method）</li>
-<li>类牛顿法（Quasi-Newton Method）</li>
-</ul>
-</details></li>
-<li>凸优化问题的前沿理论
-<details>
-<ul>
-<li>数值线性代数（Numerical linear algebra）</li>
-<li>坐标下降法（Coordinate descent）</li>
-<li>对偶分解（Dual decomposition）</li>
-<li>乘子交替方向法（Alternating direction method of multipliers, ADMM）</li>
-<li>条件梯度法（Frank-Wolfe method）</li>
-<li>现代随机方法（Modern stochastic methods）</li>
-<li>一阶非凸优化（First-order nonconvex optimization）</li>
-<li>Bregman 近端方法（Bregman proximal methods）</li>
-</ul>
-</details></li>
-</ul>
-<p><strong>这个文档简要介绍凸优化问题的重要概念。</strong></p>
-<h1 id="基础预备知识">1、基础预备知识</h1>
-<h2 id="凸集compact-set">1.1 凸集（Compact set）</h2>
+                <blockquote>
+<p><strong>这个文档用于梳理几类常见的凸优化问题的标准定义与包含关系。</strong></p>
+</blockquote>
+<h1 id="线性规划linear-program-lp的标准定义">1. 线性规划（Linear Program, LP）的标准定义</h1>
 <div class="note note-info">
-            <p><strong>定义 1</strong>：对任意 <span class="math inline">\(x, y \in C \subseteq \mathbb{R}^n\)</span> 和任意 <span class="math inline">\(\lambda \in [0,1]\)</span>，有 <span class="math display">\[
+            <p>线性规划（LP）是指目标函数与约束均为线性（仿射）形式的优化问题。标准形式可写为 <span class="math display">\[
 \begin{align}
-\lambda x + (1-\lambda) y \in C
+\min_{x\in\mathbb{R}^n}\quad &amp; c^\top x\\
+\text{s.t.}\quad &amp; Dx \le d,\\
+&amp; Ax = b,
 \end{align}
-\]</span> 则称集合 <span class="math inline">\(C\)</span> 是凸集。</p>
+\]</span> 其中 <span class="math inline">\(c\in\mathbb{R}^n\)</span>，<span class="math inline">\(D\in\mathbb{R}^{p\times n}\)</span>，<span class="math inline">\(d\in\mathbb{R}^p\)</span>，<span class="math inline">\(A\in\mathbb{R}^{m\times n}\)</span>，<span class="math inline">\(b\in\mathbb{R}^m\)</span>，不等式 <span class="math inline">\(Dx\le d\)</span> 按分量理解。</p>
           </div>
-<p>从几何角度来看，凸集的定义可以理解为：对于集合 <span class="math inline">\(C\)</span> 中的任意两点 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span>，连接 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span> 的<strong>线段</strong>也完全包含在集合 <span class="math inline">\(C\)</span> 中。</p>
-<h2 id="仿射集affine-set">1.2 仿射集（Affine set）</h2>
+<blockquote>
+<p>由于线性函数是凸函数，线性不等式与等式定义的可行域是凸集，因此 LP 始终是凸优化问题。</p>
+</blockquote>
+<hr>
+<h1 id="凸二次规划convex-quadratic-program-qp的标准定义">2. 凸二次规划（Convex Quadratic Program, QP）的标准定义</h1>
 <div class="note note-info">
-            <p><strong>定义 2</strong>：对任意 <span class="math inline">\(x, y \in A \subseteq \mathbb{R}^n\)</span> 和任意 <span class="math inline">\(\theta \in \mathbb{R}\)</span>，有 <span class="math display">\[
+            <p>凸二次规划（QP）是指目标函数为凸二次函数、约束为线性（仿射）形式的问题。标准形式可写为 <span class="math display">\[
 \begin{align}
-\theta x + (1-\theta) y \in A
+\min_{x\in\mathbb{R}^n}\quad &amp; c^\top x + \frac{1}{2}x^\top Qx\\
+\text{s.t.}\quad &amp; Dx \le d,\\
+&amp; Ax = b,
 \end{align}
-\]</span> 则称集合 <span class="math inline">\(A\)</span> 是仿射集。</p>
+\]</span> 其中 <span class="math inline">\(Q\in\mathbb{S}^n\)</span>（对称矩阵）。当且仅当<span class="math inline">\(Q\succeq 0\)</span>（半正定）时，上述 QP 为<strong>凸二次规划</strong>；若 <span class="math inline">\(Q\)</span> 非半正定，则问题一般<strong>非凸</strong>。</p>
           </div>
-<p>从几何角度来看，仿射集的定义可以理解为：对于集合 <span class="math inline">\(A\)</span> 中的任意两点 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span>，连接 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span> 的<strong>直线</strong>也完全包含在集合 <span class="math inline">\(A\)</span> 中。</p>
-<h2 id="凸函数convex-function">1.3 凸函数（Convex function）</h2>
+<hr>
+<h1 id="二阶锥规划second-order-cone-program-socp的标准定义">3. 二阶锥规划（Second-Order Cone Program, SOCP）的标准定义</h1>
 <div class="note note-info">
-            <p><strong>定义 3</strong>：设 <span class="math inline">\(C \subseteq \mathbb{R}^n\)</span> 是一个凸集，函数 <span class="math inline">\(f: C \to \mathbb{R}\)</span> 称为凸函数，如果对任意 <span class="math inline">\(x, y \in C\)</span> 和任意 <span class="math inline">\(\lambda \in [0,1]\)</span>，有 <span class="math display">\[
+            <p>二阶锥规划（SOCP）是指线性目标 + 线性等式约束 + 若干个二阶锥（SOC）约束的问题。常见标准形式为 <span class="math display">\[
 \begin{align}
-f(\lambda x + (1-\lambda) y) \leq \lambda f(x) + (1-\lambda) f(y)
+\min_{x\in\mathbb{R}^n}\quad &amp; c^\top x\\
+\text{s.t.}\quad &amp; \|D_i x + d_i\|_2 \le e_i^\top x + f_i,\quad i=1,\dots,p,\\
+&amp; Ax = b,
+\end{align}
+\]</span> 其中 <span class="math inline">\(D_i\in\mathbb{R}^{k_i\times n}\)</span>，<span class="math inline">\(d_i\in\mathbb{R}^{k_i}\)</span>，<span class="math inline">\(e_i\in\mathbb{R}^{n}\)</span>，<span class="math inline">\(f_i\in\mathbb{R}\)</span>。</p>
+          </div>
+<p>二阶锥（Lorentz cone）的定义为 <span class="math display">\[
+\begin{align}
+\mathcal{Q}_{k+1} \;=\; \{(u,t)\in\mathbb{R}^k\times\mathbb{R}\;:\;\|u\|_2\le t\}.
+\end{align}
+\]</span> 因此 SOCP 约束 <span class="math inline">\(\|D_i x + d_i\|_2 \le e_i^\top x + f_i\)</span> 等价于 <span class="math display">\[
+\begin{align}
+(D_i x + d_i,\; e_i^\top x + f_i)\in \mathcal{Q}_{k_i+1}.
 \end{align}
 \]</span></p>
-          </div>
-<p>从几何角度来看，凸函数的定义可以理解为：对于函数 <span class="math inline">\(f\)</span> 的任意两点 <span class="math inline">\((x, f(x))\)</span> 和 <span class="math inline">\((y, f(y))\)</span>，连接这两点的<strong>线段</strong>位于函数图像的<strong>上方</strong>。</p>
-<h2 id="仿射函数affine-function">1.4 仿射函数（Affine function）</h2>
+<hr>
+<h1 id="半正定规划semidefinite-program-sdp的标准定义">4. 半正定规划（Semidefinite Program, SDP）的标准定义</h1>
 <div class="note note-info">
-            <p><strong>定义 4</strong>：函数 <span class="math inline">\(f: \mathbb{R}^n \to \mathbb{R}\)</span> 称为仿射函数，如果存在向量 <span class="math inline">\(a \in \mathbb{R}^n\)</span> 和标量 <span class="math inline">\(b \in \mathbb{R}\)</span>，使得对任意 <span class="math inline">\(x \in \mathbb{R}^n\)</span> 和 <span class="math inline">\(\theta \in \mathbb{R}\)</span>，有 <span class="math display">\[
+            <p>半正定规划（SDP）是指线性目标 + 线性等式约束 + 线性矩阵不等式（LMI）约束的问题。常用标准形式为 <span class="math display">\[
 \begin{align}
-f\bigl(\theta x + (1-\theta)y\bigr) = \theta f(x) + (1-\theta)f(y)
+\min_{x\in\mathbb{R}^n}\quad &amp; c^\top x\\
+\text{s.t.}\quad &amp; x_1F_1 + \cdots + x_nF_n \preceq F_0,\\
+&amp; Ax = b,
+\end{align}
+\]</span> 其中 <span class="math inline">\(F_i\in\mathbb{S}^d\)</span>（<span class="math inline">\(d\times d\)</span> 对称矩阵），<span class="math inline">\(\preceq\)</span> 表示半正定序（<span class="math inline">\(M\preceq N \Leftrightarrow N-M\succeq 0\)</span>）。</p>
+          </div>
+<p>将矩阵不等式改写为“落在半正定锥中”的形式更直接： <span class="math display">\[
+\begin{align}
+F_0 - \sum_{i=1}^n x_iF_i \in \mathbb{S}^d_+,
+\end{align}
+\]</span> 其中 <span class="math inline">\(\mathbb{S}^d_+\)</span> 为半正定锥（闭凸锥）。</p>
+<hr>
+<h1 id="锥规划conic-program的标准定义">5. 锥规划（Conic Program）的标准定义</h1>
+<h2 id="锥规划的标准定义">5.1 锥规划的标准定义</h2>
+<div class="note note-info">
+            <p>锥规划（Conic Program）以“某个线性映射的像落在闭凸锥 <span class="math inline">\(K\)</span> 中”为核心约束。标准形式可写为 <span class="math display">\[\begin{align}
+\min_{x\in\mathbb{R}^n}\quad &amp; c^\top x\\
+\text{s.t.}\quad &amp; Ax=b,\\
+&amp; D(x)+d \in K,
+\end{align}\]</span> 其中 - <span class="math inline">\(c\in\mathbb{R}^n\)</span>，<span class="math inline">\(A\in\mathbb{R}^{m\times n}\)</span>，<span class="math inline">\(b\in\mathbb{R}^m\)</span>； - <span class="math inline">\(D:\mathbb{R}^n\to Y\)</span> 是线性映射，<span class="math inline">\(d\in Y\)</span>； - <span class="math inline">\(Y\)</span> 是欧氏空间（可看作带内积的有限维向量空间）； - <span class="math inline">\(K\subseteq Y\)</span> 是<strong>闭凸锥</strong>（closed convex cone）。</p>
+          </div>
+<hr>
+<h1 id="五类凸优化问题的包含关系">6. 五类凸优化问题的包含关系</h1>
+<p>我们要说明如下包含链： <span class="math display">\[
+\begin{align}
+\mathrm{LPs}\subseteq \mathrm{QPs}\subseteq \mathrm{SOCPs}\subseteq \mathrm{SDPs}\subseteq \mathrm{Conic\ Programs}.
+\end{align}
+\]</span> 下面逐个证明“前者是后者的特例/可等价表示”。</p>
+<hr>
+<h2 id="证明mathrmlpssubseteq-mathrmqps">6.1 证明：<span class="math inline">\(\mathrm{LPs}\subseteq \mathrm{QPs}\)</span></h2>
+<p>给定任意 LP： <span class="math display">\[
+\begin{align}
+\min_x\; c^\top x\quad \text{s.t.}\; Dx\le d,\;Ax=b,
+\end{align}
+\]</span> 取 QP 中 <span class="math inline">\(Q=0\)</span>（零矩阵），则 <span class="math display">\[
+\begin{align}
+c^\top x + \frac12 x^\top Qx = c^\top x,
+\end{align}
+\]</span> 并且约束不变，因此每个 LP 都是一个（凸）QP 的特例，从而 <span class="math inline">\(\mathrm{LPs}\subseteq \mathrm{QPs}\)</span>。</p>
+<hr>
+<h2 id="证明mathrmqpssubseteq-mathrmsocps凸-qp-的-socp-表示">6.2 证明：<span class="math inline">\(\mathrm{QPs}\subseteq \mathrm{SOCPs}\)</span>（凸 QP 的 SOCP 表示）</h2>
+<p>考虑凸 QP： <span class="math display">\[
+\begin{align}
+\min_x\quad &amp; c^\top x + \frac12 x^\top Qx\\
+\text{s.t.}\quad &amp; Dx\le d,\;Ax=b,\;\;Q\succeq 0.
+\end{align}
+\]</span> 用上图形式的 SOCP（线性目标）通常通过<strong>引入上图（epigraph）变量</strong>实现。令 <span class="math inline">\(t\in\mathbb{R}\)</span>，等价改写为 <span class="math display">\[
+\begin{align}
+\min_{x,t}\quad &amp; c^\top x + t\\
+\text{s.t.}\quad &amp; Dx\le d,\;Ax=b,\\
+&amp; t \ge \frac12 x^\top Qx.
+\end{align}
+\]</span> 由于 <span class="math inline">\(Q\succeq 0\)</span>，存在矩阵 <span class="math inline">\(R\)</span> 使得 <span class="math inline">\(Q=R^\top R\)</span>（如 Cholesky 或谱分解后取平方根），则 <span class="math display">\[
+\begin{align}
+x^\top Qx = x^\top R^\top R x = \|Rx\|_2^2.
+\end{align}
+\]</span> 因此约束变为 <span class="math display">\[
+\begin{align}
+t \ge \frac12 \|Rx\|_2^2.
+\end{align}
+\]</span> 该二次上界可用<strong>旋转二阶锥</strong>（rotated SOC）表示：旋转二阶锥定义为 <span class="math display">\[
+\begin{align}
+\mathcal{Q}_r^{k+2}=\{(u,v,w)\in\mathbb{R}\times\mathbb{R}\times\mathbb{R}^k:\; u\ge 0,\; v\ge 0,\; 2uv\ge \|w\|_2^2\}.
+\end{align}
+\]</span> 令 <span class="math inline">\(u=t,\;v=1,\;w=Rx\)</span>，则 <span class="math display">\[
+\begin{align}
+(t,1,Rx)\in \mathcal{Q}_r^{k+2}
+\;\Longleftrightarrow\;
+t\ge \frac12\|Rx\|_2^2.
+\end{align}
+\]</span> 于是凸 QP 可改写为带（旋转）SOC 约束的 SOCP，因此 <span class="math inline">\(\mathrm{QPs}\subseteq \mathrm{SOCPs}\)</span>（在允许旋转 SOC 的标准 SOCP 框架下成立；工程与优化文献中通常默认 SOCP 允许该等价变换）。</p>
+<hr>
+<h2 id="证明mathrmsocpssubseteq-mathrmsdpssoc-约束等价为-lmi">6.3 证明：<span class="math inline">\(\mathrm{SOCPs}\subseteq \mathrm{SDPs}\)</span>（SOC 约束等价为 LMI）</h2>
+<p>SOCP 的核心约束为 <span class="math display">\[
+\begin{align}
+\|u\|_2 \le t,
+\end{align}
+\]</span> 其中 <span class="math inline">\(u\in\mathbb{R}^k\)</span>，<span class="math inline">\(t\in\mathbb{R}\)</span>。证明其可写为半正定约束（LMI）。</p>
+<p>考虑块对称矩阵 <span class="math display">\[
+\begin{align}
+M=\begin{bmatrix}
+tI_k &amp; u\\
+u^\top &amp; t
+\end{bmatrix}.
+\end{align}
+\]</span> 若 <span class="math inline">\(M\succeq 0\)</span>，则必有 <span class="math inline">\(t\ge 0\)</span>，并由 Schur 补（对 <span class="math inline">\(tI_k\)</span>）可得 <span class="math display">\[
+\begin{align}
+M\succeq 0
+\;\Longleftrightarrow\;
+tI_k\succeq 0\ \text{且}\ t - u^\top (tI_k)^{-1}u \ge 0
+\;\Longleftrightarrow\;
+t\ge 0,\ \ t - \frac{1}{t}\|u\|_2^2 \ge 0.
+\end{align}
+\]</span> 当 <span class="math inline">\(t&gt;0\)</span> 时，上式等价于 <span class="math display">\[
+\begin{align}
+t^2 \ge \|u\|_2^2 \;\Longleftrightarrow\; \|u\|_2 \le t.
+\end{align}
+\]</span> 当 <span class="math inline">\(t=0\)</span> 时，<span class="math inline">\(M\succeq 0\)</span> 强制 <span class="math inline">\(u=0\)</span>，也满足 <span class="math inline">\(\|u\|_2\le t\)</span>。因此 <span class="math display">\[
+\begin{align}
+\|u\|_2 \le t
+\;\Longleftrightarrow\;
+\begin{bmatrix}
+tI_k &amp; u\\
+u^\top &amp; t
+\end{bmatrix}\succeq 0.
+\end{align}
+\]</span> SOCP 中每个 SOC 约束都可用一个 LMI 表示，线性目标与仿射约束保持不变，因此 SOCP 是 SDP 的特例：<span class="math inline">\(\mathrm{SOCPs}\subseteq \mathrm{SDPs}\)</span>。</p>
+<hr>
+<h2 id="证明mathrmsdpssubseteq-mathrmconic-programs">6.4 证明：<span class="math inline">\(\mathrm{SDPs}\subseteq \mathrm{Conic\ Programs}\)</span></h2>
+<p>SDP 的矩阵不等式 <span class="math display">\[
+\begin{align}
+\sum_{i=1}^n x_iF_i \preceq F_0
+\end{align}
+\]</span> 等价于 <span class="math display">\[
+\begin{align}
+F_0-\sum_{i=1}^n x_iF_i \in \mathbb{S}_+^d.
+\end{align}
+\]</span> 令欧氏空间 <span class="math inline">\(Y=\mathbb{S}^d\)</span>，闭凸锥 <span class="math inline">\(K=\mathbb{S}_+^d\)</span>，并定义线性映射 <span class="math display">\[
+\begin{align}
+D(x)= -\sum_{i=1}^n x_iF_i,\qquad d=F_0,
+\end{align}
+\]</span> 则约束恰为 <span class="math inline">\(D(x)+d\in K\)</span>。同时保留线性等式约束 <span class="math inline">\(Ax=b\)</span> 与线性目标 <span class="math inline">\(c^\top x\)</span>，因此每个 SDP 都是锥规划的特例，从而 <span class="math display">\[
+\begin{align}
+\mathrm{SDPs}\subseteq \mathrm{Conic\ Programs}.
 \end{align}
 \]</span></p>
-          </div>
-<p>从几何角度来看，仿射函数的定义可以理解为：对于函数 <span class="math inline">\(f\)</span> 的任意两点 <span class="math inline">\((x, f(x))\)</span> 和 <span class="math inline">\((y, f(y))\)</span>，连接这两点的<strong>直线</strong>位于函数图像上。常见的仿射函数形式为 <span class="math inline">\(f(x) = a^T x + b\)</span>。</p>
-<h1 id="凸优化问题">2、凸优化问题</h1>
-<h1 id="为什么要做凸优化why">2.1、为什么要做凸优化（Why）</h1>
-<p>为什么不能做非凸优化？ 最小化问题为什么不能用其他理论结构？</p>
-<h1 id="凸优化问题的标准形式what">2.2、凸优化问题的标准形式（What）</h1>
-<div class="note note-success">
-            <p>典型的凸优化问题可以表示为以下标准形式： <span class="math display">\[
+<hr>
+<h2 id="小结">6.5 小结</h2>
+<p>由 6.1–6.4 的逐步构造与等价变换，得到 <span class="math display">\[
 \begin{align}
-    \min_{x \in D} \quad &amp; f(x) \\
-    \text{subject to} \quad &amp; 
-    \begin{cases}
-    g_i(x) \le 0, \quad i = 1, \cdots, m \\
-    h_j(x) = 0, \quad j = 1, \cdots, p
-    \end{cases}
+\mathrm{LPs}\subseteq \mathrm{QPs}\subseteq \mathrm{SOCPs}\subseteq \mathrm{SDPs}\subseteq \mathrm{Conic\ Programs}.
 \end{align}
-\]</span></p>
-          </div>
-<p>其中：</p>
-<ul>
-<li><span class="math inline">\(D\)</span> 为满足约束条件且 <span class="math inline">\(f,g_i,h_j\)</span> 有意义的集合，称为<strong>可行域</strong>；</li>
-<li>目标函数 <span class="math inline">\(f: D \to \mathbb{R}\)</span> 是<strong>凸函数（优化目标）</strong>；</li>
-<li>变量 <span class="math inline">\(x \in \mathbb{R}^n\)</span> 是需要优化的参数（<strong>决策变量</strong>）；</li>
-<li>等式约束函数 <span class="math inline">\(h_i: D \to \mathbb{R}\)</span> 是仿射函数（<strong>等式约束</strong>）；</li>
-<li>不等式约束函数 <span class="math inline">\(g_j: D \to \mathbb{R}\)</span> 是凸函数（<strong>不等式约束</strong>）。</li>
-</ul>
-<div class="note note-warning">
-            <p><strong>问题一：为什么不等式约束 <span class="math inline">\(g_i\)</span> 是凸函数？</strong></p>
-<ul>
-<li>不等式约束 <span class="math inline">\(g_i(x) \le 0\)</span>：<strong><code>为了保证可行域是凸集</code></strong>，必须要求 <span class="math inline">\(g_i\)</span> 是凸函数；因为凸函数的<strong>次水平集</strong>（sublevel set）<span class="math inline">\(\{x | g_i(x) \le 0\}\)</span> 是凸集，证明如下：
-<ul>
-<li>对任意 <span class="math inline">\(x, y\)</span> 满足 <span class="math inline">\(g_i(x) \le 0\)</span> 和 <span class="math inline">\(g_i(y) \le 0\)</span>，以及任意 <span class="math inline">\(\lambda \in [0,1]\)</span>，有 <span class="math display">\[
-\begin{align}
-g_i(\lambda x + (1-\lambda) y) &amp;\leq \lambda g_i(x) + (1-\lambda) g_i(y) \quad (\text{因为 } g_i \text{ 是凸函数}) \\
-&amp;\leq \lambda \cdot 0 + (1-\lambda) \cdot 0 = 0
-\end{align}
-\]</span></li>
-<li>因此，<span class="math inline">\(\{x | g_i(x) \le 0\}\)</span> 是凸集。</li>
-</ul></li>
-</ul>
-<p><strong>问题二：为什么等式约束 <span class="math inline">\(h_j\)</span> 是仿射函数？</strong></p>
-<ul>
-<li>等式约束 <span class="math inline">\(h_j(x) = 0\)</span>：<strong><code>为了保证可行域是凸集</code></strong>，必须要求 <span class="math inline">\(h_j\)</span> 是仿射函数；因为仿射函数的<strong>零水平集</strong>（zero level set）<span class="math inline">\(\{x | h_j(x) = 0\}\)</span> 是凸集，证明如下：
-<ul>
-<li>对任意 <span class="math inline">\(x, y\)</span> 满足 <span class="math inline">\(h_j(x) = 0\)</span> 和 <span class="math inline">\(h_j(y) = 0\)</span>，以及任意 <span class="math inline">\(\theta \in \mathbb{R}\)</span>，有 <span class="math display">\[
-\begin{align}
-h_j(\theta x + (1-\theta) y) &amp;= \theta h_j(x) + (1-\theta) h_j(y) \quad (\text{因为 } h_j \text{ 是仿射函数}) \\
-&amp;= \theta \cdot 0 + (1-\theta) \cdot 0 = 0
-\end{align}
-\]</span></li>
-<li>因此，<span class="math inline">\(\{x | h_j(x) = 0\}\)</span> 是凸集。</li>
-<li>另一方面。如果 <span class="math inline">\(h_j(x)\)</span> 不是仿射函数，如 <span class="math inline">\(h(x) = x^2 - 1\)</span>，<span class="math inline">\(h(x) = 0\)</span> 的解集为 <span class="math inline">\(\{-1, 1\}\)</span>，显然不是凸集。</li>
-</ul></li>
-</ul>
-<p><strong>问题三：为什么可行域必须是凸集？</strong></p>
-<p><strong>问题四：为什么目标函数必须是凸的？</strong></p>
-          </div>
-<h1 id="凸优化问题的重要性质">2.3、凸优化问题的重要性质</h1>
-<ul>
-<li><strong>性质一</strong>：在一个凸可行域 <span class="math inline">\(D\)</span>上最小化一个凸函数 <span class="math inline">\(f\)</span> 时，<strong>任何局部极小点都是全局极小点</strong>（注意，这里的全局指的是整个凸可行域 <span class="math inline">\(D\)</span>，而不是 <span class="math inline">\(\mathbb{R}^n\)</span>）。对于凸优化问题(5)，该性质可用数学语言描述为：
-<ul>
-<li><p><strong>如果</strong>存在 <span class="math inline">\(x^\star \in D\)</span> 以及常数 <span class="math inline">\(\rho &gt; 0\)</span> 满足 <span class="math inline">\(\|x^\star - y\|_2 \le \rho\)</span>, <span class="math inline">\(\forall y \in D\)</span>，使得： <span class="math display">\[
-\begin{align}   
-    f(x^\star) \le f(y), \quad \forall y \in D \text{ 且 } \|x^\star - y\|_2 \le \rho
-    \end{align}
-\]</span></p></li>
-<li><p><strong>则</strong> <span class="math inline">\(x^\star\)</span> 也是全局最优解，即：<span class="math inline">\(f(x^\star) \le f(y), \forall y \in D\)</span>。</p></li>
-<li><p>这个性质可以用反证法证明，过程如下：</p>
-<details>
-<p>证明：假设结论不成立，则 <span class="math inline">\(x^\star\)</span> 不是全局最小点。于是存在某个可行点 <span class="math inline">\(\bar y\in D\)</span> 使得 <span class="math display">\[
-\begin{align}
-f(\bar y)&lt;f(x^\star).
-\end{align}
-\]</span> 由于 <span class="math inline">\(D\)</span> 是凸集，故对任意 <span class="math inline">\(\theta\in[0,1]\)</span>，点 <span class="math display">\[
-\begin{align}
-z(\theta) := (1-\theta)x^\star+\theta \bar y
-\end{align}
-\]</span> 仍属于 <span class="math inline">\(D\)</span>。</p>
-<p>又由于 <span class="math inline">\(f\)</span> 是凸函数，故对任意 <span class="math inline">\(\theta\in[0,1]\)</span> 有 <span class="math display">\[
-\begin{align}
-f\big(z(\theta)\big)\le (1-\theta)f(x^\star)+\theta f(\bar y).
-\end{align}
-\]</span> 结合 <span class="math inline">\(f(\bar y)&lt;f(x^\star)\)</span>，可得当任意 <span class="math inline">\(\theta\in(0,1]\)</span> 时 <span class="math display">\[
-\begin{align}
-(1-\theta)f(x^\star)+\theta f(\bar y)
-= f(x^\star)+\theta\big(f(\bar y)-f(x^\star)\big)
-&lt; f(x^\star),
-\end{align}
-\]</span> 从而 <span class="math display">\[
-\begin{align}
-f\big(z(\theta)\big)&lt;f(x^\star),\quad \forall\,\theta\in(0,1].
-\end{align}
-\]</span> 另一方面，注意到 <span class="math display">\[
-\begin{align}
-\|z(\theta)-x^\star\|_2
-&amp;= \|(1-\theta)x^\star+\theta \bar y-x^\star\|_2
-= \|\theta(\bar y-x^\star)\|_2
-= \theta\|\bar y-x^\star\|_2.
-\end{align}
-\]</span> 因此只要取 <span class="math display">\[
-\begin{align}
-0&lt;\theta\le \min\left\{1,\ \frac{\rho}{\|\bar y-x^\star\|_2}\right\},
-\end{align}
-\]</span> 就有 <span class="math inline">\(\|z(\theta)-x^\star\|_2\le \rho\)</span>，且 <span class="math inline">\(z(\theta)\in D\)</span>。 于是由“局部最小”的假设应当满足 <span class="math display">\[
-\begin{align}
-f(x^\star)\le f\big(z(\theta)\big).
-\end{align}
-\]</span> 但上面已经得到 <span class="math inline">\(f\big(z(\theta)\big)&lt;f(x^\star)\)</span>，矛盾。</p>
-<p>故反设不成立，结论成立，即 <span class="math display">\[
-\begin{align}
-f(x^\star)\le f(y),\quad \forall\,y\in D.
-\end{align}
-\]</span> 这说明 <span class="math inline">\(x^\star\)</span> 是全局最小点。</p>
-</details></li>
-</ul></li>
-<li><strong>性质二</strong>：如果目标函数是严格凸函数（严格不等号），则全局最优解唯一。对于凸优化问题(5)，该性质可用数学语言描述为：
-<ul>
-<li><p><strong>如果</strong> 凸优化问题 (5) 存在全局最优解，且目标函数 <span class="math inline">\(f\)</span> 是严格凸函数，</p></li>
-<li><p><strong>则</strong>凸优化问题 (5) 的全局最优解唯一。</p></li>
-<li><p>这个形式也可以用反证法证明，过程如下：</p>
-<details>
-<p>证明：严格凸的定义为：对任意不同的 <span class="math inline">\(x_1,x_2\in D\)</span> 以及任意 <span class="math inline">\(\theta\in(0,1)\)</span>，有 <span class="math display">\[
-\begin{align}
-f(\theta x_1+(1-\theta)x_2) &lt; \theta f(x_1)+(1-\theta)f(x_2).
-\end{align}
-\]</span> 下面用反证法证明唯一性。假设存在两个不同的全局最优解 <span class="math inline">\(x_1^\star\neq x_2^\star\)</span>，并记最优值为 <span class="math display">\[
-\begin{align}
-f^\star := f(x_1^\star)=f(x_2^\star)=\inf_{x\in D} f(x).
-\end{align}
-\]</span> 由于 <span class="math inline">\(D\)</span> 是凸集，对任意 <span class="math inline">\(\theta\in(0,1)\)</span>，点 <span class="math display">\[
-\begin{align}
-x_\theta := \theta x_1^\star+(1-\theta)x_2^\star
-\end{align}
-\]</span> 仍属于 <span class="math inline">\(D\)</span>。由严格凸性得 <span class="math display">\[
-\begin{align}
-f(x_\theta)
-&lt; \theta f(x_1^\star)+(1-\theta)f(x_2^\star)
-= \theta f^\star+(1-\theta)f^\star
-= f^\star.
-\end{align}
-\]</span> 这意味着存在可行点 <span class="math inline">\(x_\theta\in D\)</span> 使得 <span class="math inline">\(f(x_\theta)&lt;f^\star\)</span>，与 <span class="math inline">\(f^\star\)</span> 为全局最小值矛盾。</p>
-<p>因此不可能存在两个不同的全局最优解，故全局最优解唯一。</p>
-</details></li>
-</ul></li>
-<li><strong>性质三</strong>：凸优化问题的解集为凸集。对于凸优化问题(5)，该性质可用数学语言描述为：
-<ul>
-<li><p><strong>如果</strong> 凸优化问题 (5) 存在解集 <span class="math inline">\(\mathcal X_{\mathrm{opt}}\)</span>，</p></li>
-<li><p><strong>则</strong> 解集 <span class="math inline">\(\mathcal X_{\mathrm{opt}}\)</span> 是凸集。</p></li>
-<li><p>这个性质可以直接从凸函数和凸集的定义推导出来，证明如下：</p>
-<details>
-<p>证明：任取 <span class="math inline">\(x_1, x_2 \in {\mathcal X}_{\mathrm{opt}}\)</span>，则 <span class="math inline">\(x_1,x_2 \in D\)</span> 且 <span class="math display">\[
-\begin{align}
-f(x_1)=f(x_2)=f^\star.
-\end{align}
-\]</span> 对任意 <span class="math inline">\(\theta\in[0,1]\)</span>，令 <span class="math display">\[
-\begin{align}
-x_\theta:=\theta x_1+(1-\theta)x_2.
-\end{align}
-\]</span> 由于 <span class="math inline">\(D\)</span> 是凸集，有 <span class="math inline">\(x_\theta\in D\)</span>。</p>
-<p>又由于 <span class="math inline">\(f\)</span> 是凸函数，得到 <span class="math display">\[
-\begin{align}
-f(x_\theta)\le \theta f(x_1)+(1-\theta)f(x_2)
-= \theta f^\star+(1-\theta)f^\star=f^\star.
-\end{align}
-\]</span> 另一方面，由 <span class="math inline">\(f^\star\)</span> 是 <span class="math inline">\(D\)</span> 上的下确界（最优值），对所有 <span class="math inline">\(x\in D\)</span> 均有 <span class="math inline">\(f(x)\ge f^\star\)</span>， 特别地 <span class="math display">\[
-\begin{align}
-f(x_\theta)\ge f^\star.
-\end{align}
-\]</span> 综合两式可得 <span class="math inline">\(f(x_\theta)=f^\star\)</span>，因此 <span class="math inline">\(x_\theta\in \mathcal X_{\mathrm{opt}}\)</span>。</p>
-<p>故对任意 <span class="math inline">\(x_1,x_2\in\mathcal X_{\mathrm{opt}}\)</span> 及任意 <span class="math inline">\(\theta\in[0,1]\)</span>，均有 <span class="math inline">\(\theta x_1+(1-\theta)x_2\in\mathcal X_{\mathrm{opt}}\)</span>，即 <span class="math inline">\(\mathcal X_{\mathrm{opt}}\)</span> 为凸集。</p>
-</details></li>
-</ul></li>
-</ul>
-<div class="note note-primary">
-            <p><strong>问题五：性质一有什么作用？如何体现在凸优化问题中？</strong></p>
+\]</span> 该关系可通过下图直观表达。</p>
+<figure>
+<img src="/img/cvx-problem-relation.png" srcset="/img/loading.gif" lazyload alt="CVX问题包含关系"><figcaption aria-hidden="true">CVX问题包含关系</figcaption>
+</figure>
 <blockquote>
-<p><strong>有待后续讨论</strong></p>
+<p><strong>这条链表达的是：越往右，允许的锥/矩阵锥结构越一般，建模能力越强，但求解器实现与计算代价通常也越高。</strong></p>
 </blockquote>
-<p><strong>问题六：性质二有什么作用？如何体现在凸优化问题中？</strong></p>
-<blockquote>
-<p><strong>有待后续讨论</strong></p>
-</blockquote>
-<p><strong>问题七：性质三有什么作用？如何体现在凸优化问题中？</strong></p>
-<blockquote>
-<p><strong>有待后续讨论</strong></p>
-</blockquote>
-          </div>
 
                 
               </div>
@@ -606,8 +531,8 @@ f(x_\theta)\ge f^\star.
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>凸优化学习系列 - 1. 基本概念</div>
-      <div>https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-1/</div>
+      <div>凸优化学习系列 - 2. 凸优化问题分类</div>
+      <div>https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-2/</div>
     </div>
     <div class="license-meta">
       
@@ -651,12 +576,18 @@ f(x_\theta)\ge f^\star.
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-3/" title="凸优化学习系列 - 3. 一阶方法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">凸优化学习系列 - 3. 一阶方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-4/" title="凸优化学习系列 - 4. 梯度下降法">
-                        <span class="hidden-mobile">凸优化学习系列 - 4. 梯度下降法</span>
+                      <a href="/2025/12/12/02=SOS_Programming/SOS_0/" title="SOS Programming 系列 - 0 预备知识和底层逻辑">
+                        <span class="hidden-mobile">SOS Programming 系列 - 0 预备知识和底层逻辑</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
