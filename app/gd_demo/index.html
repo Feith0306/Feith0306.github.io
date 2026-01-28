@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>交互式演示 - Gradient Descent 对比 | GitHub Pages</title>
+
+  <!-- Chart.js：与 ode45_demo 保持一致的版本风格 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+
+  <!-- MathJax：用于 LaTeX 渲染 -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['\\(','\\)'], ['$', '$']] } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    /* ===== 与 ode45_demo 同款布局策略（顶部开始 + 可滚动 + 顶部安全 padding） ===== */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+      background: linear-gradient(135deg, #a1a4b3 0%, #764ba2 100%) !important;
+
+      display: flex !important;
+      justify-content: center !important;
+      align-items: flex-start !important;
+
+      overflow-y: auto !important;
+
+      padding: 80px 20px 40px !important;
+      min-height: 100vh !important;
+    }
+
+    #app * { box-sizing: border-box; }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+      padding: 30px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin: 0 0 10px 0;
+      font-size: 28px;
+      line-height: 1.25;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 24px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .badge {
+      display: inline-block;
+      background: #28a745;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .instructions {
+      background: #e7f3ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      border-left: 4px solid #0066cc;
+    }
+    .instructions h3 {
+      color: #0066cc;
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+    .instructions ul {
+      margin: 0 0 0 18px;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    .settings {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+    }
+    .settings h3 {
+      color: #856404;
+      margin: 0 0 12px 0;
+      font-size: 16px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+    label {
+      font-weight: 600;
+      color: #333;
+      min-width: 160px;
+    }
+    input[type="number"] {
+      padding: 8px 12px;
+      border: 2px solid #ffc107;
+      border-radius: 5px;
+      font-size: 14px;
+      width: 200px;
+      background: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+    input[type="range"]{
+      width: 260px;
+      accent-color: #667eea;
+    }
+
+    .status {
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .status.idle { background: #e7f3ff; color: #0066cc; }
+    .status.running { background: #fff3cd; color: #856404; }
+    .status.success { background: #d4edda; color: #155724; }
+    .status.error { background: #f8d7da; color: #721c24; }
+
+    .info-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+    .info-card {
+      background: #f8f9fa;
+      padding: 14px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+    .info-card.alt {
+      border-left-color: #ff4d88;
+    }
+    .info-card h3 {
+      font-size: 13px;
+      color: #666;
+      margin: 0 0 6px 0;
+      font-weight: 700;
+    }
+    .info-card p {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.35;
+    }
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .chart-container {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .chart-title {
+      font-weight: 800;
+      color: #333;
+      margin: 0 0 10px 0;
+      font-size: 14px;
+    }
+    .chart-box {
+      position: relative;
+      height: 420px; /* 比 ode45_demo 更大一点 */
+    }
+    canvas { width: 100% !important; height: 100% !important; }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-weight: 600;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-secondary:hover { background: #5a6268; }
+
+    .footer {
+      text-align: center;
+      margin-top: 8px;
+      color: #666;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* 小高度横屏：减少顶部 padding，避免内容被挤压 */
+    @media (max-height: 620px) {
+      body { padding-top: 20px !important; }
+      .container { padding: 22px; }
+      .chart-box { height: 300px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>📉 交互式演示：Gradient Descent 对比<span class="badge">GitHub Pages</span></h1>
+      <p class="subtitle">
+        目标：最小化 \( f(x)=(x-2)^4+(x-2)^2 \)，梯度：\( \nabla f(x)=4(x-2)^3+2(x-2) \)。
+        <br/>同一初值下对比：固定步长 GD vs 回溯线搜索（Armijo）GD（参数变动后自动刷新）。
+      </p>
+
+      <div class="instructions">
+        <h3>📖 使用说明</h3>
+        <ul>
+          <li>同一初值 \(x_0\) 同时用于两种方法。</li>
+          <li>固定步长 GD：\(x_{k+1}=x_k-\alpha \nabla f(x_k)\)。</li>
+          <li>回溯 GD：以 \(\alpha_0=0.1\) 起步，按 shrink 因子 \(\rho\) 回溯，满足 Armijo 条件后更新。</li>
+          <li>无需点击运行：拖动/输入参数会实时更新 \(x_k\) 迭代曲线与最终 \(x_{\mathrm{final}}, f_{\mathrm{final}}\)。</li>
+        </ul>
+      </div>
+
+      <div class="settings">
+        <h3>⚙️ 算法参数</h3>
+
+        <div class="row">
+          <label>\(x_0\)（共同初值）</label>
+          <input type="number" id="x0Num" step="0.1" value="5.0" />
+          <input type="range" id="x0Range" step="0.1" min="-20" max="20" value="5.0" />
+        </div>
+
+        <div class="row">
+          <label>\(\alpha\)（固定步长）</label>
+          <input type="number" id="alphaNum" step="0.001" min="0" max="0.2" value="0.020" />
+          <input type="range" id="alphaRange" step="0.001" min="0" max="0.2" value="0.020" />
+        </div>
+
+        <div class="row">
+          <label>\(\rho\)（回溯 shrink）</label>
+          <input type="number" id="rhoNum" step="0.01" min="0.05" max="0.95" value="0.20" />
+          <input type="range" id="rhoRange" step="0.01" min="0.05" max="0.95" value="0.20" />
+        </div>
+
+        <div class="row">
+          <label>MaxIter（迭代次数）</label>
+          <input type="number" id="iterNum" step="1" min="1" max="500" value="100" />
+          <input type="range" id="iterRange" step="1" min="1" max="500" value="100" />
+        </div>
+      </div>
+
+      <div class="status idle" id="status">已就绪：等待参数变动以刷新结果…</div>
+
+      <div class="info-panel">
+        <div class="info-card">
+          <h3>固定步长 GD</h3>
+          <p class="mono">x_final = <span id="fixX">-</span></p>
+          <p class="mono">f_final = <span id="fixF">-</span></p>
+        </div>
+        <div class="info-card alt">
+          <h3>回溯（Armijo）GD</h3>
+          <p class="mono">x_final = <span id="btX">-</span></p>
+          <p class="mono">f_final = <span id="btF">-</span></p>
+        </div>
+        <div class="info-card">
+          <h3>Armijo 参数（固定）</h3>
+          <p>\(\alpha_0=0.1\)</p>
+          <p>\(c=0.25\)</p>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-title">对比曲线：\(x_k\) 的迭代过程（同一初值）</div>
+        <div class="chart-box"><canvas id="xChart"></canvas></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn-secondary" id="resetBtn">↩️ 重置为默认参数</button>
+      </div>
+
+      <div class="footer">
+        💡 纯前端计算，适配 Hexo / GitHub Pages。固定步长过大可能震荡或发散；回溯法通常更稳健。
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ===== 目标函数与梯度（与之前 GD demo 保持一致）=====
+  function f(x){
+    const t = x - 2.0;
+    return t*t*t*t + t*t;
+  }
+  function gradF(x){
+    const t = x - 2.0;
+    return 4.0*t*t*t + 2.0*t;
+  }
+
+  // ===== 固定步长 GD（严格迭代 MaxIter 次）=====
+  function gdFixed(x0, alpha, maxIter){
+    let x = Number(x0);
+    const xs = [x];
+    for(let k=0;k<maxIter;k++){
+      x = x - alpha * gradF(x);
+      xs.push(x);
+    }
+    return { x_final: x, xs };
+  }
+
+  // ===== Armijo backtracking（工程保护：最多回溯 80 次防卡死）=====
+  function backtrackingArmijo(x, g, alpha0, rho, c){
+    let a = alpha0;
+    const fx = f(x);
+    const gg = g*g;
+    for(let it=0; it<80; it++){
+      const trial = x - a*g;
+      if (f(trial) <= fx - c*a*gg) break;
+      a = a * rho;
+      if (a < 1e-16) break;
+    }
+    return a;
+  }
+
+  function gdBacktracking(x0, maxIter, alpha0, rho, c){
+    let x = Number(x0);
+    const xs = [x];
+    for(let k=0;k<maxIter;k++){
+      const g = gradF(x);
+      const a = backtrackingArmijo(x, g, alpha0, rho, c);
+      x = x - a * g;
+      xs.push(x);
+    }
+    return { x_final: x, xs };
+  }
+
+  // ===== UI =====
+  const el = (id)=>document.getElementById(id);
+
+  function setStatus(type, text){
+    const s = el("status");
+    s.className = "status " + type;
+    s.textContent = text;
+  }
+
+  function fmt(x){
+    if (!Number.isFinite(x)) return "NaN";
+    const ax = Math.abs(x);
+    if (ax !== 0 && (ax < 1e-4 || ax > 1e4)) return x.toExponential(6);
+    return x.toFixed(8);
+  }
+
+  function syncPair(numEl, rangeEl, onChange){
+    const sync = (from, to)=>{
+      to.value = from.value;
+      onChange();
+    };
+    numEl.addEventListener("input", ()=>sync(numEl, rangeEl));
+    rangeEl.addEventListener("input", ()=>sync(rangeEl, numEl));
+  }
+
+  // ===== Chart =====
+  let chart = null;
+
+  function initChart(){
+    const ctx = el("xChart").getContext("2d");
+    chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        datasets: [
+          { label: "Fixed-step GD", data: [], borderWidth: 3, pointRadius: 0, tension: 0.25 },
+          { label: "Backtracking (Armijo) GD", data: [], borderWidth: 3, pointRadius: 0, tension: 0.25 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: { legend: { display: true, position: "top" } },
+        scales: {
+          x: { type: "linear", title: { display: true, text: "Iteration k" } },
+          y: { type: "linear", title: { display: true, text: "x_k" } }
+        }
+      }
+    });
+
+    // 固定颜色（更丰富、与 info-card 左边色条呼应）
+    chart.data.datasets[0].borderColor = "#667eea";
+    chart.data.datasets[1].borderColor = "#ff4d88";
+  }
+
+  // ===== 自动刷新（rAF 轻量防抖）=====
+  let scheduled = false;
+
+  function requestUpdate(){
+    if (scheduled) return;
+    scheduled = true;
+    setStatus("running", "正在刷新（自动更新中）...");
+    requestAnimationFrame(()=>{
+      scheduled = false;
+      try{
+        update();
+        setStatus("success", "✅ 已刷新：曲线与最终值已更新。");
+      }catch(e){
+        console.error(e);
+        setStatus("error", "❌ " + e.message + "（打开控制台查看详细报错）");
+      }
+    });
+  }
+
+  function update(){
+    const x0 = Number(el("x0Num").value);
+    const alpha = Number(el("alphaNum").value);
+    const rho = Number(el("rhoNum").value);
+    const maxIter = Math.max(1, Math.floor(Number(el("iterNum").value)));
+
+    if (!isFinite(x0) || !isFinite(alpha) || !isFinite(rho) || !isFinite(maxIter)) {
+      throw new Error("参数非法：请检查 x0、α、ρ、MaxIter。");
+    }
+    if (alpha < 0) throw new Error("α 必须 ≥ 0。");
+
+    const alpha0 = 0.1;
+    const c = 1e-4;
+
+    const resFix = gdFixed(x0, alpha, maxIter);
+    const resBt  = gdBacktracking(x0, maxIter, alpha0, rho, c);
+
+    el("fixX").textContent = fmt(resFix.x_final);
+    el("fixF").textContent = fmt(f(resFix.x_final));
+    el("btX").textContent  = fmt(resBt.x_final);
+    el("btF").textContent  = fmt(f(resBt.x_final));
+
+    // chart data: k -> x_k
+    const dataFix = resFix.xs.map((xk, k)=>({ x:k, y:xk }));
+    const dataBt  = resBt.xs.map((xk, k)=>({ x:k, y:xk }));
+    chart.data.datasets[0].data = dataFix;
+    chart.data.datasets[1].data = dataBt;
+    chart.update();
+  }
+
+  function resetDefaults(){
+    el("x0Num").value = "5.0";    el("x0Range").value = "5.0";
+    el("alphaNum").value = "0.020"; el("alphaRange").value = "0.020";
+    el("rhoNum").value = "0.20";  el("rhoRange").value = "0.20";
+    el("iterNum").value = "100";  el("iterRange").value = "100";
+    requestUpdate();
+  }
+
+  window.addEventListener("load", ()=>{
+    initChart();
+
+    // 双向同步
+    syncPair(el("x0Num"), el("x0Range"), requestUpdate);
+    syncPair(el("alphaNum"), el("alphaRange"), requestUpdate);
+    syncPair(el("rhoNum"), el("rhoRange"), requestUpdate);
+    syncPair(el("iterNum"), el("iterRange"), requestUpdate);
+
+    el("resetBtn").addEventListener("click", resetDefaults);
+
+    // 首次加载：等 MathJax 加载后再 typeset（避免偶发“未渲染”）
+    const tryTypeset = ()=>{
+      if (window.MathJax && window.MathJax.typesetPromise){
+        window.MathJax.typesetPromise();
+      }
+    };
+    setTimeout(tryTypeset, 0);
+    setTimeout(tryTypeset, 250);
+    setTimeout(tryTypeset, 800);
+
+    requestUpdate();
+  });
+</script>
+</body>
+</html>

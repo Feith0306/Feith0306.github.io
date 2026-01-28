@@ -1,0 +1,983 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.ico">
+  <link rel="icon" href="/img/fluid.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tianhao Fei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这个文档介绍凸优化问题的次梯度法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="凸优化学习系列 - 5. 次梯度法">
+<meta property="og:url" content="https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-5/index.html">
+<meta property="og:site_name" content="Feith&#39;s Blog">
+<meta property="og:description" content="这个文档介绍凸优化问题的次梯度法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
+<meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
+<meta property="article:modified_time" content="2026-01-28T10:04:26.587Z">
+<meta property="article:author" content="Tianhao Fei">
+<meta property="article:tag" content="affine">
+<meta property="article:tag" content="convex function">
+<meta property="article:tag" content="convex set">
+<meta property="article:tag" content="subgradient">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
+  
+  
+  
+  <title>凸优化学习系列 - 5. 次梯度法 - Feith&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/banner-avatar.css">
+<link rel="stylesheet" href="/css/mac.css">
+<link rel="stylesheet" href="/css/code_fold.css">
+<link rel="stylesheet" href="/css/banner-title.css">
+<link rel="stylesheet" href="/css/banner-effect.css">
+<link rel="stylesheet" href="/css/content_fold.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"feith0306.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":null,"loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Feith&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/app/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>应用</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="凸优化学习系列 - 5. 次梯度法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-26 16:32" pubdate>
+          2026年1月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">凸优化学习系列 - 5. 次梯度法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><strong>目标：读完这篇博客，应当能</strong></p>
+</blockquote>
+<ul>
+<li>理解次梯度与次微分的必要性并会算常见例子；</li>
+<li>学会如何用次梯度法求解凸优化问题；</li>
+<li>知道为何次梯度法收敛慢、收敛到哪、需要什么前提条件；</li>
+</ul>
+<hr>
+<h2 id="为什么需要次梯度不可微凸目标的一阶方法入口">1. 为什么需要次梯度：不可微凸目标的“一阶方法”入口</h2>
+<p>对无约束凸优化 <span class="math display">\[
+\begin{align}
+\min_{x\in\mathbb{R}^n} f(x),
+\end{align}
+\]</span> 如果 <span class="math inline">\(f\)</span> 可微，梯度下降更新 <span class="math display">\[
+\begin{align}
+x^{(k)}=x^{(k-1)}-t_k\nabla f(x^{(k-1)}).
+\end{align}
+\]</span> 但很多凸目标 <strong>在关键点不可微</strong>（如 <span class="math inline">\(|x|\)</span>、<span class="math inline">\(\|x\|_1\)</span>、<span class="math inline">\(\max_i a_i^\top x+b_i\)</span>等）。梯度不存在，不代表“没有一阶信息”，凸性保证我们仍有 <strong>支撑超平面</strong>，从而得到次梯度。</p>
+<p>因此：<strong>次梯度法 = 梯度下降把 <span class="math inline">\(\nabla f\)</span> 换成某个 <span class="math inline">\(g\in\partial f(x)\)</span></strong>。</p>
+<hr>
+<h2 id="次梯度与次微分">2. 次梯度与次微分</h2>
+<h3 id="次梯度subgradient的定义">2.1 次梯度（subgradient）的定义</h3>
+<p>设 <span class="math inline">\(f:\mathbb{R}^n\to\mathbb{R}\)</span> 为凸函数。向量 <span class="math inline">\(g\in\mathbb{R}^n\)</span> 称为 <span class="math inline">\(f\)</span> 在点 <span class="math inline">\(x\)</span> 的一个次梯度，如果对任意 <span class="math inline">\(y\in\mathbb{R}^n\)</span> 有 <span class="math display">\[\begin{align}
+f(y)\ge f(x)+g^\top(y-x).
+\end{align}\]</span> 这条不等式就是“在 <span class="math inline">\(x\)</span> 处用一条仿射函数从下方支撑 <span class="math inline">\(f\)</span>”。</p>
+<h3 id="次微分subdifferential">2.2 次微分（subdifferential）</h3>
+<p>所有次梯度的集合称为次微分： <span class="math display">\[\begin{align}
+\partial f(x)=\{g:\ f(y)\ge f(x)+g^\top(y-x),\ \forall y\}.
+\end{align}\]</span></p>
+<h3 id="可微时的退化情形">2.3 可微时的退化情形</h3>
+<p>若 <span class="math inline">\(f\)</span> 在 <span class="math inline">\(x\)</span> 可微，则 <span class="math display">\[\begin{align}
+\partial f(x)=\{\nabla f(x)\}.
+\end{align}\]</span> 也就是说：<strong>次梯度严格扩展了梯度</strong>。</p>
+<hr>
+<h2 id="几何直觉支撑超平面与斜率集合">3. 几何直觉：支撑超平面与“斜率集合”</h2>
+<ul>
+<li>在 1D，凸函数在不可微点（如 <span class="math inline">\(|x|\)</span> 的 0）会出现“折角”。此处不存在唯一斜率，但存在一个 <strong>斜率区间</strong>，即 <span class="math inline">\(\partial f(0)=[-1,1]\)</span>。</li>
+<li>在高维，<span class="math inline">\(\partial f(x)\)</span> 对应所有能在 <span class="math inline">\(x\)</span> 处支撑图像的超平面的法向量集合。</li>
+</ul>
+<p>把“梯度是切线斜率”升级为“次梯度是支撑超平面的法向量”。</p>
+<hr>
+<h2 id="常见次梯度计算">4. 常见次梯度计算</h2>
+<p>下面给出“可直接上手算”的典型例子（建议自己再推一遍定义）。</p>
+<h3 id="绝对值与-ell_1-范数">4.1 绝对值与 <span class="math inline">\(\ell_1\)</span> 范数</h3>
+<p>1D： <span class="math display">\[\begin{align}
+f(x)=|x|,\quad
+\partial f(x)=
+\begin{cases}
+\{1\}, &amp; x&gt;0,\\
+[-1,1], &amp; x=0,\\
+\{-1\}, &amp; x&lt;0.
+\end{cases}
+\end{align}\]</span> 向量形式： <span class="math display">\[\begin{align}
+f(x)=\|x\|_1=\sum_i |x_i|,\quad
+[\partial f(x)]_i=
+\begin{cases}
+\{1\}, &amp; x_i&gt;0,\\
+[-1,1], &amp; x_i=0,\\
+\{-1\}, &amp; x_i&lt;0.
+\end{cases}
+\end{align}\]</span></p>
+<h3 id="最大函数max-of-convex">4.2 最大函数（max of convex）</h3>
+<p>若 <span class="math display">\[\begin{align}
+f(x)=\max_{i=1,\dots,m} f_i(x),
+\end{align}\]</span> 其中每个 <span class="math inline">\(f_i\)</span> 凸，则有次梯度规则：在达到最大值的“活跃集合”上取次梯度并做凸包。 更具体地： <span class="math display">\[\begin{align}
+\partial f(x)=\mathrm{conv}\Big(\bigcup_{i\in I(x)} \partial f_i(x)\Big),
+\quad I(x)=\{i:\ f_i(x)=f(x)\}.
+\end{align}\]</span> 特别地，如果某个 <span class="math inline">\(i^\star\in I(x)\)</span>，取任意 <span class="math inline">\(g\in\partial f_{i^\star}(x)\)</span>，则 <span class="math inline">\(g\in\partial f(x)\)</span>（实现上经常这么做）。</p>
+<p>典型：<span class="math inline">\(f(x)=\max_i (a_i^\top x+b_i)\)</span>，则在活跃的 <span class="math inline">\(i^\star\)</span> 上可取 <span class="math display">\[\begin{align}
+g=a_{i^\star}.
+\end{align}\]</span></p>
+<h3 id="距离函数distance-to-a-convex-set">4.3 距离函数（distance to a convex set）</h3>
+<p>距离函数 <span class="math display">\[\begin{align}
+\mathrm{dist}(x,C)=\min_{y\in C}\|y-x\|_2
+\end{align}\]</span> 在 <span class="math inline">\(x\notin C\)</span> 时可微，梯度为 <span class="math display">\[\begin{align}
+\nabla \mathrm{dist}(x,C)=\frac{x-P_C(x)}{\|x-P_C(x)\|_2},
+\end{align}\]</span> 其中 <span class="math inline">\(P_C(x)\)</span> 是到 <span class="math inline">\(C\)</span> 的欧氏投影。</p>
+<p>这个公式在后面“集合交集/交替投影”里是核心。</p>
+<hr>
+<h2 id="次梯度法subgradient-method算法形式与关键差异">5. 次梯度法（Subgradient Method）：算法形式与关键差异</h2>
+<h3 id="无约束次梯度法">5.1 无约束次梯度法</h3>
+<p>对于 <span class="math display">\[\begin{align}
+\min_{x\in\mathbb{R}^n} f(x)\quad (f\ \text{凸，不要求可微}),
+\end{align}\]</span> 次梯度法迭代： <span class="math display">\[\begin{align}
+x^{(k)}=x^{(k-1)}-t_k g^{(k-1)},\quad g^{(k-1)}\in \partial f(x^{(k-1)}).
+\end{align}\]</span></p>
+<h3 id="重要它不一定下降">5.2 重要：它不一定“下降”</h3>
+<p>与梯度下降不同，次梯度法<strong>不一定每步都让 <span class="math inline">\(f(x^{(k)})\)</span> 下降</strong>。因此次梯度法强调要跟踪“best iterate”： <span class="math display">\[\begin{align}
+f\big(x^{(k)}_{\mathrm{best}}\big)=\min_{i=0,\dots,k} f(x^{(i)}).
+\end{align}\]</span> 实践中：应当输出/记录 <span class="math inline">\(x_{\mathrm{best}}\)</span> 而不是盯着最后一次迭代。</p>
+<hr>
+<h2 id="步长step-size怎么选三类最常用规则">6. 步长（step size）怎么选：三类最常用规则</h2>
+<blockquote>
+<p>次梯度法的步长通常 <strong>预先规定</strong>，而不是像光滑情形那样靠线搜索“自适应”找下降。</p>
+</blockquote>
+<h3 id="固定步长fixed-step">6.1 固定步长（fixed step）</h3>
+<p><span class="math display">\[\begin{align}
+t_k=t.
+\end{align}\]</span> 结论：若 <span class="math inline">\(f\)</span> Lipschitz（常数 <span class="math inline">\(G\)</span>），则固定步长只能保证收敛到一个邻域： <span class="math display">\[\begin{align}
+\lim_{k\to\infty} f(x^{(k)}_{\mathrm{best}})\le f^\star+\frac{G^2 t}{2}.
+\end{align}\]</span> 含义：<span class="math inline">\(t\)</span> 不趋零，就无法逼近最优值到任意精度。</p>
+<h3 id="递减步长diminishing-step">6.2 递减步长（diminishing step）</h3>
+<p>选择 <span class="math inline">\(\{t_k\}\)</span> 满足（平方可和但不可和） <span class="math display">\[\begin{align}
+\sum_{k=1}^\infty t_k^2&lt;\infty,\qquad \sum_{k=1}^\infty t_k=\infty.
+\end{align}\]</span> 典型例子：<span class="math inline">\(t_k=\frac{c}{\sqrt{k}}\)</span>（需调 <span class="math inline">\(c\)</span>）。<br>
+结论：在同样 Lipschitz 条件下， <span class="math display">\[\begin{align}
+\lim_{k\to\infty} f(x^{(k)}_{\mathrm{best}})=f^\star.
+\end{align}\]</span></p>
+<h3 id="polyak-步长知道最优值-fstar-时">6.3 Polyak 步长（知道最优值 <span class="math inline">\(f^\star\)</span> 时）</h3>
+<p>当<strong>已知</strong>最优值 <span class="math inline">\(f^\star\)</span>（比如某些可行性问题 <span class="math inline">\(f^\star=0\)</span>），可用： <span class="math display">\[\begin{align}
+t_k=\frac{f(x^{(k-1)})-f^\star}{\|g^{(k-1)}\|_2^2}.
+\end{align}\]</span> 动机：它最小化后面“基本不等式”右侧上界。 经验：Polyak 往往比盲选递减步长稳定，但前提苛刻（要真知道 <span class="math inline">\(f^\star\)</span> 或有可靠下界）。</p>
+<hr>
+<h2 id="收敛性分析一条基本不等式统领全部结果">7. 收敛性分析：一条“基本不等式”统领全部结果</h2>
+<h3 id="关键假设lipschitz等价于次梯度有界">7.1 关键假设：Lipschitz（等价于次梯度有界）</h3>
+<p>采用假设：存在 <span class="math inline">\(G&gt;0\)</span>，使得对任意 <span class="math inline">\(x,y\)</span>： <span class="math display">\[\begin{align}
+|f(x)-f(y)|\le G\|x-y\|_2. \tag{Lipschitz}
+\end{align}\]</span> 对凸函数，这通常对应“任意 <span class="math inline">\(g\in\partial f(x)\)</span> 都满足 <span class="math inline">\(\|g\|_2\le G\)</span>”这类有界性直觉（用于把 <span class="math inline">\(\|g\|^2\)</span> 控住）。</p>
+<h3 id="基本不等式最重要">7.2 基本不等式（最重要）</h3>
+<p>令 <span class="math inline">\(x^\star\)</span> 为最优解之一，<span class="math inline">\(R=\|x^{(0)}-x^\star\|_2\)</span>。给出推导骨架：</p>
+<p><strong>第一步（用次梯度定义 + 展开平方）：</strong> <span class="math display">\[\begin{align}
+\|x^{(k)}-x^\star\|_2^2
+\le
+\|x^{(k-1)}-x^\star\|_2^2
+-2t_k\big(f(x^{(k-1)})-f^\star\big)
++t_k^2\|g^{(k-1)}\|_2^2.
+\end{align}\]</span></p>
+<p><strong>累加迭代并用 <span class="math inline">\(\|g\|\le G\)</span>：</strong> <span class="math display">\[\begin{align}
+0\le R^2
+-2\sum_{i=1}^k t_i\big(f(x^{(i-1)})-f^\star\big)
++G^2\sum_{i=1}^k t_i^2.
+\end{align}\]</span></p>
+<p>引入 best iterate 并整理，得到“基本上界”： <span class="math display">\[\begin{align}
+f(x^{(k)}_{\mathrm{best}})-f^\star
+\le
+\frac{R^2+G^2\sum_{i=1}^k t_i^2}{2\sum_{i=1}^k t_i}.
+\tag{★}
+\end{align}\]</span></p>
+<blockquote>
+<p>要真正掌握次梯度法，就必须能看懂并复现这条不等式，因为：</p>
+</blockquote>
+<ul>
+<li>固定步长/递减步长/Polyak 的结论都是从 (★) 直接推出的；<br>
+</li>
+<li>复杂问题（加约束、随机、分布式）也经常以它为模板改造。</li>
+</ul>
+<hr>
+<h2 id="收敛速率为什么它本质上慢">8. 收敛速率：为什么它“本质上慢”？</h2>
+<p>由 (★)，固定步长 <span class="math inline">\(t_k=t\)</span> 时，给出： <span class="math display">\[\begin{align}
+f(x^{(k)}_{\mathrm{best}})-f^\star
+\le
+\frac{R^2}{2kt}+\frac{G^2 t}{2}.
+\end{align}\]</span> 为了达到精度 <span class="math inline">\(\varepsilon\)</span>，令两项都 <span class="math inline">\(\le \varepsilon/2\)</span>，可取 <span class="math display">\[\begin{align}
+t=\frac{\varepsilon}{G^2},\qquad
+k=\frac{R^2G^2}{\varepsilon^2}.
+\end{align}\]</span> 因此次梯度法复杂度是 <span class="math display">\[\begin{align}
+k=O(1/\varepsilon^2),
+\end{align}\]</span> 明显慢于光滑凸梯度法的 <span class="math inline">\(O(1/\varepsilon)\)</span>。</p>
+<p>更扎心的是：引用 Nesterov 的下界结论——在“仅靠次梯度 oracle 的非光滑一阶法”类里，整体上无法把最坏情形做得比 <span class="math inline">\(O(1/\varepsilon^2)\)</span> 更好（除非换问题结构或换信息模型）。</p>
+<hr>
+<h2 id="典型应用-1闭凸集交集可行性以及交替投影的由来">9. 典型应用 1：闭凸集交集可行性（以及交替投影的由来）</h2>
+<p>问题：找 <span class="math display">\[\begin{align}
+x^\star\in \bigcap_{i=1}^m C_i,
+\end{align}\]</span> 其中 <span class="math inline">\(C_i\)</span> 闭凸。</p>
+<p>定义 <span class="math display">\[\begin{align}
+f_i(x)=\mathrm{dist}(x,C_i),\qquad
+f(x)=\max_{i=1,\dots,m} f_i(x),
+\end{align}\]</span> 并解 <span class="math display">\[\begin{align}
+\min_x f(x).
+\end{align}\]</span> 检验：<span class="math inline">\(f^\star=0 \iff x^\star\in\cap_i C_i\)</span>。</p>
+<p>因为 <span class="math inline">\(f\)</span> 是“max of convex”，可取最远集合 <span class="math inline">\(C_{i^\star}\)</span> 上的梯度作为次梯度： <span class="math display">\[\begin{align}
+g=\nabla f_{i^\star}(x)=\frac{x-P_{C_{i^\star}}(x)}{\|x-P_{C_{i^\star}}(x)\|_2}.
+\end{align}\]</span> 若用 Polyak 步长且 <span class="math inline">\(f^\star=0\)</span>，进一步得到更新： <span class="math display">\[\begin{align}
+x^+=x-f(x)\,g
+= P_{C_{i^\star}}(x).
+\end{align}\]</span> 也就是：<strong>每步直接投影到“当前最远的集合”</strong>。</p>
+<p>特别地，当只有两个集合时，这退化为著名的 <strong>交替投影（alternating projections）</strong>：在 <span class="math inline">\(C_1\)</span> 与 <span class="math inline">\(C_2\)</span> 之间来回投影。</p>
+<hr>
+<h2 id="典型应用-2带约束的凸优化-投影次梯度法projected-subgradient">10. 典型应用 2：带约束的凸优化 —— 投影次梯度法（Projected Subgradient）</h2>
+<p>问题形式： <span class="math display">\[\begin{align}
+\min_{x\in C} f(x),
+\end{align}\]</span> 其中 <span class="math inline">\(f\)</span> 凸可不可微均可，<span class="math inline">\(C\)</span> 闭凸且可投影。</p>
+<p>投影次梯度法： <span class="math display">\[\begin{align}
+x^{(k)}=P_C\Big(x^{(k-1)}-t_k g^{(k-1)}\Big),\quad g^{(k-1)}\in\partial f(x^{(k-1)}).
+\end{align}\]</span> 理解：先沿“次梯度方向”走一步，再把点拉回可行域。</p>
+<h3 id="哪些集合易投影">10.1 哪些集合易投影？</h3>
+<p>看起来简单的多面体投影可能很难。 典型易投影例子： - 非负正交锥 <span class="math inline">\(\mathbb{R}^n_+\)</span>：逐分量截断 <span class="math inline">\(P(x)=\max(x,0)\)</span> - <span class="math inline">\(\ell_2\)</span> 球、<span class="math inline">\(\ell_\infty\)</span> 球：都有闭式 - 仿射子空间/线性方程解集：正交投影可显式写出（或解线性方程）</p>
+<hr>
+<h2 id="会用次梯度法实现要点与一份可复用伪代码">11. “会用”次梯度法：实现要点与一份可复用伪代码</h2>
+<h3 id="必须明确的-4-个对象">11.1 必须明确的 4 个对象</h3>
+<ol type="1">
+<li>目标函数 <span class="math inline">\(f(x)\)</span><br>
+</li>
+<li>次梯度算子：给定 <span class="math inline">\(x\)</span>，能返回一个 <span class="math inline">\(g\in\partial f(x)\)</span><br>
+</li>
+<li>步长规则：fixed / diminishing / Polyak<br>
+</li>
+<li>约束投影 <span class="math inline">\(P_C(\cdot)\)</span>（若无约束可省）</li>
+</ol>
+<h3 id="伪代码无约束">11.2 伪代码（无约束）</h3>
+<blockquote>
+<p>算法 1: 次梯度法（无约束；返回 best iterate）</p>
+<p>输入：初值 <span class="math inline">\(x_0\)</span>；步长规则 <span class="math inline">\(\{t_k\}\)</span>（fixed / diminishing / Polyak）；最大迭代次数 <span class="math inline">\(K\)</span></p>
+<p>输出：<span class="math inline">\(x_{\mathrm{best}}\)</span>，<span class="math inline">\(f_{\mathrm{best}}\)</span></p>
+</blockquote>
+<p><span class="math display">\[
+\begin{array}{l}
+\textbf{Algorithm 1: Unconstrained Subgradient Method}\\
+\textbf{Input:}\; x_0,\; \{t_k\},\; K \qquad
+1:\; x \leftarrow x_0\\
+2:\; x_{\mathrm{best}} \leftarrow x_0\\
+3:\; f_{\mathrm{best}} \leftarrow f(x_0)\\
+4:\; \textbf{for } k = 1,2,\ldots,K \textbf{ do}\\
+5:\; \qquad \text{choose any } g \in \partial f(x)\\
+6:\; \qquad t \leftarrow \text{stepsize}(k,x,g)\quad (\text{fixed/diminishing/Polyak})\\
+7:\; \qquad x \leftarrow x - t\, g\\
+8:\; \qquad  \textbf{if } f(x) &lt; f_{\mathrm{best}} \\
+9:\; \qquad\qquad x_{\mathrm{best}} \leftarrow x\\
+10:\; \qquad\qquad f_{\mathrm{best}} \leftarrow f(x)\\
+11:\; \qquad \textbf{end if}\\
+12:\; \textbf{end for}\\
+\textbf{Output:}\; (x_{\mathrm{best}}, f_{\mathrm{best}})\\[2pt]
+\end{array}
+\]</span></p>
+<h3 id="伪代码有约束投影次梯度">11.3 伪代码（有约束➡️投影次梯度）</h3>
+<blockquote>
+<p>算法 2: 投影次梯度法（约束集 C；返回 best iterate）</p>
+<p>输入：初值 <span class="math inline">\(x_0\)</span>；约束集 <span class="math inline">\(C\)</span>；步长规则 <span class="math inline">\(\{t_k\}\)</span>；最大迭代次数 <span class="math inline">\(K\)</span></p>
+<p>输出：<span class="math inline">\(x_{\mathrm{best}}\)</span>，<span class="math inline">\(f_{\mathrm{best}}\)</span></p>
+</blockquote>
+<p><span class="math display">\[
+\begin{array}{l}
+\textbf{Algorithm 2: Projected Subgradient Method }\\
+\textbf{Input:}\; x_0,\; C,\; \{t_k\},\; K \\
+1:\; x \leftarrow x_0\\
+2:\; x_{\mathrm{best}} \leftarrow x_0\\
+3:\; f_{\mathrm{best}} \leftarrow f(x_0)\\
+4:\; \textbf{for } k = 1,2,\ldots,K \textbf{ do}\\
+5:\; \qquad \text{choose any } g \in \partial f(x)\\
+6:\; \qquad t \leftarrow \text{stepsize}(k,x,g)\\
+7:\; \qquad x \leftarrow \mathrm{Proj}_C(x - t\, g)\\
+8:\; \qquad \textbf{if } f(x) &lt; f_{\mathrm{best}} \textbf{ then}\\
+9:\; \qquad\qquad x_{\mathrm{best}} \leftarrow x\\
+10:\; \qquad\qquad f_{\mathrm{best}} \leftarrow f(x)\\
+11:\; \qquad \textbf{end if}\\
+12:\; \textbf{end for}\\
+13:\; \textbf{Output:}\; (x_{\mathrm{best}}, f_{\mathrm{best}})\\[2pt]
+\end{array}
+\]</span></p>
+<h3 id="常见坑">11.4 常见坑</h3>
+<ul>
+<li><strong>只看最后迭代点</strong>：次梯度法不是下降法，必须输出 (x_{})。</li>
+<li><strong>固定步长幻想“收敛到最优”</strong>：它只收敛到邻域，误差下界 (G^2 t/2)。</li>
+<li><strong>步长衰减太快</strong>：(t_k &lt;) 会“走不到最优”，明确要求“平方可和但不可和”。</li>
+<li><strong>次梯度选取随意但不自知</strong>：(f(x)) 常是集合（如 (_1) 在 0），选哪个会影响轨迹与速度，但不改变最坏阶。<br>
+</li>
+<li><strong>忽视 Lipschitz/有界次梯度假设</strong>：收敛界里 (G) 是核心常数，不可用就无法直接套 (★)。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/optimization/" class="category-chain-item">optimization</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/convex-set/" class="print-no-link">#convex set</a>
+      
+        <a href="/tags/convex-function/" class="print-no-link">#convex function</a>
+      
+        <a href="/tags/affine/" class="print-no-link">#affine</a>
+      
+        <a href="/tags/subgradient/" class="print-no-link">#subgradient</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>凸优化学习系列 - 5. 次梯度法</div>
+      <div>https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-5/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Tianhao Fei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-7/" title="凸优化学习系列 - 7. 随机梯度下降法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">凸优化学习系列 - 7. 随机梯度下降法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/12/12/02=SOS_Programming/SOS_0/" title="SOS Programming 系列 - 0 预备知识和底层逻辑">
+                        <span class="hidden-mobile">SOS Programming 系列 - 0 预备知识和底层逻辑</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            tags: 'ams',
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/banner-avatar.js"></script>
+<script src="/js/banner-title.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

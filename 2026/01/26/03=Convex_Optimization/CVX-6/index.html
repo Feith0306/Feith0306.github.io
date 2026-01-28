@@ -1,0 +1,1043 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.ico">
+  <link rel="icon" href="/img/fluid.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tianhao Fei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这个文档介绍凸优化问题的近端梯度下降法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="凸优化学习系列 - 6. 近端梯度下降法">
+<meta property="og:url" content="https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-6/index.html">
+<meta property="og:site_name" content="Feith&#39;s Blog">
+<meta property="og:description" content="这个文档介绍凸优化问题的近端梯度下降法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
+<meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
+<meta property="article:modified_time" content="2026-01-28T10:05:28.507Z">
+<meta property="article:author" content="Tianhao Fei">
+<meta property="article:tag" content="affine">
+<meta property="article:tag" content="convex function">
+<meta property="article:tag" content="convex set">
+<meta property="article:tag" content="proximal gradient descent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
+  
+  
+  
+  <title>凸优化学习系列 - 6. 近端梯度下降法 - Feith&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/banner-avatar.css">
+<link rel="stylesheet" href="/css/mac.css">
+<link rel="stylesheet" href="/css/code_fold.css">
+<link rel="stylesheet" href="/css/banner-title.css">
+<link rel="stylesheet" href="/css/banner-effect.css">
+<link rel="stylesheet" href="/css/content_fold.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"feith0306.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":null,"loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Feith&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/app/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>应用</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="凸优化学习系列 - 6. 近端梯度下降法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-26 16:32" pubdate>
+          2026年1月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">凸优化学习系列 - 6. 近端梯度下降法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><strong>目标：读完这篇博客，应当能</strong></p>
+</blockquote>
+<ul>
+<li>理解近端梯度的必要性以及作用机制；</li>
+<li>学会如何用近端梯度法求解复合凸优化问题；</li>
+<li>知道近端梯度法的收敛速率及其与标准梯度下降的关系；</li>
+<li>掌握加速近端梯度法的原理与实现；</li>
+</ul>
+<hr>
+<h2 id="问题背景为什么要引入近端">1. 问题背景：为什么要引入“近端”？</h2>
+<p>上一讲常见的工具是 <strong>次梯度法（subgradient method）</strong>：对一般凸函数 <span class="math display">\[\begin{align}
+\min_x f(x)
+\end{align}\]</span> 用更新 <span class="math display">\[\begin{align}
+x^{(k)} = x^{(k-1)} - t_k g^{(k-1)},\quad g^{(k-1)}\in \partial f(x^{(k-1)}).
+\end{align}\]</span> 它的优点是通用；缺点是<strong>慢</strong>：若 <span class="math inline">\(f\)</span> Lipschitz，则典型复杂度是 <span class="math inline">\(O(1/\varepsilon^2)\)</span>（或写作 <span class="math inline">\(O(1/\sqrt{k})\)</span> 的函数值误差）。</p>
+<p>现实里大量问题不是“完全不可微”，而是“<strong>一部分光滑 + 一部分非光滑</strong>”。次梯度法把结构浪费掉了，于是近端梯度出现。</p>
+<hr>
+<h2 id="复合凸优化近端梯度要解决的标准形式">2. 复合凸优化：近端梯度要解决的标准形式</h2>
+<p>近端梯度针对 <strong>复合目标（composite objective）</strong>： <span class="math display">\[\begin{align}
+\min_{x\in\mathbb{R}^n} f(x)=g(x)+h(x),
+\end{align}\]</span> 满足：</p>
+<ul>
+<li><span class="math inline">\(g\)</span>：凸、可微，且 <span class="math inline">\(\mathrm{dom}(g)=\mathbb{R}^n\)</span>；</li>
+<li><span class="math inline">\(h\)</span>：凸，但<strong>可以不可微</strong>（如 <span class="math inline">\(\ell_1\)</span>、核范数、指标函数等）；</li>
+<li>关键结构：<strong>只有 <span class="math inline">\(g\)</span> 需要梯度</strong>，而 <span class="math inline">\(h\)</span> 通过一个特殊算子处理。</li>
+</ul>
+<p>你应该立刻意识到：这覆盖了“带正则项”“带凸约束”的大量模型。</p>
+<hr>
+<h2 id="从梯度下降的动机出发为什么是二次近似-保留-h">3. 从梯度下降的动机出发：为什么是“二次近似 + 保留 <span class="math inline">\(h\)</span>”？</h2>
+<h3 id="先回忆光滑情形的梯度下降来自二次上界二次模型">3.1 先回忆：光滑情形的梯度下降来自“二次上界/二次模型”</h3>
+<p>若 <span class="math inline">\(f\)</span> 可微，常见动机是：在当前点 <span class="math inline">\(x\)</span> 处，用二次函数近似（或上界） <span class="math inline">\(f\)</span>： <span class="math display">\[\begin{align}
+\bar f_t(z)= f(x)+\nabla f(x)^\top(z-x)+\frac{1}{2t}\|z-x\|_2^2,
+\end{align}\]</span> 然后令 <span class="math display">\[\begin{align}
+x^+ = \arg\min_z \bar f_t(z),
+\end{align}\]</span> 可推出 <span class="math inline">\(x^+=x-t\nabla f(x)\)</span>。</p>
+<h3 id="复合情形的关键想法只近似-g把-h-原样保留">3.2 复合情形的关键想法：只近似 <span class="math inline">\(g\)</span>，把 <span class="math inline">\(h\)</span> 原样保留</h3>
+<p>当 <span class="math inline">\(f=g+h\)</span> 且 <span class="math inline">\(h\)</span> 可能不可微时，直接做 <span class="math inline">\(\nabla f\)</span> 不现实。 但我们可以对 <strong>光滑部分 <span class="math inline">\(g\)</span></strong> 做二次近似，对 <strong>非光滑部分 <span class="math inline">\(h\)</span></strong> 不动： <span class="math display">\[\begin{align}
+x^+ 
+= \arg\min_z \Big[g(x)+\nabla g(x)^\top(z-x)+\frac{1}{2t}\|z-x\|_2^2 + h(z)\Big].
+\end{align}\]</span> 把与 <span class="math inline">\(z\)</span> 无关的常数去掉、配方可得等价形式： <span class="math display">\[\begin{align}
+x^+ = \arg\min_z\ \frac{1}{2t}\Big\|z-\big(x-t\nabla g(x)\big)\Big\|_2^2 + h(z).
+\end{align}\]</span> 这句式非常重要：<br>
+- 第一项逼迫 <span class="math inline">\(z\)</span> 靠近“<strong>对 <span class="math inline">\(g\)</span> 做梯度一步</strong>”得到的点 <span class="math inline">\(x-t\nabla g(x)\)</span>； - 第二项逼迫 <span class="math inline">\(h(z)\)</span> 小（体现正则化/约束）。</p>
+<hr>
+<h2 id="核心定义近端映射proximal-mapping">4. 核心定义：近端映射（proximal mapping）</h2>
+<h3 id="近端算子定义">4.1 近端算子定义</h3>
+<p>对凸函数 <span class="math inline">\(h\)</span>，步长 <span class="math inline">\(t&gt;0\)</span>，定义 <span class="math display">\[\begin{align}
+\mathrm{prox}_{h,t}(x)=\arg\min_z \frac{1}{2t}\|x-z\|_2^2 + h(z).
+\end{align}\]</span> 这叫 <strong>近端映射 / 近端算子</strong>。</p>
+<p><strong>直觉</strong>：它是在“离 <span class="math inline">\(x\)</span> 不要太远”的前提下，让 <span class="math inline">\(h\)</span> 尽量小。<br>
+因此它常被理解为“对 <span class="math inline">\(h\)</span> 做一次带二次正则的局部最小化”。</p>
+<h3 id="近端梯度下降pgd的迭代公式">4.2 近端梯度下降（PGD）的迭代公式</h3>
+<p>把上一节的更新写成 prox 形式： <span class="math display">\[\begin{align}
+x^{(k)}=\mathrm{prox}_{h,t_k}\big(x^{(k-1)}-t_k\nabla g(x^{(k-1)})\big),\quad k=1,2,\dots
+\end{align}\]</span> 这就是 <strong>Proximal Gradient Descent (PGD)</strong>。</p>
+<hr>
+<h2 id="广义梯度视角它看起来更像梯度下降">5. “广义梯度”视角：它看起来更像梯度下降</h2>
+<p>定义 <strong>广义梯度（generalized gradient）/梯度映射（gradient mapping）</strong> <span class="math display">\[\begin{align}
+G_t(x)=\frac{x-\mathrm{prox}_{h,t}(x-t\nabla g(x))}{t}.
+\end{align}\]</span> 则迭代可写成 <span class="math display">\[\begin{align}
+x^{(k)}=x^{(k-1)}-t_k\,G_{t_k}(x^{(k-1)}).
+\end{align}\]</span> 当 <span class="math inline">\(h=0\)</span> 时，<span class="math inline">\(\mathrm{prox}_{h,t}(y)=y\)</span>，所以 <span class="math inline">\(G_t(x)=\nabla g(x)\)</span>，退化为标准梯度下降。</p>
+<p>这解释了“为什么近端梯度仍然是一阶法”：它每步只用到 <span class="math inline">\(\nabla g\)</span> 与一次 prox。</p>
+<hr>
+<h2 id="你有理由怀疑prox-会不会比原问题更难">6. 你有理由怀疑：prox 会不会比原问题更难？</h2>
+<p>关键点：很多重要的 <span class="math inline">\(h\)</span>，其 <span class="math inline">\(\mathrm{prox}_{h,t}\)</span> <strong>有闭式解或高效实现</strong>，且 prox 只依赖于 <span class="math inline">\(h\)</span>，与 <span class="math inline">\(g\)</span> 无关。</p>
+<p>因此典型分工是： - <span class="math inline">\(g\)</span>：可能很复杂，但只需要算梯度； - <span class="math inline">\(h\)</span>：设计成“prox 好算”的正则/约束（<span class="math inline">\(\ell_1\)</span>、指标函数、核范数等）。</p>
+<hr>
+<h2 id="例子-1lasso-与-ista软阈值">7. 例子 1：Lasso 与 ISTA（软阈值）</h2>
+<h3 id="lasso-的复合结构">7.1 Lasso 的复合结构</h3>
+<p>给定 <span class="math inline">\(y\in\mathbb{R}^n\)</span>, <span class="math inline">\(X\in\mathbb{R}^{n\times p}\)</span>，Lasso： <span class="math display">\[\begin{align}
+\min_\beta f(\beta)=\underbrace{\frac12\|y-X\beta\|_2^2}_{g(\beta)}+\underbrace{\lambda\|\beta\|_1}_{h(\beta)}.
+\end{align}\]</span> 其中 <span class="math display">\[\begin{align}
+\nabla g(\beta)=-X^\top(y-X\beta).
+\end{align}\]</span></p>
+<h3 id="ell_1-的-prox-是软阈值soft-thresholding">7.2 <span class="math inline">\(\ell_1\)</span> 的 prox 是软阈值（soft-thresholding）</h3>
+<p><span class="math display">\[\begin{align}
+\mathrm{prox}_{t}(\beta)=\arg\min_z \frac{1}{2t}\|\beta-z\|_2^2+\lambda\|z\|_1
+= S_{\lambda t}(\beta),
+\end{align}\]</span> 其中软阈值算子 <span class="math inline">\(S_\lambda(\cdot)\)</span> 按坐标定义： <span class="math display">\[\begin{align}
+[S_\lambda(\beta)]_i=
+\begin{cases}
+\beta_i-\lambda, &amp; \beta_i&gt;\lambda,\\
+0, &amp; -\lambda\le \beta_i\le \lambda,\\
+\beta_i+\lambda, &amp; \beta_i&lt;-\lambda.
+\end{cases}
+\end{align}\]</span></p>
+<h3 id="ista-更新公式即-pgd-应用于-lasso">7.3 ISTA 更新公式（即 PGD 应用于 Lasso）</h3>
+<p><span class="math display">\[\begin{align}
+\beta^+ = S_{\lambda t}\big(\beta+tX^\top(y-X\beta)\big).
+\end{align}\]</span> 这常称为 <strong>ISTA（Iterative Soft-Thresholding Algorithm）</strong>。</p>
+<blockquote>
+<p>关键理解：一步 ISTA = “对光滑最小二乘做梯度一步” + “对 <span class="math inline">\(\ell_1\)</span> 做软阈值修正”。</p>
+</blockquote>
+<hr>
+<h2 id="步长怎么选固定步长与回溯线搜索backtracking">8. 步长怎么选：固定步长与回溯线搜索（Backtracking）</h2>
+<h3 id="固定步长的理论条件">8.1 固定步长的理论条件</h3>
+<p>若 <span class="math inline">\(\nabla g\)</span> 是 <span class="math inline">\(L\)</span>-Lipschitz 连续（即 <span class="math inline">\(\|\nabla g(x)-\nabla g(y)\|\le L\|x-y\|\)</span>），则 PGD 取 <span class="math display">\[\begin{align}
+t\le \frac{1}{L}
+\end{align}\]</span> 可保证标准收敛性质。</p>
+<h3 id="回溯线搜索对-g-而不是对-f">8.2 回溯线搜索（对 <span class="math inline">\(g\)</span> 而不是对 <span class="math inline">\(f\)</span>）</h3>
+<p>回溯准则：取 <span class="math inline">\(0&lt;\beta&lt;1\)</span>，每次从 <span class="math inline">\(t=t_{\text{init}}\)</span> 开始，如果 <span class="math display">\[\begin{align}
+g\big(x-tG_t(x)\big)\ &gt;\ g(x)-t\nabla g(x)^\top G_t(x) + \frac{t}{2}\|G_t(x)\|_2^2,
+\end{align}\]</span> 则缩小 <span class="math inline">\(t\leftarrow \beta t\)</span>，直到满足为止，再做一次 prox 更新。</p>
+<blockquote>
+<p>注意：这里判断的是 <span class="math inline">\(g\)</span> 的充分下降/二次上界条件，而不是直接判断 <span class="math inline">\(f\)</span>。这是复合结构下的关键差异。</p>
+</blockquote>
+<hr>
+<h2 id="pgd-的收敛率它能达到梯度下降同级别的-o1k">9. PGD 的收敛率：它能达到梯度下降同级别的 <span class="math inline">\(O(1/k)\)</span></h2>
+<p>在假设： - <span class="math inline">\(g\)</span> 凸可微、<span class="math inline">\(\nabla g\)</span> 为 <span class="math inline">\(L\)</span>-Lipschitz； - <span class="math inline">\(h\)</span> 凸，且 <span class="math inline">\(\mathrm{prox}_{h,t}\)</span> 可计算；</p>
+<p>则 <strong>定理（PGD 收敛）</strong>：若固定步长 <span class="math inline">\(t\le 1/L\)</span>，则 <span class="math display">\[\begin{align}
+f(x^{(k)})-f^\star \le \frac{\|x^{(0)}-x^\star\|_2^2}{2tk}.
+\end{align}\]</span> 回溯线搜索也成立，但常数上用 <span class="math inline">\(t=\beta/L\)</span> 类似替换。</p>
+<p>因此 PGD 具有 - 迭代复杂度：<span class="math inline">\(f(x^{(k)})-f^\star = O(1/k)\)</span>； - 误差 <span class="math inline">\(\varepsilon\)</span> 下的迭代次数：<span class="math inline">\(k=O(1/\varepsilon)\)</span>。</p>
+<p>这比次梯度法的 <span class="math inline">\(O(1/\varepsilon^2)\)</span> 要快一个量级（在同样的一阶框架内）。</p>
+<hr>
+<h2 id="例子-2矩阵补全matrix-completion与矩阵软阈值">10. 例子 2：矩阵补全（Matrix Completion）与“矩阵软阈值”</h2>
+<h3 id="模型观测子集上的平方损失-核范数正则">10.1 模型：观测子集上的平方损失 + 核范数正则</h3>
+<p>给定 <span class="math inline">\(Y\in\mathbb{R}^{m\times n}\)</span>，只观测 <span class="math inline">\(\Omega\)</span> 中的条目，解： <span class="math display">\[\begin{align}
+\min_B \frac12\sum_{(i,j)\in\Omega}(Y_{ij}-B_{ij})^2+\lambda\|B\|_{\mathrm{tr}},
+\end{align}\]</span> 其中核范数（trace/nuclear norm） <span class="math display">\[\begin{align}
+\|B\|_{\mathrm{tr}}=\sum_{i=1}^r \sigma_i(B).
+\end{align}\]</span></p>
+<p>定义投影算子 <span class="math inline">\(P_\Omega\)</span>： <span class="math display">\[\begin{align}
+[P_\Omega(B)]_{ij}=
+\begin{cases}
+B_{ij},&amp;(i,j)\in\Omega,\\
+0,&amp;(i,j)\notin\Omega.
+\end{cases}
+\end{align}\]</span> 则目标可写为 <span class="math display">\[\begin{align}
+f(B)=\underbrace{\frac12\|P_\Omega(Y)-P_\Omega(B)\|_F^2}_{g(B)}+\underbrace{\lambda\|B\|_{\mathrm{tr}}}_{h(B)}.
+\end{align}\]</span></p>
+<h3 id="两个必需部件梯度与-prox">10.2 两个必需部件：梯度与 prox</h3>
+<ul>
+<li>梯度： <span class="math display">\[\begin{align}
+\nabla g(B)=-(P_\Omega(Y)-P_\Omega(B)).
+\end{align}\]</span></li>
+<li>prox： <span class="math display">\[\begin{align}
+\mathrm{prox}_{t}(B)=\arg\min_Z \frac{1}{2t}\|B-Z\|_F^2+\lambda\|Z\|_{\mathrm{tr}}.
+\end{align}\]</span> 结论：它等于“<strong>对奇异值做软阈值</strong>”（矩阵软阈值 / SVT）： 若 <span class="math inline">\(B=U\Sigma V^\top\)</span> 为 SVD，则 <span class="math display">\[\begin{align}
+S_\lambda(B)=U\Sigma_\lambda V^\top,\quad (\Sigma_\lambda)_{ii}=\max\{\Sigma_{ii}-\lambda,0\}.
+\end{align}\]</span> 并且 <span class="math display">\[\begin{align}
+\mathrm{prox}_{t}(B)=S_{\lambda t}(B).
+\end{align}\]</span></li>
+</ul>
+<h3 id="更新soft-impute">10.3 更新：Soft-Impute</h3>
+<p>因此 PGD 更新为 <span class="math display">\[\begin{align}
+B^+=S_{\lambda t}\Big(B+t(P_\Omega(Y)-P_\Omega(B))\Big).
+\end{align}\]</span> 并且这里 <span class="math inline">\(\nabla g\)</span> 的 Lipschitz 常数 <span class="math inline">\(L=1\)</span>，可取 <span class="math inline">\(t=1\)</span>，得到更简洁形式 <span class="math display">\[\begin{align}
+B^+=S_{\lambda}\big(P_\Omega(Y)+P_{\Omega^\perp}(B)\big),
+\end{align}\]</span> 这就是经典的 <strong>soft-impute</strong> 思路。</p>
+<hr>
+<h2 id="三个特殊情形你应该把-prox-当作统一抽象">11. 三个“特殊情形”：你应该把 prox 当作统一抽象</h2>
+<p>PGD 也叫 composite/generalized gradient descent，因为很多方法都是它的特例：</p>
+<ol type="1">
+<li><p><strong><span class="math inline">\(h=0\)</span></strong>：<br>
+<span class="math display">\[\begin{align}
+x^+=x-t\nabla g(x)
+\end{align}\]</span> 退化为梯度下降。</p></li>
+<li><p><strong><span class="math inline">\(h=I_C\)</span></strong>（指标函数，表示约束 <span class="math inline">\(x\in C\)</span>）：<br>
+<span class="math display">\[\begin{align}
+I_C(x)=\begin{cases}
+0,&amp;x\in C,\\
+\infty,&amp;x\notin C,
+\end{cases}
+\end{align}\]</span> 则 <span class="math display">\[\begin{align}
+\mathrm{prox}_{I_C,t}(x)=\arg\min_{z\in C}\|x-z\|_2^2 = P_C(x),
+\end{align}\]</span> 于是 <span class="math display">\[\begin{align}
+x^+=P_C\big(x-t\nabla g(x)\big),
+\end{align}\]</span> 这就是 <strong>投影梯度下降（Projected GD）</strong>。</p></li>
+<li><p><strong><span class="math inline">\(g=0\)</span></strong>：<br>
+<span class="math display">\[\begin{align}
+x^+=\mathrm{prox}_{h,t}(x)
+\end{align}\]</span> 称为 <strong>近端最小化/近端点法</strong> 的基本迭代（但只有当 prox 易算时才可用）。</p></li>
+</ol>
+<blockquote>
+<p>统一视角的价值：当你看到一个问题“约束 + 正则 + 光滑损失”，第一反应应该是：能不能写成 <span class="math inline">\(g+h\)</span>，并让 <span class="math inline">\(h\)</span> 的 prox 易算？</p>
+</blockquote>
+<hr>
+<h2 id="如果-prox-不能精确算怎么办inexact-prox">12. 如果 prox 不能精确算怎么办？（inexact prox）</h2>
+<p>理论通常假设 prox 子问题能<strong>精确</strong>求解： <span class="math display">\[\begin{align}
+\mathrm{prox}_{h,t}(x)=\arg\min_z \frac{1}{2t}\|x-z\|^2+h(z).
+\end{align}\]</span> 提醒：一般情况下，近似求解会怎样不一定清楚；但如果你能严格控制近似误差，则仍可恢复原收敛率（有相关文献分析）。实践上，若用近似 prox，应保证足够高精度。</p>
+<hr>
+<h2 id="加速把-o1k-提升到最优的-o1k2">13. 加速：把 <span class="math inline">\(O(1/k)\)</span> 提升到最优的 <span class="math inline">\(O(1/k^2)\)</span></h2>
+<h3 id="动机nesterov-加速思想在复合问题上同样可用">13.1 动机：Nesterov 加速思想在复合问题上同样可用</h3>
+<p>回顾 Nesterov 的多条加速线索，并采用 Beck &amp; Teboulle (2008) 的形式：对复合 <span class="math inline">\(g+h\)</span> 只需每步 <strong>一次 prox</strong>，并只用最近两步信息。</p>
+<h3 id="加速近端梯度法apgd的迭代">13.2 加速近端梯度法（APGD）的迭代</h3>
+<p>初始化 <span class="math inline">\(x^{(0)}=x^{(-1)}\)</span>。对 <span class="math inline">\(k=1,2,\dots\)</span>： <span class="math display">\[\begin{align}
+v = x^{(k-1)}+\frac{k-2}{k+1}\big(x^{(k-1)}-x^{(k-2)}\big),
+\end{align}\]</span> <span class="math display">\[\begin{align}
+x^{(k)}=\mathrm{prox}_{h,t_k}\big(v-t_k\nabla g(v)\big).
+\end{align}\]</span> 解释： - 当 <span class="math inline">\(k=1\)</span> 时，<span class="math inline">\(\frac{k-2}{k+1}=-\frac{1}{2}\)</span>，但通常第一步就是普通 PGD（说明“第一步就是 usual proximal gradient update”）； - 之后 <span class="math inline">\(v\)</span> 是带“动量”的外推点，利用历史方向加速。</p>
+<p>重要提醒：<strong>加速方法不一定是下降法</strong>（目标值可能不单调）。</p>
+<h3 id="加速的收敛定理达到最优-o1k2">13.3 加速的收敛定理：达到最优 <span class="math inline">\(O(1/k^2)\)</span></h3>
+<p>在与 PGD 相同的假设下，若固定步长 <span class="math inline">\(t\le 1/L\)</span>，则： <span class="math display">\[\begin{align}
+f(x^{(k)})-f^\star \le \frac{2\|x^{(0)}-x^\star\|_2^2}{t(k+1)^2}.
+\end{align}\]</span> 因此 - 函数值误差 <span class="math inline">\(O(1/k^2)\)</span>； - 达到 <span class="math inline">\(\varepsilon\)</span> 误差所需迭代数 <span class="math inline">\(k=O(1/\sqrt{\varepsilon})\)</span>，这是一般一阶方法可达的最优数量级。</p>
+<hr>
+<h2 id="fista加速版本的-istalasso-的快算法">14. FISTA：加速版本的 ISTA（Lasso 的“快”算法）</h2>
+<p>对 Lasso，ISTA 为 <span class="math display">\[\begin{align}
+\beta^{(k)}=S_{\lambda t_k}\Big(\beta^{(k-1)}+t_kX^\top(y-X\beta^{(k-1)})\Big).
+\end{align}\]</span> 加速后得到 <strong>FISTA</strong>：对 <span class="math inline">\(k=1,2,\dots\)</span> <span class="math display">\[\begin{align}
+v = \beta^{(k-1)}+\frac{k-2}{k+1}\big(\beta^{(k-1)}-\beta^{(k-2)}\big),
+\end{align}\]</span> <span class="math display">\[\begin{align}
+\beta^{(k)}=S_{\lambda t_k}\Big(v+t_kX^\top(y-Xv)\Big).
+\end{align}\]</span> 经验上加速常显著提速（给出多组对比曲线）。</p>
+<hr>
+<h2 id="回溯线搜索在加速情形下简单但可能导致步长递减">15. 回溯线搜索在加速情形下：简单但可能导致步长递减</h2>
+<p>简单策略：取 <span class="math inline">\(\beta&lt;1\)</span>，<span class="math inline">\(t_0=1\)</span>。第 <span class="math inline">\(k\)</span> 步从 <span class="math inline">\(t=t_{k-1}\)</span> 开始，若 <span class="math display">\[\begin{align}
+g(x^+) &gt; g(v)+\nabla g(v)^\top(x^+-v)+\frac{1}{2t}\|x^+-v\|_2^2,
+\end{align}\]</span> 则缩小 <span class="math inline">\(t\leftarrow \beta t\)</span>，并令 <span class="math display">\[\begin{align}
+x^+=\mathrm{prox}_{h,t}(v-t\nabla g(v)).
+\end{align}\]</span> 但它会“强迫步长递减”，更复杂的策略可以避免该问题。</p>
+<hr>
+<h2 id="实战警告加速回溯并非总是更好">16. 实战警告：加速/回溯并非总是更好</h2>
+<p>在后面非常直接地提醒两类常见“反效果”：</p>
+<h3 id="warm-start-下加速收益会被削弱">16.1 warm start 下加速收益会被削弱</h3>
+<p>例如要解一系列 Lasso，<span class="math inline">\(\lambda_1&gt;\lambda_2&gt;\dots&gt;\lambda_r\)</span>，每次用上一次解作初值： - 解 <span class="math inline">\(\lambda_1\)</span>：从 0 开始； - 解 <span class="math inline">\(\lambda_j\)</span>：从 <span class="math inline">\(\hat x(\lambda_{j-1})\)</span> 开始； 当 <span class="math inline">\(\lambda\)</span> 网格足够密，普通 PGD 可能已经很快，加速额外收益变小。</p>
+<h3 id="当-prox-很贵如需-svd时回溯加速可能更慢">16.2 当 prox 很贵（如需 SVD）时，回溯/加速可能更慢</h3>
+<p>矩阵补全中 prox 需要 SVD： - 回溯一次要多次 prox ⇒ 多次 SVD ⇒ 成本爆炸； - 加速改变 prox 的输入点结构，可能让 SVD 失去“低秩 + 稀疏”的可利用结构，从而更慢。</p>
+<blockquote>
+<p>结论：是否加速/是否回溯，不是信仰问题，是“每步代价 × 迭代数”的工程权衡。</p>
+</blockquote>
+<hr>
+<h2 id="把方法真正用起来一份从建模到算法的操作清单">17. 把方法真正用起来：一份“从建模到算法”的操作清单</h2>
+<p>当你遇到一个凸优化问题，按以下顺序做（这是掌握近端梯度的关键技能）：</p>
+<ol type="1">
+<li><strong>拆分：写成 <span class="math inline">\(f=g+h\)</span></strong><br>
+</li>
+</ol>
+<ul>
+<li>把“可微的损失”放进 <span class="math inline">\(g\)</span>；</li>
+<li>把“不可微正则/简单凸约束”放进 <span class="math inline">\(h\)</span>。</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>确认：<span class="math inline">\(\nabla g\)</span> 是否 Lipschitz（或能否回溯）</strong><br>
+</li>
+</ol>
+<ul>
+<li>若能估计 <span class="math inline">\(L\)</span>，直接取 <span class="math inline">\(t\le 1/L\)</span>；</li>
+<li>否则用回溯线搜索（注意 prox 的调用成本）。</li>
+</ul>
+<ol start="3" type="1">
+<li><strong>计算两件事</strong><br>
+</li>
+</ol>
+<ul>
+<li><span class="math inline">\(\nabla g(x)\)</span>；</li>
+<li><span class="math inline">\(\mathrm{prox}_{h,t}(\cdot)\)</span>（最好闭式/高效）。
+<ul>
+<li><span class="math inline">\(\ell_1\)</span>：软阈值；</li>
+<li>指标函数 <span class="math inline">\(I_C\)</span>：投影 <span class="math inline">\(P_C\)</span>；</li>
+<li>核范数：奇异值软阈值（SVT）。</li>
+</ul></li>
+</ul>
+<ol start="4" type="1">
+<li><strong>选算法</strong><br>
+</li>
+</ol>
+<ul>
+<li>先用 PGD/ISTA（稳定、常单调更好调试）；</li>
+<li>再尝试 APGD/FISTA（更快但不单调、对“每步代价结构”更敏感）。</li>
+</ul>
+<ol start="5" type="1">
+<li><strong>停止准则建议</strong>（工程上常用）<br>
+理论常用 <span class="math inline">\(f(x^{(k)})-f^\star\)</span>，但 <span class="math inline">\(f^\star\)</span> 不可得。可用：</li>
+</ol>
+<ul>
+<li>相对变化：<span class="math inline">\(\frac{|f(x^{(k)})-f(x^{(k-1)})|}{\max\{1,|f(x^{(k-1)})|\}} \le \tau\)</span>；</li>
+<li>迭代差：<span class="math inline">\(\frac{\|x^{(k)}-x^{(k-1)}\|}{\max\{1,\|x^{(k-1)}\|\}} \le \tau\)</span>；</li>
+<li>或广义梯度 <span class="math inline">\(\|G_t(x^{(k)})\|\)</span> 小（若可算）。</li>
+</ul>
+<hr>
+<h2 id="算法伪代码">18. 算法伪代码</h2>
+<h3 id="pgdproximal-gradient-descent">18.1 PGD（Proximal Gradient Descent）</h3>
+<p><span class="math display">\[
+\begin{array}{l}
+\textbf{Algorithm 1: Proximal Gradient Descent}\\
+\textbf{Input: } x^{(0)}\in\mathbb{R}^n;\ t&gt;0\ (\text{or }t_0&gt;0,\beta\in(0,1)\text{ for backtracking});\ K.\\
+1:\ \textbf{for } k=1,2,\ldots,K\ \textbf{do}\\
+2:\ \ \ \ \textbf{(optional backtracking)}\ \text{set } t\leftarrow t_0\ \text{(or reuse last }t\text{)}\\
+3:\ \ \ \ \textbf{repeat}\\
+4:\ \ \ \ \ \ \ y \leftarrow x^{(k-1)}-t\,\nabla g\!\left(x^{(k-1)}\right)\\
+5:\ \ \ \ \ \ \ x_{\text{trial}} \leftarrow \mathrm{prox}_{h,t}(y)\\
+6:\ \ \ \ \ \ \ \textbf{if } g(x_{\text{trial}})\le g(x^{(k-1)})+\nabla g(x^{(k-1)})^\top(x_{\text{trial}}-x^{(k-1)})+\frac{1}{2t}\|x_{\text{trial}}-x^{(k-1)}\|_2^2\\
+7:\ \ \ \ \ \ \ \textbf{then break}\\
+8:\ \ \ \ \ \ \ \textbf{else } t\leftarrow \beta t\\
+9:\ \ \ \ \textbf{until } \text{condition holds}\\
+10:\ \ \ \ x^{(k)} \leftarrow x_{\text{trial}}\\
+11:\ \ \ \ \textbf{(stopping)}\ \textbf{if }\frac{\|x^{(k)}-x^{(k-1)}\|_2}{\max\{1,\|x^{(k-1)}\|_2\}}\le \varepsilon\ \textbf{then break}\\
+12:\ \textbf{end for}\\
+\textbf{Output: } x^{(k)}\ (\text{final iterate}),\ f(x^{(k)}).\\[2mm]
+\end{array}
+\]</span></p>
+<h3 id="apgdaccelerated-proximal-gradient-descent">17.2 APGD（Accelerated Proximal Gradient Descent）</h3>
+<p><span class="math display">\[
+\begin{array}{l}
+\textbf{Algorithm 2: Accelerated Proximal Gradient Descent}\\
+\textbf{Input: } x^{(0)}\in\mathbb{R}^n;\ x^{(-1)}=x^{(0)};\ t&gt;0\ (\text{or }t_0&gt;0,\beta\in(0,1)\text{ for backtracking});\ K.\\
+1:\ \textbf{for } k=1,2,\ldots,K\ \textbf{do}\\
+2:\ \ \ \ \alpha_k \leftarrow \frac{k-2}{k+1}\qquad(\text{momentum parameter})\\
+3:\ \ \ \ v^{(k-1)} \leftarrow x^{(k-1)}+\alpha_k\big(x^{(k-1)}-x^{(k-2)}\big)\qquad(\text{extrapolation})\\
+4:\ \ \ \ \textbf{(optional backtracking)}\ \text{set } t\leftarrow t_0\ \text{(or reuse last }t\text{)}\\
+5:\ \ \ \ \textbf{repeat}\\
+6:\ \ \ \ \ \ \ y \leftarrow v^{(k-1)}-t\,\nabla g\!\left(v^{(k-1)}\right)\\
+7:\ \ \ \ \ \ \ x_{\text{trial}} \leftarrow \mathrm{prox}_{h,t}(y)\\
+8:\ \ \ \ \ \ \ \textbf{if } g(x_{\text{trial}})\le g(v^{(k-1)})+\nabla g(v^{(k-1)})^\top(x_{\text{trial}}-v^{(k-1)})+\frac{1}{2t}\|x_{\text{trial}}-v^{(k-1)}\|_2^2\\
+9:\ \ \ \ \ \ \ \textbf{then break}\\
+10:\ \ \ \ \ \ \ \textbf{else } t\leftarrow \beta t\\
+11:\ \ \ \ \textbf{until } \text{condition holds}\\
+12:\ \ \ \ x^{(k)} \leftarrow x_{\text{trial}}\\
+13:\ \ \ \ \textbf{(stopping)}\ \textbf{if }\frac{\|x^{(k)}-x^{(k-1)}\|_2}{\max\{1,\|x^{(k-1)}\|_2\}}\le \varepsilon\ \textbf{then break}\\
+14:\ \textbf{end for}\\
+\textbf{Output: } x^{(k)}\ (\text{final iterate}),\ f(x^{(k)}).\\[2mm]
+\end{array}
+\]</span></p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/optimization/" class="category-chain-item">optimization</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/convex-set/" class="print-no-link">#convex set</a>
+      
+        <a href="/tags/convex-function/" class="print-no-link">#convex function</a>
+      
+        <a href="/tags/affine/" class="print-no-link">#affine</a>
+      
+        <a href="/tags/proximal-gradient-descent/" class="print-no-link">#proximal gradient descent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>凸优化学习系列 - 6. 近端梯度下降法</div>
+      <div>https://feith0306.github.io/2026/01/26/03=Convex_Optimization/CVX-6/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Tianhao Fei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-4/" title="凸优化学习系列 - 4. 梯度下降法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">凸优化学习系列 - 4. 梯度下降法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-7/" title="凸优化学习系列 - 7. 随机梯度下降法">
+                        <span class="hidden-mobile">凸优化学习系列 - 7. 随机梯度下降法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            tags: 'ams',
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/banner-avatar.js"></script>
+<script src="/js/banner-title.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
