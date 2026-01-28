@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-28T10:04:26.587Z">
+<meta property="article:modified_time" content="2026-01-28T11:48:51.337Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          2.5k 字
         
       </span>
     
@@ -250,7 +250,7 @@
         
         
         
-          23 分钟
+          22 分钟
         
       </span>
     
@@ -481,7 +481,7 @@ x^{(k)}=P_C\Big(x^{(k-1)}-t_k g^{(k-1)}\Big),\quad g^{(k-1)}\in\partial f(x^{(k-
 <h3 id="哪些集合易投影">10.1 哪些集合易投影？</h3>
 <p>看起来简单的多面体投影可能很难。 典型易投影例子： - 非负正交锥 <span class="math inline">\(\mathbb{R}^n_+\)</span>：逐分量截断 <span class="math inline">\(P(x)=\max(x,0)\)</span> - <span class="math inline">\(\ell_2\)</span> 球、<span class="math inline">\(\ell_\infty\)</span> 球：都有闭式 - 仿射子空间/线性方程解集：正交投影可显式写出（或解线性方程）</p>
 <hr>
-<h2 id="会用次梯度法实现要点与一份可复用伪代码">11. “会用”次梯度法：实现要点与一份可复用伪代码</h2>
+<h2 id="会用次梯度法">11. “会用”次梯度法</h2>
 <h3 id="必须明确的-4-个对象">11.1 必须明确的 4 个对象</h3>
 <ol type="1">
 <li>目标函数 <span class="math inline">\(f(x)\)</span><br>
@@ -542,15 +542,6 @@ x^{(k)}=P_C\Big(x^{(k-1)}-t_k g^{(k-1)}\Big),\quad g^{(k-1)}\in\partial f(x^{(k-
 13:\; \textbf{Output:}\; (x_{\mathrm{best}}, f_{\mathrm{best}})\\[2pt]
 \end{array}
 \]</span></p>
-<h3 id="常见坑">11.4 常见坑</h3>
-<ul>
-<li><strong>只看最后迭代点</strong>：次梯度法不是下降法，必须输出 (x_{})。</li>
-<li><strong>固定步长幻想“收敛到最优”</strong>：它只收敛到邻域，误差下界 (G^2 t/2)。</li>
-<li><strong>步长衰减太快</strong>：(t_k &lt;) 会“走不到最优”，明确要求“平方可和但不可和”。</li>
-<li><strong>次梯度选取随意但不自知</strong>：(f(x)) 常是集合（如 (_1) 在 0），选哪个会影响轨迹与速度，但不改变最坏阶。<br>
-</li>
-<li><strong>忽视 Lipschitz/有界次梯度假设</strong>：收敛界里 (G) 是核心常数，不可用就无法直接套 (★)。</li>
-</ul>
 
                 
               </div>
@@ -647,9 +638,9 @@ x^{(k)}=P_C\Big(x^{(k-1)}-t_k g^{(k-1)}\Big),\quad g^{(k-1)}\in\partial f(x^{(k-
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-2/" title="凸优化学习系列 - 2. 凸优化问题分类">
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-4/" title="凸优化学习系列 - 4. 梯度下降法">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">凸优化学习系列 - 2. 凸优化问题分类</span>
+                        <span class="hidden-mobile">凸优化学习系列 - 4. 梯度下降法</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
