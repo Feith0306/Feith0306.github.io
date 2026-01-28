@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-28T11:50:47.154Z">
+<meta property="article:modified_time" content="2026-01-28T12:02:53.330Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -614,14 +614,12 @@ k = O(1/\varepsilon^2).
 \textbf{Output:} \ (x^{(k)},\ f\!\left(x^{(k)}\right))
 \end{array}
 \]</span></p>
-<h3 id="示例与演示">5.2 示例与演示</h3>
-<p><a href="/app/gd_demo/">梯度下降对比演示（GD Demo）</a></p>
-<h2 id="附backtracking-与收敛性结论的关系总结性说明">附：Backtracking 与收敛性结论的关系（总结性说明）</h2>
 <ul>
 <li>backtracking line search 不改变梯度法在一般光滑凸上的收敛阶（仍为 <span class="math inline">\(O(1/k)\)</span>），但能通过自适应步长避免发散与过慢；</li>
 <li>在强凸光滑场景下，与合理步长同量级的 backtracking 可保留线性收敛结构（常数因子层面差异）；</li>
-<li>exact line search 单步更“精确”但代价更高，且在条件数主导的慢收敛问题中，整体效率往往不如 backtracking 的“足够好”策略。</li>
 </ul>
+<h3 id="示例与演示">5.2 示例与演示</h3>
+<p><a href="/app/gd_demo/">梯度下降对比演示（GD Demo）</a></p>
 
                 
               </div>
@@ -718,9 +716,9 @@ k = O(1/\varepsilon^2).
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-2/" title="凸优化学习系列 - 2. 凸优化问题分类">
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-3/" title="凸优化学习系列 - 3. 一阶方法">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">凸优化学习系列 - 2. 凸优化问题分类</span>
+                        <span class="hidden-mobile">凸优化学习系列 - 3. 一阶方法</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -728,8 +726,8 @@ k = O(1/\varepsilon^2).
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-5/" title="凸优化学习系列 - 5. 次梯度法">
-                        <span class="hidden-mobile">凸优化学习系列 - 5. 次梯度法</span>
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-6/" title="凸优化学习系列 - 6. 近端梯度下降法">
+                        <span class="hidden-mobile">凸优化学习系列 - 6. 近端梯度下降法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
