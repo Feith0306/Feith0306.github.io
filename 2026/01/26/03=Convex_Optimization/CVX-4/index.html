@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-28T08:36:28.324Z">
+<meta property="article:modified_time" content="2026-01-28T11:12:30.649Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k 字
+          3.8k 字
         
       </span>
     
@@ -250,7 +250,7 @@
         
         
         
-          30 分钟
+          32 分钟
         
       </span>
     
@@ -574,7 +574,43 @@ k = O(1/\varepsilon^2).
 \end{align}
 \]</span></p>
 <hr>
-<h2 id="五梯度下降求解凸优化示例">五、梯度下降求解凸优化示例</h2>
+<h2 id="五梯度下降求解凸优化">五、梯度下降求解凸优化</h2>
+<h3 id="伪代码">5.1 伪代码</h3>
+<blockquote>
+<p>算法1：固定步长梯度下降</p>
+</blockquote>
+<p><span class="math display">\[
+\begin{array}{l}
+\textbf{Algorithm 1: Fixed-Step Size Gradient Descent}\\
+\textbf{Input:} \ x^{(0)},\ \alpha&gt;0, \ K,\  \varepsilon&gt;0\\
+1:\ \textbf{for } k=0,1,\dots,K-1\ \textbf{do}\\
+2:\ \ \ \ g^{(k)} \leftarrow \nabla f\!\left(x^{(k)}\right)\\
+3:\ \ \ \ \textbf{if }\ \|g^{(k)}\|\le \varepsilon\ \textbf{then break}\\
+4:\ \ \ \ x^{(k+1)} \leftarrow x^{(k)}-\alpha\, g^{(k)}\\
+5:\ \textbf{end for}\\
+\textbf{Output:} \ (x^{(k)},\ f\!\left(x^{(k)}\right))
+\end{array}
+\]</span></p>
+<blockquote>
+<p>算法2：变步长梯度下降（Backtracking Line Search）</p>
+</blockquote>
+<h3 id="示例与演示">5.2 示例与演示</h3>
+<p><span class="math display">\[
+\begin{array}{l}
+\textbf{Algorithm 2: Gradient Descent with Backtracking Line Search }\\
+\textbf{Input:}  x^{(0)},\ \alpha_0&gt;0, \ \beta\in(0,1),\ c\in(0,1),\ K,\ \varepsilon&gt;0\\
+1:\ \textbf{for } k=0,1,\dots,K-1\ \textbf{do}\\
+2:\ \ \ \ g^{(k)} \leftarrow \nabla f\!\left(x^{(k)}\right)\\
+3:\ \ \ \ \textbf{if }\ \|g^{(k)}\|\le \varepsilon\ \textbf{then break}\\
+4:\ \ \ \ \alpha \leftarrow \alpha_0\\
+5:\ \ \ \ \textbf{while }\ f\!\left(x^{(k)}-\alpha g^{(k)}\right) &gt; f\!\left(x^{(k)}\right) - c\,\alpha\,\|g^{(k)}\|^2\ \textbf{do}\\
+6:\ \ \ \ \ \ \alpha \leftarrow \beta\,\alpha\\
+7:\ \ \ \ \textbf{end while}\\
+8:\ \ \ \ x^{(k+1)} \leftarrow x^{(k)}-\alpha\, g^{(k)}\\
+9:\ \textbf{end for}\\
+\textbf{Output:} \ (x^{(k)},\ f\!\left(x^{(k)}\right))
+\end{array}
+\]</span></p>
 <p><a href="/app/gd_demo/">梯度下降对比演示（GD Demo）</a></p>
 <h2 id="附backtracking-与收敛性结论的关系总结性说明">附：Backtracking 与收敛性结论的关系（总结性说明）</h2>
 <ul>
@@ -688,8 +724,8 @@ k = O(1/\varepsilon^2).
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-6/" title="凸优化学习系列 - 6. 近端梯度下降法">
-                        <span class="hidden-mobile">凸优化学习系列 - 6. 近端梯度下降法</span>
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-5/" title="凸优化学习系列 - 5. 次梯度法">
+                        <span class="hidden-mobile">凸优化学习系列 - 5. 次梯度法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
