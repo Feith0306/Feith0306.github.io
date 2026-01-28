@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-28T10:05:28.507Z">
+<meta property="article:modified_time" content="2026-01-28T12:10:34.699Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k 字
+          2.9k 字
         
       </span>
     
@@ -250,7 +250,7 @@
         
         
         
-          31 分钟
+          25 分钟
         
       </span>
     
@@ -322,7 +322,7 @@ x^{(k)} = x^{(k-1)} - t_k g^{(k-1)},\quad g^{(k-1)}\in \partial f(x^{(k-1)}).
 <p>你应该立刻意识到：这覆盖了“带正则项”“带凸约束”的大量模型。</p>
 <hr>
 <h2 id="从梯度下降的动机出发为什么是二次近似-保留-h">3. 从梯度下降的动机出发：为什么是“二次近似 + 保留 <span class="math inline">\(h\)</span>”？</h2>
-<h3 id="先回忆光滑情形的梯度下降来自二次上界二次模型">3.1 先回忆：光滑情形的梯度下降来自“二次上界/二次模型”</h3>
+<h3 id="光滑情形的梯度下降来自二次上界二次模型">3.1 光滑情形的梯度下降来自“二次上界/二次模型”</h3>
 <p>若 <span class="math inline">\(f\)</span> 可微，常见动机是：在当前点 <span class="math inline">\(x\)</span> 处，用二次函数近似（或上界） <span class="math inline">\(f\)</span>： <span class="math display">\[\begin{align}
 \bar f_t(z)= f(x)+\nabla f(x)^\top(z-x)+\frac{1}{2t}\|z-x\|_2^2,
 \end{align}\]</span> 然后令 <span class="math display">\[\begin{align}
@@ -334,8 +334,11 @@ x^+
 = \arg\min_z \Big[g(x)+\nabla g(x)^\top(z-x)+\frac{1}{2t}\|z-x\|_2^2 + h(z)\Big].
 \end{align}\]</span> 把与 <span class="math inline">\(z\)</span> 无关的常数去掉、配方可得等价形式： <span class="math display">\[\begin{align}
 x^+ = \arg\min_z\ \frac{1}{2t}\Big\|z-\big(x-t\nabla g(x)\big)\Big\|_2^2 + h(z).
-\end{align}\]</span> 这句式非常重要：<br>
-- 第一项逼迫 <span class="math inline">\(z\)</span> 靠近“<strong>对 <span class="math inline">\(g\)</span> 做梯度一步</strong>”得到的点 <span class="math inline">\(x-t\nabla g(x)\)</span>； - 第二项逼迫 <span class="math inline">\(h(z)\)</span> 小（体现正则化/约束）。</p>
+\end{align}\]</span> 这句式非常重要：</p>
+<ul>
+<li>第一项逼迫 <span class="math inline">\(z\)</span> 靠近“<strong>对 <span class="math inline">\(g\)</span> 做梯度一步</strong>”得到的点 <span class="math inline">\(x-t\nabla g(x)\)</span>；</li>
+<li>第二项逼迫 <span class="math inline">\(h(z)\)</span> 小（体现正则化/约束）。</li>
+</ul>
 <hr>
 <h2 id="核心定义近端映射proximal-mapping">4. 核心定义：近端映射（proximal mapping）</h2>
 <h3 id="近端算子定义">4.1 近端算子定义</h3>
@@ -357,43 +360,57 @@ x^{(k)}=x^{(k-1)}-t_k\,G_{t_k}(x^{(k-1)}).
 \end{align}\]</span> 当 <span class="math inline">\(h=0\)</span> 时，<span class="math inline">\(\mathrm{prox}_{h,t}(y)=y\)</span>，所以 <span class="math inline">\(G_t(x)=\nabla g(x)\)</span>，退化为标准梯度下降。</p>
 <p>这解释了“为什么近端梯度仍然是一阶法”：它每步只用到 <span class="math inline">\(\nabla g\)</span> 与一次 prox。</p>
 <hr>
-<h2 id="你有理由怀疑prox-会不会比原问题更难">6. 你有理由怀疑：prox 会不会比原问题更难？</h2>
+<h2 id="prox-会不会比原问题更难">6. prox 会不会比原问题更难？</h2>
 <p>关键点：很多重要的 <span class="math inline">\(h\)</span>，其 <span class="math inline">\(\mathrm{prox}_{h,t}\)</span> <strong>有闭式解或高效实现</strong>，且 prox 只依赖于 <span class="math inline">\(h\)</span>，与 <span class="math inline">\(g\)</span> 无关。</p>
-<p>因此典型分工是： - <span class="math inline">\(g\)</span>：可能很复杂，但只需要算梯度； - <span class="math inline">\(h\)</span>：设计成“prox 好算”的正则/约束（<span class="math inline">\(\ell_1\)</span>、指标函数、核范数等）。</p>
+<p>因此典型分工是：</p>
+<ul>
+<li><span class="math inline">\(g\)</span>：可能很复杂，但只需要算梯度；</li>
+<li><span class="math inline">\(h\)</span>：设计成“prox 好算”的正则/约束（<span class="math inline">\(\ell_1\)</span>、指标函数、核范数等）。</li>
+</ul>
 <hr>
-<h2 id="例子-1lasso-与-ista软阈值">7. 例子 1：Lasso 与 ISTA（软阈值）</h2>
-<h3 id="lasso-的复合结构">7.1 Lasso 的复合结构</h3>
-<p>给定 <span class="math inline">\(y\in\mathbb{R}^n\)</span>, <span class="math inline">\(X\in\mathbb{R}^{n\times p}\)</span>，Lasso： <span class="math display">\[\begin{align}
+<!-- ## 7. 例子 1：Lasso 与 ISTA（软阈值）
+
+### 7.1 Lasso 的复合结构
+给定 $y\in\mathbb{R}^n$, $X\in\mathbb{R}^{n\times p}$，Lasso：
+$$\begin{align}
 \min_\beta f(\beta)=\underbrace{\frac12\|y-X\beta\|_2^2}_{g(\beta)}+\underbrace{\lambda\|\beta\|_1}_{h(\beta)}.
-\end{align}\]</span> 其中 <span class="math display">\[\begin{align}
+\end{align}$$
+其中
+$$\begin{align}
 \nabla g(\beta)=-X^\top(y-X\beta).
-\end{align}\]</span></p>
-<h3 id="ell_1-的-prox-是软阈值soft-thresholding">7.2 <span class="math inline">\(\ell_1\)</span> 的 prox 是软阈值（soft-thresholding）</h3>
-<p><span class="math display">\[\begin{align}
+\end{align}$$
+
+
+### 7.2 $\ell_1$ 的 prox 是软阈值（soft-thresholding）
+$$\begin{align}
 \mathrm{prox}_{t}(\beta)=\arg\min_z \frac{1}{2t}\|\beta-z\|_2^2+\lambda\|z\|_1
 = S_{\lambda t}(\beta),
-\end{align}\]</span> 其中软阈值算子 <span class="math inline">\(S_\lambda(\cdot)\)</span> 按坐标定义： <span class="math display">\[\begin{align}
+\end{align}$$
+其中软阈值算子 $S_\lambda(\cdot)$ 按坐标定义：
+$$\begin{align}
 [S_\lambda(\beta)]_i=
 \begin{cases}
-\beta_i-\lambda, &amp; \beta_i&gt;\lambda,\\
-0, &amp; -\lambda\le \beta_i\le \lambda,\\
-\beta_i+\lambda, &amp; \beta_i&lt;-\lambda.
+\beta_i-\lambda, & \beta_i>\lambda,\\
+0, & -\lambda\le \beta_i\le \lambda,\\
+\beta_i+\lambda, & \beta_i<-\lambda.
 \end{cases}
-\end{align}\]</span></p>
-<h3 id="ista-更新公式即-pgd-应用于-lasso">7.3 ISTA 更新公式（即 PGD 应用于 Lasso）</h3>
-<p><span class="math display">\[\begin{align}
+\end{align}$$
+
+
+### 7.3 ISTA 更新公式（即 PGD 应用于 Lasso）
+$$\begin{align}
 \beta^+ = S_{\lambda t}\big(\beta+tX^\top(y-X\beta)\big).
-\end{align}\]</span> 这常称为 <strong>ISTA（Iterative Soft-Thresholding Algorithm）</strong>。</p>
-<blockquote>
-<p>关键理解：一步 ISTA = “对光滑最小二乘做梯度一步” + “对 <span class="math inline">\(\ell_1\)</span> 做软阈值修正”。</p>
-</blockquote>
+\end{align}$$
+这常称为 **ISTA（Iterative Soft-Thresholding Algorithm）**。
+
+> 关键理解：一步 ISTA = “对光滑最小二乘做梯度一步” + “对 $\ell_1$ 做软阈值修正”。 -->
 <hr>
-<h2 id="步长怎么选固定步长与回溯线搜索backtracking">8. 步长怎么选：固定步长与回溯线搜索（Backtracking）</h2>
-<h3 id="固定步长的理论条件">8.1 固定步长的理论条件</h3>
+<h2 id="步长怎么选固定步长与回溯线搜索backtracking">7. 步长怎么选：固定步长与回溯线搜索（Backtracking）</h2>
+<h3 id="固定步长的理论条件">7.1 固定步长的理论条件</h3>
 <p>若 <span class="math inline">\(\nabla g\)</span> 是 <span class="math inline">\(L\)</span>-Lipschitz 连续（即 <span class="math inline">\(\|\nabla g(x)-\nabla g(y)\|\le L\|x-y\|\)</span>），则 PGD 取 <span class="math display">\[\begin{align}
 t\le \frac{1}{L}
 \end{align}\]</span> 可保证标准收敛性质。</p>
-<h3 id="回溯线搜索对-g-而不是对-f">8.2 回溯线搜索（对 <span class="math inline">\(g\)</span> 而不是对 <span class="math inline">\(f\)</span>）</h3>
+<h3 id="回溯线搜索对-g-而不是对-f">7.2 回溯线搜索（对 <span class="math inline">\(g\)</span> 而不是对 <span class="math inline">\(f\)</span>）</h3>
 <p>回溯准则：取 <span class="math inline">\(0&lt;\beta&lt;1\)</span>，每次从 <span class="math inline">\(t=t_{\text{init}}\)</span> 开始，如果 <span class="math display">\[\begin{align}
 g\big(x-tG_t(x)\big)\ &gt;\ g(x)-t\nabla g(x)^\top G_t(x) + \frac{t}{2}\|G_t(x)\|_2^2,
 \end{align}\]</span> 则缩小 <span class="math inline">\(t\leftarrow \beta t\)</span>，直到满足为止，再做一次 prox 更新。</p>
@@ -401,7 +418,7 @@ g\big(x-tG_t(x)\big)\ &gt;\ g(x)-t\nabla g(x)^\top G_t(x) + \frac{t}{2}\|G_t(x)\
 <p>注意：这里判断的是 <span class="math inline">\(g\)</span> 的充分下降/二次上界条件，而不是直接判断 <span class="math inline">\(f\)</span>。这是复合结构下的关键差异。</p>
 </blockquote>
 <hr>
-<h2 id="pgd-的收敛率它能达到梯度下降同级别的-o1k">9. PGD 的收敛率：它能达到梯度下降同级别的 <span class="math inline">\(O(1/k)\)</span></h2>
+<h2 id="pgd-的收敛率它能达到梯度下降同级别的-o1k">8. PGD 的收敛率：它能达到梯度下降同级别的 <span class="math inline">\(O(1/k)\)</span></h2>
 <p>在假设： - <span class="math inline">\(g\)</span> 凸可微、<span class="math inline">\(\nabla g\)</span> 为 <span class="math inline">\(L\)</span>-Lipschitz； - <span class="math inline">\(h\)</span> 凸，且 <span class="math inline">\(\mathrm{prox}_{h,t}\)</span> 可计算；</p>
 <p>则 <strong>定理（PGD 收敛）</strong>：若固定步长 <span class="math inline">\(t\le 1/L\)</span>，则 <span class="math display">\[\begin{align}
 f(x^{(k)})-f^\star \le \frac{\|x^{(0)}-x^\star\|_2^2}{2tk}.
@@ -409,43 +426,65 @@ f(x^{(k)})-f^\star \le \frac{\|x^{(0)}-x^\star\|_2^2}{2tk}.
 <p>因此 PGD 具有 - 迭代复杂度：<span class="math inline">\(f(x^{(k)})-f^\star = O(1/k)\)</span>； - 误差 <span class="math inline">\(\varepsilon\)</span> 下的迭代次数：<span class="math inline">\(k=O(1/\varepsilon)\)</span>。</p>
 <p>这比次梯度法的 <span class="math inline">\(O(1/\varepsilon^2)\)</span> 要快一个量级（在同样的一阶框架内）。</p>
 <hr>
-<h2 id="例子-2矩阵补全matrix-completion与矩阵软阈值">10. 例子 2：矩阵补全（Matrix Completion）与“矩阵软阈值”</h2>
-<h3 id="模型观测子集上的平方损失-核范数正则">10.1 模型：观测子集上的平方损失 + 核范数正则</h3>
-<p>给定 <span class="math inline">\(Y\in\mathbb{R}^{m\times n}\)</span>，只观测 <span class="math inline">\(\Omega\)</span> 中的条目，解： <span class="math display">\[\begin{align}
+<!-- ## 10. 例子 2：矩阵补全（Matrix Completion）与“矩阵软阈值”
+
+### 10.1 模型：观测子集上的平方损失 + 核范数正则
+给定 $Y\in\mathbb{R}^{m\times n}$，只观测 $\Omega$ 中的条目，解：
+$$\begin{align}
 \min_B \frac12\sum_{(i,j)\in\Omega}(Y_{ij}-B_{ij})^2+\lambda\|B\|_{\mathrm{tr}},
-\end{align}\]</span> 其中核范数（trace/nuclear norm） <span class="math display">\[\begin{align}
+\end{align}$$
+其中核范数（trace/nuclear norm）
+$$\begin{align}
 \|B\|_{\mathrm{tr}}=\sum_{i=1}^r \sigma_i(B).
-\end{align}\]</span></p>
-<p>定义投影算子 <span class="math inline">\(P_\Omega\)</span>： <span class="math display">\[\begin{align}
+\end{align}$$
+
+
+定义投影算子 $P_\Omega$：
+$$\begin{align}
 [P_\Omega(B)]_{ij}=
 \begin{cases}
-B_{ij},&amp;(i,j)\in\Omega,\\
-0,&amp;(i,j)\notin\Omega.
+B_{ij},&(i,j)\in\Omega,\\
+0,&(i,j)\notin\Omega.
 \end{cases}
-\end{align}\]</span> 则目标可写为 <span class="math display">\[\begin{align}
+\end{align}$$
+则目标可写为
+$$\begin{align}
 f(B)=\underbrace{\frac12\|P_\Omega(Y)-P_\Omega(B)\|_F^2}_{g(B)}+\underbrace{\lambda\|B\|_{\mathrm{tr}}}_{h(B)}.
-\end{align}\]</span></p>
-<h3 id="两个必需部件梯度与-prox">10.2 两个必需部件：梯度与 prox</h3>
-<ul>
-<li>梯度： <span class="math display">\[\begin{align}
+\end{align}$$
+
+
+### 10.2 两个必需部件：梯度与 prox
+- 梯度：
+$$\begin{align}
 \nabla g(B)=-(P_\Omega(Y)-P_\Omega(B)).
-\end{align}\]</span></li>
-<li>prox： <span class="math display">\[\begin{align}
+\end{align}$$
+- prox：
+$$\begin{align}
 \mathrm{prox}_{t}(B)=\arg\min_Z \frac{1}{2t}\|B-Z\|_F^2+\lambda\|Z\|_{\mathrm{tr}}.
-\end{align}\]</span> 结论：它等于“<strong>对奇异值做软阈值</strong>”（矩阵软阈值 / SVT）： 若 <span class="math inline">\(B=U\Sigma V^\top\)</span> 为 SVD，则 <span class="math display">\[\begin{align}
+\end{align}$$
+结论：它等于“**对奇异值做软阈值**”（矩阵软阈值 / SVT）：
+若 $B=U\Sigma V^\top$ 为 SVD，则
+$$\begin{align}
 S_\lambda(B)=U\Sigma_\lambda V^\top,\quad (\Sigma_\lambda)_{ii}=\max\{\Sigma_{ii}-\lambda,0\}.
-\end{align}\]</span> 并且 <span class="math display">\[\begin{align}
+\end{align}$$
+并且
+$$\begin{align}
 \mathrm{prox}_{t}(B)=S_{\lambda t}(B).
-\end{align}\]</span></li>
-</ul>
-<h3 id="更新soft-impute">10.3 更新：Soft-Impute</h3>
-<p>因此 PGD 更新为 <span class="math display">\[\begin{align}
+\end{align}$$
+
+
+### 10.3 更新：Soft-Impute
+因此 PGD 更新为
+$$\begin{align}
 B^+=S_{\lambda t}\Big(B+t(P_\Omega(Y)-P_\Omega(B))\Big).
-\end{align}\]</span> 并且这里 <span class="math inline">\(\nabla g\)</span> 的 Lipschitz 常数 <span class="math inline">\(L=1\)</span>，可取 <span class="math inline">\(t=1\)</span>，得到更简洁形式 <span class="math display">\[\begin{align}
+\end{align}$$
+并且这里 $\nabla g$ 的 Lipschitz 常数 $L=1$，可取 $t=1$，得到更简洁形式
+$$\begin{align}
 B^+=S_{\lambda}\big(P_\Omega(Y)+P_{\Omega^\perp}(B)\big),
-\end{align}\]</span> 这就是经典的 <strong>soft-impute</strong> 思路。</p>
+\end{align}$$
+这就是经典的 **soft-impute** 思路。 -->
 <hr>
-<h2 id="三个特殊情形你应该把-prox-当作统一抽象">11. 三个“特殊情形”：你应该把 prox 当作统一抽象</h2>
+<h2 id="三个特殊情形你应该把-prox-当作统一抽象">9. 三个“特殊情形”：你应该把 prox 当作统一抽象</h2>
 <p>PGD 也叫 composite/generalized gradient descent，因为很多方法都是它的特例：</p>
 <ol type="1">
 <li><p><strong><span class="math inline">\(h=0\)</span></strong>：<br>
@@ -472,54 +511,59 @@ x^+=\mathrm{prox}_{h,t}(x)
 <p>统一视角的价值：当你看到一个问题“约束 + 正则 + 光滑损失”，第一反应应该是：能不能写成 <span class="math inline">\(g+h\)</span>，并让 <span class="math inline">\(h\)</span> 的 prox 易算？</p>
 </blockquote>
 <hr>
-<h2 id="如果-prox-不能精确算怎么办inexact-prox">12. 如果 prox 不能精确算怎么办？（inexact prox）</h2>
+<h2 id="如果-prox-不能精确算怎么办inexact-prox">10. 如果 prox 不能精确算怎么办？（inexact prox）</h2>
 <p>理论通常假设 prox 子问题能<strong>精确</strong>求解： <span class="math display">\[\begin{align}
 \mathrm{prox}_{h,t}(x)=\arg\min_z \frac{1}{2t}\|x-z\|^2+h(z).
 \end{align}\]</span> 提醒：一般情况下，近似求解会怎样不一定清楚；但如果你能严格控制近似误差，则仍可恢复原收敛率（有相关文献分析）。实践上，若用近似 prox，应保证足够高精度。</p>
 <hr>
-<h2 id="加速把-o1k-提升到最优的-o1k2">13. 加速：把 <span class="math inline">\(O(1/k)\)</span> 提升到最优的 <span class="math inline">\(O(1/k^2)\)</span></h2>
-<h3 id="动机nesterov-加速思想在复合问题上同样可用">13.1 动机：Nesterov 加速思想在复合问题上同样可用</h3>
+<h2 id="加速把-o1k-提升到最优的-o1k2">11. 加速：把 <span class="math inline">\(O(1/k)\)</span> 提升到最优的 <span class="math inline">\(O(1/k^2)\)</span></h2>
+<h3 id="动机nesterov-加速思想在复合问题上同样可用">11.1 动机：Nesterov 加速思想在复合问题上同样可用</h3>
 <p>回顾 Nesterov 的多条加速线索，并采用 Beck &amp; Teboulle (2008) 的形式：对复合 <span class="math inline">\(g+h\)</span> 只需每步 <strong>一次 prox</strong>，并只用最近两步信息。</p>
-<h3 id="加速近端梯度法apgd的迭代">13.2 加速近端梯度法（APGD）的迭代</h3>
+<h3 id="加速近端梯度法apgd的迭代">11.2 加速近端梯度法（APGD）的迭代</h3>
 <p>初始化 <span class="math inline">\(x^{(0)}=x^{(-1)}\)</span>。对 <span class="math inline">\(k=1,2,\dots\)</span>： <span class="math display">\[\begin{align}
 v = x^{(k-1)}+\frac{k-2}{k+1}\big(x^{(k-1)}-x^{(k-2)}\big),
 \end{align}\]</span> <span class="math display">\[\begin{align}
 x^{(k)}=\mathrm{prox}_{h,t_k}\big(v-t_k\nabla g(v)\big).
 \end{align}\]</span> 解释： - 当 <span class="math inline">\(k=1\)</span> 时，<span class="math inline">\(\frac{k-2}{k+1}=-\frac{1}{2}\)</span>，但通常第一步就是普通 PGD（说明“第一步就是 usual proximal gradient update”）； - 之后 <span class="math inline">\(v\)</span> 是带“动量”的外推点，利用历史方向加速。</p>
 <p>重要提醒：<strong>加速方法不一定是下降法</strong>（目标值可能不单调）。</p>
-<h3 id="加速的收敛定理达到最优-o1k2">13.3 加速的收敛定理：达到最优 <span class="math inline">\(O(1/k^2)\)</span></h3>
+<h3 id="加速的收敛定理达到最优-o1k2">11.3 加速的收敛定理：达到最优 <span class="math inline">\(O(1/k^2)\)</span></h3>
 <p>在与 PGD 相同的假设下，若固定步长 <span class="math inline">\(t\le 1/L\)</span>，则： <span class="math display">\[\begin{align}
 f(x^{(k)})-f^\star \le \frac{2\|x^{(0)}-x^\star\|_2^2}{t(k+1)^2}.
 \end{align}\]</span> 因此 - 函数值误差 <span class="math inline">\(O(1/k^2)\)</span>； - 达到 <span class="math inline">\(\varepsilon\)</span> 误差所需迭代数 <span class="math inline">\(k=O(1/\sqrt{\varepsilon})\)</span>，这是一般一阶方法可达的最优数量级。</p>
-<hr>
-<h2 id="fista加速版本的-istalasso-的快算法">14. FISTA：加速版本的 ISTA（Lasso 的“快”算法）</h2>
-<p>对 Lasso，ISTA 为 <span class="math display">\[\begin{align}
+<!-- ## 14. FISTA：加速版本的 ISTA（Lasso 的“快”算法）
+
+对 Lasso，ISTA 为
+$$\begin{align}
 \beta^{(k)}=S_{\lambda t_k}\Big(\beta^{(k-1)}+t_kX^\top(y-X\beta^{(k-1)})\Big).
-\end{align}\]</span> 加速后得到 <strong>FISTA</strong>：对 <span class="math inline">\(k=1,2,\dots\)</span> <span class="math display">\[\begin{align}
+\end{align}$$
+加速后得到 **FISTA**：对 $k=1,2,\dots$
+$$\begin{align}
 v = \beta^{(k-1)}+\frac{k-2}{k+1}\big(\beta^{(k-1)}-\beta^{(k-2)}\big),
-\end{align}\]</span> <span class="math display">\[\begin{align}
+\end{align}$$
+$$\begin{align}
 \beta^{(k)}=S_{\lambda t_k}\Big(v+t_kX^\top(y-Xv)\Big).
-\end{align}\]</span> 经验上加速常显著提速（给出多组对比曲线）。</p>
+\end{align}$$
+经验上加速常显著提速（给出多组对比曲线）。 -->
 <hr>
-<h2 id="回溯线搜索在加速情形下简单但可能导致步长递减">15. 回溯线搜索在加速情形下：简单但可能导致步长递减</h2>
+<h2 id="回溯线搜索在加速情形下简单但可能导致步长递减">12. 回溯线搜索在加速情形下：简单但可能导致步长递减</h2>
 <p>简单策略：取 <span class="math inline">\(\beta&lt;1\)</span>，<span class="math inline">\(t_0=1\)</span>。第 <span class="math inline">\(k\)</span> 步从 <span class="math inline">\(t=t_{k-1}\)</span> 开始，若 <span class="math display">\[\begin{align}
 g(x^+) &gt; g(v)+\nabla g(v)^\top(x^+-v)+\frac{1}{2t}\|x^+-v\|_2^2,
 \end{align}\]</span> 则缩小 <span class="math inline">\(t\leftarrow \beta t\)</span>，并令 <span class="math display">\[\begin{align}
 x^+=\mathrm{prox}_{h,t}(v-t\nabla g(v)).
 \end{align}\]</span> 但它会“强迫步长递减”，更复杂的策略可以避免该问题。</p>
 <hr>
-<h2 id="实战警告加速回溯并非总是更好">16. 实战警告：加速/回溯并非总是更好</h2>
+<h2 id="实战警告加速回溯并非总是更好">13. 实战警告：加速/回溯并非总是更好</h2>
 <p>在后面非常直接地提醒两类常见“反效果”：</p>
-<h3 id="warm-start-下加速收益会被削弱">16.1 warm start 下加速收益会被削弱</h3>
+<h3 id="warm-start-下加速收益会被削弱">13.1 warm start 下加速收益会被削弱</h3>
 <p>例如要解一系列 Lasso，<span class="math inline">\(\lambda_1&gt;\lambda_2&gt;\dots&gt;\lambda_r\)</span>，每次用上一次解作初值： - 解 <span class="math inline">\(\lambda_1\)</span>：从 0 开始； - 解 <span class="math inline">\(\lambda_j\)</span>：从 <span class="math inline">\(\hat x(\lambda_{j-1})\)</span> 开始； 当 <span class="math inline">\(\lambda\)</span> 网格足够密，普通 PGD 可能已经很快，加速额外收益变小。</p>
-<h3 id="当-prox-很贵如需-svd时回溯加速可能更慢">16.2 当 prox 很贵（如需 SVD）时，回溯/加速可能更慢</h3>
+<h3 id="当-prox-很贵如需-svd时回溯加速可能更慢">13.2 当 prox 很贵（如需 SVD）时，回溯/加速可能更慢</h3>
 <p>矩阵补全中 prox 需要 SVD： - 回溯一次要多次 prox ⇒ 多次 SVD ⇒ 成本爆炸； - 加速改变 prox 的输入点结构，可能让 SVD 失去“低秩 + 稀疏”的可利用结构，从而更慢。</p>
 <blockquote>
 <p>结论：是否加速/是否回溯，不是信仰问题，是“每步代价 × 迭代数”的工程权衡。</p>
 </blockquote>
 <hr>
-<h2 id="把方法真正用起来一份从建模到算法的操作清单">17. 把方法真正用起来：一份“从建模到算法”的操作清单</h2>
-<p>当你遇到一个凸优化问题，按以下顺序做（这是掌握近端梯度的关键技能）：</p>
+<h2 id="如何用-pgdapgd-求解凸优化">14. 如何用 PGD/APGD 求解凸优化？</h2>
+<h3 id="步骤总结">14.1 步骤总结</h3>
 <ol type="1">
 <li><strong>拆分：写成 <span class="math inline">\(f=g+h\)</span></strong><br>
 </li>
@@ -554,11 +598,11 @@ x^+=\mathrm{prox}_{h,t}(v-t\nabla g(v)).
 </li>
 </ol>
 <ul>
-<li>先用 PGD/ISTA（稳定、常单调更好调试）；</li>
-<li>再尝试 APGD/FISTA（更快但不单调、对“每步代价结构”更敏感）。</li>
+<li>先用 PGD（稳定、常单调更好调试）；</li>
+<li>再尝试 APGD（更快但不单调、对“每步代价结构”更敏感）。</li>
 </ul>
 <ol start="5" type="1">
-<li><strong>停止准则建议</strong>（工程上常用）<br>
+<li><strong>停止准则建议</strong><br>
 理论常用 <span class="math inline">\(f(x^{(k)})-f^\star\)</span>，但 <span class="math inline">\(f^\star\)</span> 不可得。可用：</li>
 </ol>
 <ul>
@@ -567,8 +611,10 @@ x^+=\mathrm{prox}_{h,t}(v-t\nabla g(v)).
 <li>或广义梯度 <span class="math inline">\(\|G_t(x^{(k)})\|\)</span> 小（若可算）。</li>
 </ul>
 <hr>
-<h2 id="算法伪代码">18. 算法伪代码</h2>
-<h3 id="pgdproximal-gradient-descent">18.1 PGD（Proximal Gradient Descent）</h3>
+<h2 id="伪代码总结">14.2 伪代码总结</h2>
+<blockquote>
+<p><strong>算法 1： 近端梯度下降（PGD）</strong></p>
+</blockquote>
 <p><span class="math display">\[
 \begin{array}{l}
 \textbf{Algorithm 1: Proximal Gradient Descent}\\
@@ -588,7 +634,9 @@ x^+=\mathrm{prox}_{h,t}(v-t\nabla g(v)).
 \textbf{Output: } x^{(k)}\ (\text{final iterate}),\ f(x^{(k)}).\\[2mm]
 \end{array}
 \]</span></p>
-<h3 id="apgdaccelerated-proximal-gradient-descent">17.2 APGD（Accelerated Proximal Gradient Descent）</h3>
+<blockquote>
+<p><strong>算法 2：加速近端梯度下降（APGD）</strong></p>
+</blockquote>
 <p><span class="math display">\[
 \begin{array}{l}
 \textbf{Algorithm 2: Accelerated Proximal Gradient Descent}\\
@@ -707,9 +755,9 @@ x^+=\mathrm{prox}_{h,t}(v-t\nabla g(v)).
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-4/" title="凸优化学习系列 - 4. 梯度下降法">
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-5/" title="凸优化学习系列 - 5. 次梯度法">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">凸优化学习系列 - 4. 梯度下降法</span>
+                        <span class="hidden-mobile">凸优化学习系列 - 5. 次梯度法</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -717,8 +765,8 @@ x^+=\mathrm{prox}_{h,t}(v-t\nabla g(v)).
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-5/" title="凸优化学习系列 - 5. 次梯度法">
-                        <span class="hidden-mobile">凸优化学习系列 - 5. 次梯度法</span>
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-7/" title="凸优化学习系列 - 7. 随机梯度下降法">
+                        <span class="hidden-mobile">凸优化学习系列 - 7. 随机梯度下降法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
