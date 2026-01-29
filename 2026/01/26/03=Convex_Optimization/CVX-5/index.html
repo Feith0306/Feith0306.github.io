@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://feith0306.github.io/img/cover/optimization.jpg">
 <meta property="article:published_time" content="2026-01-26T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-01-28T11:48:51.337Z">
+<meta property="article:modified_time" content="2026-01-29T03:00:32.705Z">
 <meta property="article:author" content="Tianhao Fei">
 <meta property="article:tag" content="affine">
 <meta property="article:tag" content="convex function">
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          2.1k 字
         
       </span>
     
@@ -250,7 +250,7 @@
         
         
         
-          22 分钟
+          18 分钟
         
       </span>
     
@@ -453,36 +453,63 @@ k=O(1/\varepsilon^2),
 \end{align}\]</span> 明显慢于光滑凸梯度法的 <span class="math inline">\(O(1/\varepsilon)\)</span>。</p>
 <p>更扎心的是：引用 Nesterov 的下界结论——在“仅靠次梯度 oracle 的非光滑一阶法”类里，整体上无法把最坏情形做得比 <span class="math inline">\(O(1/\varepsilon^2)\)</span> 更好（除非换问题结构或换信息模型）。</p>
 <hr>
-<h2 id="典型应用-1闭凸集交集可行性以及交替投影的由来">9. 典型应用 1：闭凸集交集可行性（以及交替投影的由来）</h2>
-<p>问题：找 <span class="math display">\[\begin{align}
+<!-- ## 9. 典型应用 1：闭凸集交集可行性（以及交替投影的由来）
+
+问题：找
+$$\begin{align}
 x^\star\in \bigcap_{i=1}^m C_i,
-\end{align}\]</span> 其中 <span class="math inline">\(C_i\)</span> 闭凸。</p>
-<p>定义 <span class="math display">\[\begin{align}
+\end{align}$$
+其中 $C_i$ 闭凸。
+
+定义
+$$\begin{align}
 f_i(x)=\mathrm{dist}(x,C_i),\qquad
 f(x)=\max_{i=1,\dots,m} f_i(x),
-\end{align}\]</span> 并解 <span class="math display">\[\begin{align}
+\end{align}$$
+并解
+$$\begin{align}
 \min_x f(x).
-\end{align}\]</span> 检验：<span class="math inline">\(f^\star=0 \iff x^\star\in\cap_i C_i\)</span>。</p>
-<p>因为 <span class="math inline">\(f\)</span> 是“max of convex”，可取最远集合 <span class="math inline">\(C_{i^\star}\)</span> 上的梯度作为次梯度： <span class="math display">\[\begin{align}
+\end{align}$$
+检验：$f^\star=0 \iff x^\star\in\cap_i C_i$。
+
+因为 $f$ 是“max of convex”，可取最远集合 $C_{i^\star}$ 上的梯度作为次梯度：
+$$\begin{align}
 g=\nabla f_{i^\star}(x)=\frac{x-P_{C_{i^\star}}(x)}{\|x-P_{C_{i^\star}}(x)\|_2}.
-\end{align}\]</span> 若用 Polyak 步长且 <span class="math inline">\(f^\star=0\)</span>，进一步得到更新： <span class="math display">\[\begin{align}
+\end{align}$$
+若用 Polyak 步长且 $f^\star=0$，进一步得到更新：
+$$\begin{align}
 x^+=x-f(x)\,g
 = P_{C_{i^\star}}(x).
-\end{align}\]</span> 也就是：<strong>每步直接投影到“当前最远的集合”</strong>。</p>
-<p>特别地，当只有两个集合时，这退化为著名的 <strong>交替投影（alternating projections）</strong>：在 <span class="math inline">\(C_1\)</span> 与 <span class="math inline">\(C_2\)</span> 之间来回投影。</p>
-<hr>
-<h2 id="典型应用-2带约束的凸优化-投影次梯度法projected-subgradient">10. 典型应用 2：带约束的凸优化 —— 投影次梯度法（Projected Subgradient）</h2>
-<p>问题形式： <span class="math display">\[\begin{align}
+\end{align}$$
+也就是：**每步直接投影到“当前最远的集合”**。
+
+特别地，当只有两个集合时，这退化为著名的 **交替投影（alternating projections）**：在 $C_1$ 与 $C_2$ 之间来回投影。
+
+---
+
+## 10. 典型应用 2：带约束的凸优化 —— 投影次梯度法（Projected Subgradient）
+
+问题形式：
+$$\begin{align}
 \min_{x\in C} f(x),
-\end{align}\]</span> 其中 <span class="math inline">\(f\)</span> 凸可不可微均可，<span class="math inline">\(C\)</span> 闭凸且可投影。</p>
-<p>投影次梯度法： <span class="math display">\[\begin{align}
+\end{align}$$
+其中 $f$ 凸可不可微均可，$C$ 闭凸且可投影。
+
+投影次梯度法：
+$$\begin{align}
 x^{(k)}=P_C\Big(x^{(k-1)}-t_k g^{(k-1)}\Big),\quad g^{(k-1)}\in\partial f(x^{(k-1)}).
-\end{align}\]</span> 理解：先沿“次梯度方向”走一步，再把点拉回可行域。</p>
-<h3 id="哪些集合易投影">10.1 哪些集合易投影？</h3>
-<p>看起来简单的多面体投影可能很难。 典型易投影例子： - 非负正交锥 <span class="math inline">\(\mathbb{R}^n_+\)</span>：逐分量截断 <span class="math inline">\(P(x)=\max(x,0)\)</span> - <span class="math inline">\(\ell_2\)</span> 球、<span class="math inline">\(\ell_\infty\)</span> 球：都有闭式 - 仿射子空间/线性方程解集：正交投影可显式写出（或解线性方程）</p>
+\end{align}$$
+理解：先沿“次梯度方向”走一步，再把点拉回可行域。
+
+### 10.1 哪些集合易投影？
+看起来简单的多面体投影可能很难。
+典型易投影例子：
+- 非负正交锥 $\mathbb{R}^n_+$：逐分量截断 $P(x)=\max(x,0)$
+- $\ell_2$ 球、$\ell_\infty$ 球：都有闭式
+- 仿射子空间/线性方程解集：正交投影可显式写出（或解线性方程） -->
 <hr>
-<h2 id="会用次梯度法">11. “会用”次梯度法</h2>
-<h3 id="必须明确的-4-个对象">11.1 必须明确的 4 个对象</h3>
+<h2 id="会用次梯度法">9. “会用”次梯度法</h2>
+<h3 id="必须明确的-4-个对象">9.1 必须明确的 4 个对象</h3>
 <ol type="1">
 <li>目标函数 <span class="math inline">\(f(x)\)</span><br>
 </li>
@@ -492,7 +519,7 @@ x^{(k)}=P_C\Big(x^{(k-1)}-t_k g^{(k-1)}\Big),\quad g^{(k-1)}\in\partial f(x^{(k-
 </li>
 <li>约束投影 <span class="math inline">\(P_C(\cdot)\)</span>（若无约束可省）</li>
 </ol>
-<h3 id="伪代码无约束">11.2 伪代码（无约束）</h3>
+<h3 id="伪代码无约束">9.2 伪代码（无约束）</h3>
 <blockquote>
 <p>算法 1: 次梯度法（无约束；返回 best iterate）</p>
 <p>输入：初值 <span class="math inline">\(x_0\)</span>；步长规则 <span class="math inline">\(\{t_k\}\)</span>（fixed / diminishing / Polyak）；最大迭代次数 <span class="math inline">\(K\)</span></p>
@@ -638,9 +665,9 @@ x^{(k)}=P_C\Big(x^{(k-1)}-t_k g^{(k-1)}\Big),\quad g^{(k-1)}\in\partial f(x^{(k-
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/26/03=Convex_Optimization/CVX-4/" title="凸优化学习系列 - 4. 梯度下降法">
+                      <a href="/2026/01/26/03=Convex_Optimization/CVX-2/" title="凸优化学习系列 - 2. 凸优化问题分类">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">凸优化学习系列 - 4. 梯度下降法</span>
+                        <span class="hidden-mobile">凸优化学习系列 - 2. 凸优化问题分类</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
